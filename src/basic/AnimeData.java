@@ -26,6 +26,39 @@ public class AnimeData {
         this.score = score;
     }
 
+    public String getTitle() {
+        return title;
+    }
 
-    
+    public String getSynopsis() {
+        return synopsis;
+    }
+
+    public ArrayList<String> getGenre() {
+        return genre;
+    } 
+
+    public String getAired() {
+        return aired;
+    }
+
+    public int getEpisodes() {
+        return episodes;
+    }
+
+    public int getMembers() {
+        return members;
+    }
+
+    public int getPopularity() {
+        return popularity;
+    }
+
+    public int getRank() {
+        return rank;
+    }
+
+    public double getScore() {
+        return score;
+    }
 }
