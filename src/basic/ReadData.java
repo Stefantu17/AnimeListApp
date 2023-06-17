@@ -33,7 +33,7 @@ public class ReadData {
                 data.addAnimeData(animeData);
             }
         } 
-        
+         
         catch (IOException e) {
             e.printStackTrace();
         }
