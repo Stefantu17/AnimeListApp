@@ -12,6 +12,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,26 +35,87 @@ public class AnimeListApp extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Anime List App");
 
-        ReadData.processData();
+        ArrayList<AnimeData> animeList = new ArrayList<>(); 
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/basic/animesShort.csv"))) {
+            String line = reader.readLine();
+            for (int i = 0; i < 911; i++) {
+                line = reader.readLine();
+                int UID = Integer.parseInt(line.substring(0, line.indexOf(",")));
+                line = line.substring(line.indexOf(",") + 1);
+                String title = line.substring(0, line.indexOf(","));
+                line = line.substring(line.indexOf(",") + 2);
+                String synopsis = "";
+                while (line.charAt(0) != '[' && line.charAt(0) != '(') {
+                    synopsis += line;
+                    line = reader.readLine();
+                }
+                System.out.println(line);
+                while (line.length() < 30) {
+                    line = reader.readLine();
+                }
+                System.out.println(line);
+                line = line.substring(line.indexOf(",") + 2);
+                String strGenres = line.substring(0, line.indexOf("]"));
+                line = line.substring(line.indexOf("]") + 4);
+                String newGenres = strGenres;
+                newGenres = newGenres.replace("[", "");
+                newGenres = newGenres.replace("'", "");
+                String[] newGenreList = newGenres.split(", ");
+                ArrayList<String> genres = new ArrayList<>(Arrays.asList(newGenreList));
+                String aired = line.substring(0, line.indexOf(","));
+                line = line.substring(line.indexOf('"') + 2);
 
-        ArrayList<AnimeData> animeList = new ArrayList<AnimeData>();
-
-        for (int i = 0; i < ReadData.getData().size(); i++) {
-            animeList.add((ReadData.getData()).get(i));
+                System.out.println(line);
+                double episodes = Double.parseDouble(line.substring(0, line.indexOf(",")));
+                line = line.substring(line.indexOf(",") + 1);
+                System.out.println(line);
+                double members = Double.parseDouble(line.substring(0, line.indexOf(",")));
+                line = line.substring(line.indexOf(",") + 1);
+                System.out.println(line);
+                double popularity = Double.parseDouble(line.substring(0, line.indexOf(",")));
+                line = line.substring(line.indexOf(",") + 1);
+                System.out.println(line);
+                double rank = Double.parseDouble(line.substring(0, line.indexOf(",")));
+                line = line.substring(line.indexOf(",") + 1);
+                System.out.println(line);
+                double score = Double.parseDouble(line.substring(0, line.indexOf(",")));
+                
+                line = line.substring(line.indexOf(",") + 1);
+                String imageLink = line.substring(0, line.indexOf(","));
+                line = line.substring(line.indexOf(",") + 1);
+                String animeLink = line;
+                line = line.substring(line.indexOf(",") + 1);
+                AnimeData animeData = new AnimeData(UID, title, synopsis, genres, aired, episodes, members, popularity, rank, score, imageLink, animeLink);
+                System.out.println(animeData.getTitle());
+                System.out.println(animeData.getSynopsis());
+                System.out.println(animeData.getGenresString());
+                System.out.println(animeData.getAired());
+                System.out.println(animeData.getEpisodes());
+                System.out.println(animeData.getPopularity());
+                System.out.println(animeData.getMembers());
+                System.out.println(animeData.getRank());
+                System.out.println(animeData.getScore());
+                animeList.add(animeData);
+            }
+        } 
+        catch (IOException e) {
+            e.printStackTrace();
         }
 
-
         userAnimeList = new ArrayList<>();
-
+        
         animeListView = new ListView<>();
         animeListView.setItems(FXCollections.observableArrayList(animeList));
+        animeListView.setCellFactory(param -> new AnimeListCell());
         animeListView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> showAnimeDetails(newValue)
         );
 
         userAnimeListView = new ListView<>();
         userAnimeListView.setItems(FXCollections.observableArrayList(userAnimeList));
-        userAnimeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showAnimeDetails(newValue)
+        userAnimeListView.setCellFactory(param -> new AnimeListCell());
+        userAnimeListView.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> showAnimeDetails(newValue)
         );
 
         Button addButton = new Button("Add");
@@ -96,7 +160,7 @@ public class AnimeListApp extends Application {
         gridPane.setVgap(5);
         gridPane.setPadding(new Insets(10));
 
-        //gridPane.addRow(0, new Label("Genres:"), new Label(anime.getGenresAsString()));
+        gridPane.addRow(0, new Label("Genres:"), new Label(anime.getGenresString()));
         gridPane.addRow(1, new Label("Date Aired:"), new Label(anime.getAired()));
         gridPane.addRow(2, new Label("Episode Count:"), new Label(String.valueOf(anime.getEpisodes())));
         gridPane.addRow(3, new Label("Popularity Rank:"), new Label(String.valueOf(anime.getPopularity())));
@@ -127,7 +191,7 @@ public class AnimeListApp extends Application {
         List<PieChart.Data> genreData = new ArrayList<>();
 
         for (AnimeData anime : userAnimeList) {
-            for (String genre : anime.getGenre()) {
+            for (String genre : anime.getGenres()) {
                 boolean genreExists = false;
                 for (PieChart.Data data : genreData) {
                     if (data.getName().equalsIgnoreCase(genre)) {
@@ -145,4 +209,15 @@ public class AnimeListApp extends Application {
         genrePieChart.setData(FXCollections.observableArrayList(genreData));
     }
 
+    private class AnimeListCell extends ListCell<AnimeData> {
+        @Override
+        protected void updateItem(AnimeData anime, boolean empty) {
+            super.updateItem(anime, empty);
+            if (empty || anime == null) {
+                setText(null);
+            } else {
+                setText(anime.getTitle());
+            }
+        }
+    }
 }
