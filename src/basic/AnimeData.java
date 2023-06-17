@@ -7,21 +7,21 @@ public class AnimeData {
     private int UID;
     private String title;
     private String synopsis;
-    private ArrayList<String> genre;
+    private ArrayList<String> genres;
     private String aired;
-    private int episodes;
+    private double episodes;
     private int members; 
     private int popularity;
-    private int rank;
+    private double rank;
     private double score;
     private String imageLink;
     private String animeLink;
 
-    public AnimeData(int UID, String title, String synopsis, ArrayList<String> genre, String aired, int episodes, int members, int popularity, int rank, double score, String imageLink, String animeLink) {
+    public AnimeData(int UID, String title, String synopsis, ArrayList<String> genres, String aired, double episodes, int members, int popularity, double rank, double score, String imageLink, String animeLink) {
         this.UID = UID;
         this.title = title;
         this.synopsis = synopsis;
-        this.genre = genre;
+        this.genres = genres;
         this.aired = aired;
         this.episodes = episodes;
         this.members = members;
@@ -44,14 +44,23 @@ public class AnimeData {
     }
 
     public ArrayList<String> getGenre() {
-        return genre;
+        return genres;
     } 
+
+    public String getGenreString() {
+        String str = "";
+        for (int i = 0; i < genres.size(); i++) {
+            str += genres.get(i) + ", ";
+        }
+        return str;
+
+    }
 
     public String getAired() {
         return aired;
     }
 
-    public int getEpisodes() {
+    public double getEpisodes() {
         return episodes;
     }
 
@@ -63,7 +72,7 @@ public class AnimeData {
         return popularity;
     }
 
-    public int getRank() {
+    public double getRank() {
         return rank;
     }
 

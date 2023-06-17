@@ -6,7 +6,7 @@ import java.util.Comparator;
 
 public class AnimeDataSet {
 
-    private static ArrayList<AnimeData> data;
+    private ArrayList<AnimeData> data;
 
     public AnimeDataSet() {
         this.data = new ArrayList<>();

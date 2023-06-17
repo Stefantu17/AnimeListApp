@@ -33,7 +33,6 @@ public class AnimeListApp extends Application {
         primaryStage.setTitle("Anime List App");
 
         ReadData.processData();
-        ReadData.getData();
 
         ArrayList<AnimeData> animeList = new ArrayList<AnimeData>();
 
