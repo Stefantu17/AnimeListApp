@@ -17,7 +17,7 @@ public class ReadData {
         this.data = new ArrayList<>();
     }
 
-    public void processData() {
+    public static void processData() {
         AnimeDataSet data = new AnimeDataSet();
         try (BufferedReader reader = new BufferedReader(new FileReader("src/basic/animes.csv"))) {
             String line = reader.readLine();
@@ -37,5 +37,9 @@ public class ReadData {
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static ArrayList<AnimeData> getData() {
+        return this.data;
     }
 }
