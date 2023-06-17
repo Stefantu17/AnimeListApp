@@ -86,6 +86,9 @@ public class AnimeDataSet {
         return -1;
     }
 
+    public void add(AnimeData animeData) {
+    }
+
     
 
 }

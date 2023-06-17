@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class AnimeData {
     
+    private int UID;
     private String title;
     private String synopsis;
     private ArrayList<String> genre;
@@ -13,8 +14,11 @@ public class AnimeData {
     private int popularity;
     private int rank;
     private double score;
+    private String imageLink;
+    private String animeLink;
 
-    public AnimeData(String title, String synopsis, ArrayList<String> genre, String aired, int episodes, int members, int popularity, int rank, double score) {
+    public AnimeData(int UID, String title, String synopsis, ArrayList<String> genre, String aired, int episodes, int members, int popularity, int rank, double score, String imageLink, String animeLink) {
+        this.UID = UID;
         this.title = title;
         this.synopsis = synopsis;
         this.genre = genre;
@@ -24,8 +28,13 @@ public class AnimeData {
         this.popularity = popularity;
         this.rank = rank;
         this.score = score;
+        this.imageLink = imageLink;
+        this.animeLink = animeLink;
     }
 
+    public int getUID() {
+        return UID;
+    }
     public String getTitle() {
         return title;
     }
@@ -60,5 +69,13 @@ public class AnimeData {
 
     public double getScore() {
         return score;
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public String getAnimeLink() {
+        return animeLink;
     }
 }

@@ -46,16 +46,13 @@ public class AnimeListApp extends Application {
 
         animeListView = new ListView<>();
         animeListView.setItems(FXCollections.observableArrayList(animeList));
-        animeListView.setCellFactory(param -> new AnimeListCell());
         animeListView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> showAnimeDetails(newValue)
         );
 
         userAnimeListView = new ListView<>();
         userAnimeListView.setItems(FXCollections.observableArrayList(userAnimeList));
-        userAnimeListView.setCellFactory(param -> new AnimeListCell());
-        userAnimeListView.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> showAnimeDetails(newValue)
+        userAnimeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showAnimeDetails(newValue)
         );
 
         Button addButton = new Button("Add");
@@ -100,13 +97,13 @@ public class AnimeListApp extends Application {
         gridPane.setVgap(5);
         gridPane.setPadding(new Insets(10));
 
-        gridPane.addRow(0, new Label("Genres:"), new Label(anime.getGenresAsString()));
-        gridPane.addRow(1, new Label("Date Aired:"), new Label(anime.getDateAired()));
+        //gridPane.addRow(0, new Label("Genres:"), new Label(anime.getGenresAsString()));
+        gridPane.addRow(1, new Label("Date Aired:"), new Label(anime.getAired()));
         gridPane.addRow(2, new Label("Episode Count:"), new Label(String.valueOf(anime.getEpisodes())));
         gridPane.addRow(3, new Label("Popularity Rank:"), new Label(String.valueOf(anime.getPopularity())));
-        gridPane.addRow(4, new Label("People Watching:"), new Label(String.valueOf(anime.getPeopleWatching())));
+        gridPane.addRow(4, new Label("People Watching:"), new Label(String.valueOf(anime.getMembers())));
         gridPane.addRow(5, new Label("Rank:"), new Label(String.valueOf(anime.getRank())));
-        gridPane.addRow(6, new Label("Average Score:"), new Label(String.valueOf(anime.getAverageScore())));
+        gridPane.addRow(6, new Label("Average Score:"), new Label(String.valueOf(anime.getScore())));
 
         TextArea summaryTextArea = new TextArea(anime.getSynopsis());
         summaryTextArea.setEditable(false);
@@ -120,7 +117,7 @@ public class AnimeListApp extends Application {
     }
 
     private void addAnimeToUserList() {
-        Anime selectedAnime = animeListView.getSelectionModel().getSelectedItem();
+        AnimeData selectedAnime = animeListView.getSelectionModel().getSelectedItem();
         if (selectedAnime != null && !userAnimeList.contains(selectedAnime)) {
             userAnimeList.add(selectedAnime);
             updateGenrePieChart();
@@ -130,8 +127,8 @@ public class AnimeListApp extends Application {
     private void updateGenrePieChart() {
         List<PieChart.Data> genreData = new ArrayList<>();
 
-        for (Anime anime : userAnimeList) {
-            for (String genre : anime.getGenres()) {
+        for (AnimeData anime : userAnimeList) {
+            for (String genre : anime.getGenre()) {
                 boolean genreExists = false;
                 for (PieChart.Data data : genreData) {
                     if (data.getName().equalsIgnoreCase(genre)) {
@@ -149,15 +146,4 @@ public class AnimeListApp extends Application {
         genrePieChart.setData(FXCollections.observableArrayList(genreData));
     }
 
-    private class AnimeListCell extends ListCell<Anime> {
-        @Override
-        protected void updateItem(Anime anime, boolean empty) {
-            super.updateItem(anime, empty);
-            if (empty || anime == null) {
-                setText(null);
-            } else {
-                setText(anime.getName());
-            }
-        }
-    }
 }

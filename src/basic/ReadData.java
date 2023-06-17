@@ -11,26 +11,56 @@ import javafx.scene.chart.XYChart;
 
 public class ReadData {
     
-    private ArrayList<AnimeData> data;
+    private static ArrayList<AnimeData> data;
 
     public ReadData() {
-        this.data = new ArrayList<>();
+        data = new ArrayList<>();
     }
 
     public static void processData() {
-        AnimeDataSet data = new AnimeDataSet();
         try (BufferedReader reader = new BufferedReader(new FileReader("src/basic/animes.csv"))) {
             String line = reader.readLine();
-            while ((line = reader.readLine()) != null) {
-                String[] row = line.split(",");
-                String newGenre = row[3].replace("[", "");
+            for (int i = 0; i < 1; i++) {
+                line = reader.readLine();
+                int UID = Integer.parseInt(line.substring(0, line.indexOf(",")));
+                line = line.substring(line.indexOf(",") + 1);
+                String title = line.substring(0, line.indexOf(","));
+                line = line.substring(line.indexOf(",") + 1);
+                String synopsis = "";
+                while (line.charAt(0) != '[') {
+                    synopsis += line;
+                    line = reader.readLine();
+                }
+                line = line.substring(line.indexOf(",") + 1);
+                String strGenres = line.substring(0, line.indexOf(","));
+                line = line.substring(line.indexOf(",") + 1);
+                System.out.println(newGenre);
+                String newGenre = strGenres.replace("[", "");
                 newGenre = newGenre.replace("]", "");
                 newGenre = newGenre.replace("'", "");
                 String[] newGenreList = newGenre.split(", ");
-                ArrayList<String> genres = new ArrayList<>();
-                genres = (ArrayList<String>) Arrays.asList(newGenreList);
-                AnimeData animeData = new AnimeData(row[1], row[2], genres, row[4], Integer.parseInt(row[5]), Integer.parseInt(row[6]), Integer.parseInt(row[7]), Integer.parseInt(row[8]), Integer.parseInt(row[9]));
-                data.addAnimeData(animeData);
+                System.out.println(line);
+                ArrayList<String> genres = new ArrayList<>(Arrays.asList(newGenreList));
+                String aired = line.substring(0, line.indexOf(","));
+                line = line.substring(line.indexOf(",") + 1);
+                int episodes = Integer.parseInt(line.substring(0, line.indexOf(",")));
+                line = line.substring(line.indexOf(",") + 1);
+                int members = Integer.parseInt(line.substring(0, line.indexOf(",")));
+                line = line.substring(line.indexOf(",") + 1);
+                int popularity = Integer.parseInt(line.substring(0, line.indexOf(",")));
+                line = line.substring(line.indexOf(",") + 1);
+                System.out.println(line);
+                int rank = Integer.parseInt(line.substring(0, line.indexOf(",")));
+                line = line.substring(line.indexOf(",") + 1);
+                double score = Double.parseDouble(line.substring(0, line.indexOf(",")));
+                line = line.substring(line.indexOf(",") + 1);
+                String imageLink = line.substring(0, line.indexOf(","));
+                line = line.substring(line.indexOf(",") + 1);
+                String animeLink = line.substring(0, line.indexOf(","));
+                line = line.substring(line.indexOf(",") + 1);
+                AnimeData animeData = new AnimeData(UID, title, synopsis, genres, aired, episodes, members, popularity, rank, score, imageLink, animeLink);
+                data.add(animeData);
+    
             }
         } 
          
@@ -40,6 +70,6 @@ public class ReadData {
     }
 
     public static ArrayList<AnimeData> getData() {
-        return this.data;
+        return data;
     }
 }
