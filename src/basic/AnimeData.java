@@ -140,4 +140,8 @@ public class AnimeData {
     public void setAnimeLink(String animeLink) {
         this.animeLink = animeLink;
     }
+
+    public int titleCompareTo(AnimeData animeTwo) {
+        return getTitle().compareTo(animeTwo.getTitle());
+    }
 }
