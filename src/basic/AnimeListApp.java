@@ -10,7 +10,7 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -129,12 +129,17 @@ public class AnimeListApp extends Application {
         nsfwFilterCheckBox.setOnAction(event -> updateAnimeListView(nsfwFilterCheckBox, animeList));
 
         TextField genreSearchField = new TextField();
-        Button genreSearchButton = new Button("Search");
 
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
+        HBox hboxAnimeSearch = new HBox(10);
+        hboxAnimeSearch.getChildren().add(genreSearchField);
+        hboxAnimeSearch.setAlignment(Pos.TOP_LEFT);
+        hboxAnimeSearch.setPadding(new Insets(10));
+
         VBox vboxAnimeList = new VBox(10);
+        vboxAnimeList.getChildren().add(hboxAnimeSearch);
         vboxAnimeList.getChildren().add(animeListView);
         vboxAnimeList.getChildren().addAll(tabPane, addButton, nsfwFilterCheckBox);
         vboxAnimeList.setAlignment(Pos.CENTER);
