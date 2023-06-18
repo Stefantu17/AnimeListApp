@@ -10,7 +10,7 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -121,22 +121,9 @@ public class AnimeListApp extends Application {
             }
         });
 
+    
         Button addButton = new Button("Watched");
         addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList));
-
-        TabPane tabPane = new TabPane();
-        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-
-        Tab animeListTab = new Tab("Anime List");
-        animeListTab.setContent(animeListView);
-
-        Tab userAnimeListTab = new Tab("My Anime List");
-        userAnimeListTab.setContent(userAnimeListView);
-
-        Tab genreTab = new Tab("Genre Distribution");
-        genrePieChart = new PieChart();
-        genrePieChart.setTitle("Genre Distribution");
-        genreTab.setContent(genrePieChart);
 
         CheckBox nsfwFilterCheckBox = new CheckBox("NSFW Filter");
         nsfwFilterCheckBox.setOnAction(event -> updateAnimeListView(nsfwFilterCheckBox, animeList));
@@ -144,13 +131,34 @@ public class AnimeListApp extends Application {
         TextField genreSearchField = new TextField();
         Button genreSearchButton = new Button("Search");
 
+        TabPane tabPane = new TabPane();
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+
+        VBox vboxAnimeList = new VBox(10);
+        vboxAnimeList.getChildren().add(animeListView);
+        vboxAnimeList.getChildren().addAll(tabPane, addButton, nsfwFilterCheckBox);
+        vboxAnimeList.setAlignment(Pos.CENTER);
+        vboxAnimeList.setPadding(new Insets(10));
+
+        VBox vboxUserAnimeList = new VBox(10);
+        vboxUserAnimeList.getChildren().add(userAnimeListView);
+        vboxUserAnimeList.getChildren().addAll(tabPane, nsfwFilterCheckBox);
+        vboxUserAnimeList.setAlignment(Pos.CENTER);
+        vboxUserAnimeList.setPadding(new Insets(10));
+
+        Tab animeListTab = new Tab("Anime List");
+        animeListTab.setContent(vboxAnimeList);
+
+        Tab userAnimeListTab = new Tab("My Anime List");
+        userAnimeListTab.setContent(vboxUserAnimeList);
+
+        Tab genreTab = new Tab("Genre Distribution");
+        genrePieChart = new PieChart();
+        genrePieChart.setTitle("Genre Distribution");
+        genreTab.setContent(genrePieChart);
+
         tabPane.getTabs().addAll(animeListTab, userAnimeListTab, genreTab);
 
-        VBox vbox = new VBox(10);
-        vbox.setAlignment(Pos.CENTER);
-        vbox.getChildren().addAll(tabPane, addButton);
-        vbox.getChildren().add(nsfwFilterCheckBox);
-        vbox.setPadding(new Insets(10));
         /** 
         vbox.setPadding(new Insets(10));
         vbox.setAlignment(Pos.CENTER_LEFT);
@@ -158,9 +166,7 @@ public class AnimeListApp extends Application {
         */
 
         BorderPane borderPane = new BorderPane();
-
-        borderPane.setCenter(vbox);
-
+        borderPane.setCenter(tabPane);
 
         Scene scene = new Scene(borderPane, 800, 600);
         primaryStage.setScene(scene);
