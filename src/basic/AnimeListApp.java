@@ -110,9 +110,8 @@ public class AnimeListApp extends Application {
         addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList));
 
         ChoiceBox sortingChoiceBox = new ChoiceBox(FXCollections.observableArrayList("Title", "Score", "Popularity", "Members", "Episodes", "Rank"));
-        int selectedIndex = sortingChoiceBox.getSelectionModel().getSelectedIndex();
-
-        sortingChoiceBox.setOnAction(e -> animeSorting(animeList, selectedIndex));
+        
+        sortingChoiceBox.setOnAction(e -> animeSorting(animeList, sortingChoiceBox));
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
@@ -215,11 +214,10 @@ public class AnimeListApp extends Application {
         genrePieChart.setData(FXCollections.observableArrayList(genreData));
     }
 
-    private void animeSorting(ArrayList<AnimeData> animeList, int selectedIndex){
-        
-        if(selectedIndex == 1){
-            
-        }
+    private void animeSorting(ArrayList<AnimeData> animeList, ChoiceBox sortingChoiceBox) {
+            int selectedIndex = sortingChoiceBox.getSelectionModel().getSelectedIndex();
+            AnimeDataSet.mergeSort(animeList, selectedIndex);
+            animeListView.setItems(FXCollections.observableArrayList(animeList));
     }
 
     private void updateAnimeListView(CheckBox nsfwFilterCheckBox, ArrayList<AnimeData> animeList) {

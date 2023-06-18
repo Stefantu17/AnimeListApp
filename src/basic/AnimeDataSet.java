@@ -16,7 +16,6 @@ public class AnimeDataSet {
     }
 
     public static void mergeSort(ArrayList<AnimeData> list, int comparatorType) {
-        System.out.println("mergeSort");
         if (list == null || list.size() <= 1) {
             return; // Base case: already sorted
         }
@@ -40,7 +39,6 @@ public class AnimeDataSet {
         int rightIndex = 0;
         int listIndex = 0;
 
-        System.out.println("merge");
         // Compare first data types of objects from left and right lists
         while (leftIndex < left.size() && rightIndex < right.size()) {
             AnimeData leftAnime = left.get(leftIndex);
@@ -51,28 +49,24 @@ public class AnimeDataSet {
                     if (leftAnime.titleCompareTo(rightAnime) <= 0) {
                         list.set(listIndex, leftAnime);
                         leftIndex++;
-                        System.out.println("left");
                     } 
                     
                     else {
                         list.set(listIndex, rightAnime);
                         rightIndex++;
-                        System.out.println("right");
                     }
 
                     break;
 
                 case 1:
-                    if (leftAnime.scoreCompareTo(rightAnime) <= 0) {
+                    if (leftAnime.scoreCompareTo(rightAnime) > 0) {
                             list.set(listIndex, leftAnime);
                             leftIndex++;
-                            System.out.println("left");
                         } 
                     
                     else {
                         list.set(listIndex, rightAnime);
                         rightIndex++;
-                        System.out.println("right");
                     }
 
                     break;
@@ -81,43 +75,37 @@ public class AnimeDataSet {
                     if (leftAnime.popularityCompareTo(rightAnime) <= 0) {
                             list.set(listIndex, leftAnime);
                             leftIndex++;
-                            System.out.println("left");
                         } 
                     
                     else {
                         list.set(listIndex, rightAnime);
                         rightIndex++;
-                        System.out.println("right");
                     }
 
                     break;
 
                 case 3:
-                    if (leftAnime.membersCompareTo(rightAnime) <= 0) {
+                    if (leftAnime.membersCompareTo(rightAnime) > 0) {
                             list.set(listIndex, leftAnime);
                             leftIndex++;
-                            System.out.println("left");
                         } 
                     
                     else {
                         list.set(listIndex, rightAnime);
                         rightIndex++;
-                        System.out.println("right");
                     }
 
                     break;
-                    
+
                 case 4:
-                    if (leftAnime.episodeCompareTo(rightAnime) <= 0) {
+                    if (leftAnime.episodesCompareTo(rightAnime) <= 0) {
                             list.set(listIndex, leftAnime);
                             leftIndex++;
-                            System.out.println("left");
                         } 
                     
                     else {
                         list.set(listIndex, rightAnime);
                         rightIndex++;
-                        System.out.println("right");
                     }
 
                     break;
@@ -126,13 +114,11 @@ public class AnimeDataSet {
                     if (leftAnime.rankCompareTo(rightAnime) <= 0) {
                             list.set(listIndex, leftAnime);
                             leftIndex++;
-                            System.out.println("left");
                         } 
                     
                     else {
                         list.set(listIndex, rightAnime);
                         rightIndex++;
-                        System.out.println("right");
                     }
 
                     break;
@@ -146,7 +132,6 @@ public class AnimeDataSet {
             list.set(listIndex, left.get(leftIndex));
             leftIndex++;
             listIndex++;
-            System.out.println("copy left");
         }
 
         // Copy remaining objects from right list
@@ -154,7 +139,6 @@ public class AnimeDataSet {
             list.set(listIndex, right.get(rightIndex));
             rightIndex++;
             listIndex++;
-            System.out.println("copy left");
         }
     }
 
