@@ -122,10 +122,6 @@ public class AnimeListApp extends Application {
             }
         });
 
-        ComboBox<String> sortComboBox = new ComboBox<>();
-        sortComboBox.setItems(FXCollections.observableArrayList("Sort by Name", "Sort by Date", "Sort by Popularity", "Sort by Score"));
-        sortComboBox.getSelectionModel().selectFirst();
-    
         Button addButton = new Button("Watched");
         addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList));
         
@@ -138,8 +134,8 @@ public class AnimeListApp extends Application {
         TextField genreSearchField = new TextField();
 
         ChoiceBox sortingChoiceBox = new ChoiceBox(FXCollections.observableArrayList("Title", "Score", "Popularity", "Members", "Episodes", "Rank"));
-        
         sortingChoiceBox.setOnAction(e -> animeSorting(animeList, sortingChoiceBox));
+        
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
@@ -147,7 +143,7 @@ public class AnimeListApp extends Application {
         hboxAnimeSearch.setAlignment(Pos.TOP_LEFT);
         hboxAnimeSearch.setPadding(new Insets(10));
         hboxAnimeSearch.setSpacing(500);
-        hboxAnimeSearch.getChildren().addAll(genreSearchField, sortComboBox);
+        hboxAnimeSearch.getChildren().addAll(genreSearchField, sortingChoiceBox);
 
         VBox vboxAnimeList = new VBox(10);
         vboxAnimeList.getChildren().add(hboxAnimeSearch);
