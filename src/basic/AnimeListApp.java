@@ -106,7 +106,7 @@ public class AnimeListApp extends Application {
         userAnimeListView.setCellFactory(param -> new AnimeListCell());
         userAnimeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showAnimeDetails(newValue));
 
-        Button addButton = new Button("Add");
+        Button addButton = new Button("Watched");
         addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList));
 
         TabPane tabPane = new TabPane();
@@ -125,6 +125,9 @@ public class AnimeListApp extends Application {
 
         CheckBox nsfwFilterCheckBox = new CheckBox("NSFW Filter");
         nsfwFilterCheckBox.setOnAction(event -> updateAnimeListView(nsfwFilterCheckBox, animeList));
+
+        TextField genreSearchField = new TextField();
+        Button genreSearchButton = new Button("Search");
 
         tabPane.getTabs().addAll(animeListTab, userAnimeListTab, genreTab);
 
@@ -172,6 +175,7 @@ public class AnimeListApp extends Application {
     }
 
     private void addAnimeToUserList(ObservableList<AnimeData> observableUserAnimeList) {
+        
         AnimeData selectedAnime = animeListView.getSelectionModel().getSelectedItem();
         
 
