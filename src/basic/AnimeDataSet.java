@@ -61,6 +61,81 @@ public class AnimeDataSet {
                     }
 
                     break;
+
+                case 1:
+                    if (leftAnime.scoreCompareTo(rightAnime) <= 0) {
+                            list.set(listIndex, leftAnime);
+                            leftIndex++;
+                            System.out.println("left");
+                        } 
+                    
+                    else {
+                        list.set(listIndex, rightAnime);
+                        rightIndex++;
+                        System.out.println("right");
+                    }
+
+                    break;
+                
+                case 2:
+                    if (leftAnime.popularityCompareTo(rightAnime) <= 0) {
+                            list.set(listIndex, leftAnime);
+                            leftIndex++;
+                            System.out.println("left");
+                        } 
+                    
+                    else {
+                        list.set(listIndex, rightAnime);
+                        rightIndex++;
+                        System.out.println("right");
+                    }
+
+                    break;
+
+                case 3:
+                    if (leftAnime.membersCompareTo(rightAnime) <= 0) {
+                            list.set(listIndex, leftAnime);
+                            leftIndex++;
+                            System.out.println("left");
+                        } 
+                    
+                    else {
+                        list.set(listIndex, rightAnime);
+                        rightIndex++;
+                        System.out.println("right");
+                    }
+
+                    break;
+                    
+                case 4:
+                    if (leftAnime.episodeCompareTo(rightAnime) <= 0) {
+                            list.set(listIndex, leftAnime);
+                            leftIndex++;
+                            System.out.println("left");
+                        } 
+                    
+                    else {
+                        list.set(listIndex, rightAnime);
+                        rightIndex++;
+                        System.out.println("right");
+                    }
+
+                    break;
+
+                case 5:
+                    if (leftAnime.rankCompareTo(rightAnime) <= 0) {
+                            list.set(listIndex, leftAnime);
+                            leftIndex++;
+                            System.out.println("left");
+                        } 
+                    
+                    else {
+                        list.set(listIndex, rightAnime);
+                        rightIndex++;
+                        System.out.println("right");
+                    }
+
+                    break;
             }
  
             listIndex++;
