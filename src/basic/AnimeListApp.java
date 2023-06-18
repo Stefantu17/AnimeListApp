@@ -128,6 +128,9 @@ public class AnimeListApp extends Application {
     
         Button addButton = new Button("Watched");
         addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList));
+        
+        Button removeButton = new Button("Remove");
+        removeButton.setOnAction(e -> removeAnimeFromUserList(observableUserAnimeList));
 
         CheckBox nsfwFilterCheckBox = new CheckBox("NSFW Filter");
         nsfwFilterCheckBox.setOnAction(event -> updateAnimeListView(nsfwFilterCheckBox, animeList));
@@ -152,7 +155,8 @@ public class AnimeListApp extends Application {
 
         VBox vboxUserAnimeList = new VBox(10);
         vboxUserAnimeList.getChildren().add(userAnimeListView);
-        vboxUserAnimeList.getChildren().addAll(tabPane);
+        vboxUserAnimeList.getChildren().add(removeButton);
+        vboxUserAnimeList.getChildren().add(tabPane);
         vboxUserAnimeList.setAlignment(Pos.CENTER);
         vboxUserAnimeList.setPadding(new Insets(10));
 
@@ -168,12 +172,6 @@ public class AnimeListApp extends Application {
         genreTab.setContent(genrePieChart);
 
         tabPane.getTabs().addAll(animeListTab, userAnimeListTab, genreTab);
-
-        /** 
-        vbox.setPadding(new Insets(10));
-        vbox.setAlignment(Pos.CENTER_LEFT);
-        vbox.getChildren().addAll(genreSearchField, genreSearchButton);
-        */
 
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(tabPane);
@@ -216,10 +214,22 @@ public class AnimeListApp extends Application {
 
         AnimeData selectedAnime = animeListView.getSelectionModel().getSelectedItem();
         
-
         if (selectedAnime != null && !userAnimeList.contains(selectedAnime)) {
             userAnimeList.add(selectedAnime);
             observableUserAnimeList.add(selectedAnime);
+            userAnimeListView.setItems(observableUserAnimeList);
+            updateGenrePieChart();
+        }
+
+    }
+
+    private void removeAnimeFromUserList(ObservableList<AnimeData> observableUserAnimeList) {
+
+        AnimeData selectedAnime = userAnimeListView.getSelectionModel().getSelectedItem();
+        
+        if (selectedAnime != null && !userAnimeList.contains(selectedAnime)) {
+            userAnimeList.remove(selectedAnime);
+            observableUserAnimeList.remove(selectedAnime);
             userAnimeListView.setItems(observableUserAnimeList);
             updateGenrePieChart();
         }
