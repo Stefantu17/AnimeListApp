@@ -142,7 +142,7 @@ public class AnimeListApp extends Application {
 
         VBox vboxUserAnimeList = new VBox(10);
         vboxUserAnimeList.getChildren().add(userAnimeListView);
-        vboxUserAnimeList.getChildren().addAll(tabPane, nsfwFilterCheckBox);
+        vboxUserAnimeList.getChildren().addAll(tabPane);
         vboxUserAnimeList.setAlignment(Pos.CENTER);
         vboxUserAnimeList.setPadding(new Insets(10));
 
