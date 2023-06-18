@@ -100,12 +100,26 @@ public class AnimeListApp extends Application {
         animeListView = new ListView<>();
         animeListView.setItems(FXCollections.observableArrayList(animeList));
         animeListView.setCellFactory(param -> new AnimeListCell());
-        animeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showAnimeDetails(newValue));
+        animeListView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                AnimeData selectedAnime = animeListView.getSelectionModel().getSelectedItem();
+                if (selectedAnime != null) {
+                    showAnimeDetails(selectedAnime);
+                }
+            }
+        });
 
         userAnimeListView = new ListView<>();
         userAnimeListView.setItems(FXCollections.observableArrayList(userAnimeList));
         userAnimeListView.setCellFactory(param -> new AnimeListCell());
-        userAnimeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showAnimeDetails(newValue));
+        userAnimeListView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                AnimeData selectedAnime = animeListView.getSelectionModel().getSelectedItem();
+                if (selectedAnime != null) {
+                    showAnimeDetails(selectedAnime);
+                }
+            }
+        });
 
         Button addButton = new Button("Watched");
         addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList));
@@ -144,6 +158,7 @@ public class AnimeListApp extends Application {
         */
 
         BorderPane borderPane = new BorderPane();
+
         borderPane.setCenter(vbox);
 
 
