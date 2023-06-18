@@ -15,39 +15,115 @@ public class AnimeDataSet {
         data.add(animeData);
     }
 
-    public static void mergeSort(ArrayList<Object> list, Comparator<Object> comparator) {
+    public static void mergeSort(ArrayList<AnimeData> list, int comparatorType) {
         if (list == null || list.size() <= 1) {
             return; // Base case: already sorted
         }
 
         int mid = list.size() / 2;
-        ArrayList<Object> left = new ArrayList<>(list.subList(0, mid));
-        ArrayList<Object> right = new ArrayList<>(list.subList(mid, list.size()));
+        ArrayList<AnimeData> left = new ArrayList<>(list.subList(0, mid));
+        ArrayList<AnimeData> right = new ArrayList<>(list.subList(mid, list.size()));
 
         // Recursively sort the two halves
-        mergeSort(left, comparator);
-        mergeSort(right, comparator);
+        mergeSort(left, comparatorType);
+        mergeSort(right, comparatorType);
 
         // Merge the sorted halves
-        merge(list, left, right, comparator);
+        merge(list, left, right, comparatorType);
     }
 
-    private static void merge(ArrayList<Object> list, ArrayList<Object> left, ArrayList<Object> right, Comparator<Object> comparator) {
+    
+
+    private static void merge(ArrayList<AnimeData> list, ArrayList<AnimeData> left, ArrayList<AnimeData> right, int comparatorType) {
         int leftIndex = 0;
         int rightIndex = 0;
         int listIndex = 0;
 
         // Compare first data types of objects from left and right lists
         while (leftIndex < left.size() && rightIndex < right.size()) {
-            Object leftObject = left.get(leftIndex);
-            Object rightObject = right.get(rightIndex);
-            if (comparator.compare(leftObject, rightObject) <= 0) {
-                list.set(listIndex, leftObject);
-                leftIndex++;
-            } else {
-                list.set(listIndex, rightObject);
-                rightIndex++;
+            AnimeData leftAnime = left.get(leftIndex);
+            AnimeData rightAnime = right.get(rightIndex);
+
+            switch (comparatorType){
+                case 0:
+                    if (leftAnime.titleCompareTo(rightAnime) <= 0) {
+                        list.set(listIndex, leftAnime);
+                        leftIndex++;
+                    } 
+                    
+                    else {
+                        list.set(listIndex, rightAnime);
+                        rightIndex++;
+                    }
+
+                    break;
+
+                case 1:
+                    if (leftAnime.scoreCompareTo(rightAnime) > 0) {
+                            list.set(listIndex, leftAnime);
+                            leftIndex++;
+                        } 
+                    
+                    else {
+                        list.set(listIndex, rightAnime);
+                        rightIndex++;
+                    }
+
+                    break;
+                
+                case 2:
+                    if (leftAnime.popularityCompareTo(rightAnime) <= 0) {
+                            list.set(listIndex, leftAnime);
+                            leftIndex++;
+                        } 
+                    
+                    else {
+                        list.set(listIndex, rightAnime);
+                        rightIndex++;
+                    }
+
+                    break;
+
+                case 3:
+                    if (leftAnime.membersCompareTo(rightAnime) > 0) {
+                            list.set(listIndex, leftAnime);
+                            leftIndex++;
+                        } 
+                    
+                    else {
+                        list.set(listIndex, rightAnime);
+                        rightIndex++;
+                    }
+
+                    break;
+
+                case 4:
+                    if (leftAnime.episodesCompareTo(rightAnime) <= 0) {
+                            list.set(listIndex, leftAnime);
+                            leftIndex++;
+                        } 
+                    
+                    else {
+                        list.set(listIndex, rightAnime);
+                        rightIndex++;
+                    }
+
+                    break;
+
+                case 5:
+                    if (leftAnime.rankCompareTo(rightAnime) <= 0) {
+                            list.set(listIndex, leftAnime);
+                            leftIndex++;
+                        } 
+                    
+                    else {
+                        list.set(listIndex, rightAnime);
+                        rightIndex++;
+                    }
+
+                    break;
             }
+ 
             listIndex++;
         }
 

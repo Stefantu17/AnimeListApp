@@ -140,4 +140,29 @@ public class AnimeData {
     public void setAnimeLink(String animeLink) {
         this.animeLink = animeLink;
     }
+
+    public int titleCompareTo(AnimeData animeTwo) {
+        return this.getTitle().compareTo(animeTwo.getTitle());
+    }
+
+    public double scoreCompareTo(AnimeData animeTwo) {
+        return this.getScore() - animeTwo.getScore();
+    }
+
+    public double popularityCompareTo(AnimeData animeTwo) {
+        return this.getPopularity() - animeTwo.getPopularity();
+    }
+
+    public double membersCompareTo(AnimeData animeTwo) {
+        return this.getMembers() - animeTwo.getMembers();
+    }
+
+    public double episodesCompareTo(AnimeData animeTwo) {
+        return this.getEpisodes() - animeTwo.getEpisodes();
+    }
+
+    public double rankCompareTo(AnimeData animeTwo) {
+        return this.getRank() - animeTwo.getRank();
+    }
+
 }
