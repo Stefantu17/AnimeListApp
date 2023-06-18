@@ -109,6 +109,10 @@ public class AnimeListApp extends Application {
         Button addButton = new Button("Watched");
         addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList));
 
+        ChoiceBox sortingChoiceBox = new ChoiceBox(FXCollections.observableArrayList("Title", "Score", "Popularity", "Members", "Episodes", "Rank"));
+        int selectedIndex = sortingChoiceBox.getSelectionModel().getSelectedIndex();
+
+        sortingChoiceBox.setOnAction(e -> animeSorting(animeList, selectedIndex));
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
@@ -136,6 +140,7 @@ public class AnimeListApp extends Application {
         vbox.setAlignment(Pos.CENTER);
         vbox.getChildren().addAll(tabPane, addButton);
         vbox.getChildren().add(nsfwFilterCheckBox);
+        vbox.getChildren().add(sortingChoiceBox);
 
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(vbox);
@@ -210,6 +215,13 @@ public class AnimeListApp extends Application {
         genrePieChart.setData(FXCollections.observableArrayList(genreData));
     }
 
+    private void animeSorting(ArrayList<AnimeData> animeList, int selectedIndex){
+        
+        if(selectedIndex == 1){
+            
+        }
+    }
+
     private void updateAnimeListView(CheckBox nsfwFilterCheckBox, ArrayList<AnimeData> animeList) {
 
         ObservableList<AnimeData> filteredAnimeList = FXCollections.observableArrayList();
@@ -236,6 +248,7 @@ public class AnimeListApp extends Application {
         
     }
 
+    
     private class AnimeListCell extends ListCell<AnimeData> {
         @Override
         protected void updateItem(AnimeData anime, boolean empty) {
