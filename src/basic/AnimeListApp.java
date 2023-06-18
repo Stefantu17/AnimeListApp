@@ -107,7 +107,7 @@ public class AnimeListApp extends Application {
         userAnimeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> showAnimeDetails(newValue));
 
         Button addButton = new Button("Add");
-        addButton.setOnAction(e -> addAnimeToUserList());
+        addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList));
 
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
@@ -115,7 +115,6 @@ public class AnimeListApp extends Application {
         Tab animeListTab = new Tab("Anime List");
         animeListTab.setContent(animeListView);
 
-        ListView<AnimeData> userAnimeListView = new ListView<>();
         Tab userAnimeListTab = new Tab("My Anime List");
         userAnimeListTab.setContent(userAnimeListView);
 
@@ -172,23 +171,20 @@ public class AnimeListApp extends Application {
         alert.showAndWait();
     }
 
-    private void addAnimeToUserList() {
+    private void addAnimeToUserList(ObservableList<AnimeData> observableUserAnimeList) {
         AnimeData selectedAnime = animeListView.getSelectionModel().getSelectedItem();
         
 
         if (selectedAnime != null && !userAnimeList.contains(selectedAnime)) {
             userAnimeList.add(selectedAnime);
+            observableUserAnimeList.add(selectedAnime);
+            userAnimeListView.setItems(observableUserAnimeList);
             updateGenrePieChart();
         }
-        animeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            updateUserAnimeListView(newValue);
-        });
+
     }
 
-    private void updateUserAnimeListView(AnimeData anime) {
-        observableUserAnimeList.getItems().add(anime);
-        animeListView.setItems(observableUserAnimeList);
-    }
+
 
     private void updateGenrePieChart() {
         List<PieChart.Data> genreData = new ArrayList<>();
