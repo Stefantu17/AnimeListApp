@@ -212,7 +212,6 @@ public class AnimeListApp extends Application {
     private void addAnimeToUserList(ObservableList<AnimeData> observableUserAnimeList) {
 
         AnimeData selectedAnime = animeListView.getSelectionModel().getSelectedItem();
-        
         if (selectedAnime != null && !userAnimeList.contains(selectedAnime)) {
             userAnimeList.add(selectedAnime);
             observableUserAnimeList.add(selectedAnime);
@@ -225,8 +224,8 @@ public class AnimeListApp extends Application {
     private void removeAnimeFromUserList(ObservableList<AnimeData> observableUserAnimeList) {
 
         AnimeData selectedAnime = userAnimeListView.getSelectionModel().getSelectedItem();
-        
-        if (selectedAnime != null && !userAnimeList.contains(selectedAnime)) {
+
+        if (selectedAnime != null && userAnimeList.contains(selectedAnime)) {
             userAnimeList.remove(selectedAnime);
             observableUserAnimeList.remove(selectedAnime);
             userAnimeListView.setItems(observableUserAnimeList);
