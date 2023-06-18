@@ -45,7 +45,6 @@ public class AnimeListApp extends Application {
                 String title = line.substring(0, line.indexOf(","));
                 line = line.substring(line.indexOf(",") + 1);
                 String synopsis = "";
-                System.out.println(line);
                 if (line.contains("[") == true) {
                     line = line.substring(line.indexOf("["));
                 }
