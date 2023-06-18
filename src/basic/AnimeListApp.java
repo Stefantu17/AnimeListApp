@@ -10,6 +10,7 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -132,13 +133,19 @@ public class AnimeListApp extends Application {
         tabPane.getTabs().addAll(animeListTab, userAnimeListTab, genreTab);
 
         VBox vbox = new VBox(10);
-        vbox.setPadding(new Insets(10));
         vbox.setAlignment(Pos.CENTER);
         vbox.getChildren().addAll(tabPane, addButton);
         vbox.getChildren().add(nsfwFilterCheckBox);
+        vbox.setPadding(new Insets(10));
+        /** 
+        vbox.setPadding(new Insets(10));
+        vbox.setAlignment(Pos.CENTER_LEFT);
+        vbox.getChildren().addAll(genreSearchField, genreSearchButton);
+        */
 
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(vbox);
+
 
         Scene scene = new Scene(borderPane, 800, 600);
         primaryStage.setScene(scene);
@@ -149,7 +156,7 @@ public class AnimeListApp extends Application {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Anime Details");
         alert.setHeaderText(anime.getTitle());
-
+        
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);
         gridPane.setVgap(5);
@@ -175,7 +182,7 @@ public class AnimeListApp extends Application {
     }
 
     private void addAnimeToUserList(ObservableList<AnimeData> observableUserAnimeList) {
-        
+
         AnimeData selectedAnime = animeListView.getSelectionModel().getSelectedItem();
         
 
