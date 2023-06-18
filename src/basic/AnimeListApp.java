@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -121,6 +122,9 @@ public class AnimeListApp extends Application {
             }
         });
 
+        ComboBox<String> sortComboBox = new ComboBox<>();
+        sortComboBox.setItems(FXCollections.observableArrayList("Sort by Name", "Sort by Date", "Sort by Popularity", "Sort by Score"));
+        sortComboBox.getSelectionModel().selectFirst();
     
         Button addButton = new Button("Watched");
         addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList));
@@ -134,9 +138,10 @@ public class AnimeListApp extends Application {
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         HBox hboxAnimeSearch = new HBox(10);
-        hboxAnimeSearch.getChildren().add(genreSearchField);
         hboxAnimeSearch.setAlignment(Pos.TOP_LEFT);
         hboxAnimeSearch.setPadding(new Insets(10));
+        hboxAnimeSearch.setSpacing(500);
+        hboxAnimeSearch.getChildren().addAll(genreSearchField, sortComboBox);
 
         VBox vboxAnimeList = new VBox(10);
         vboxAnimeList.getChildren().add(hboxAnimeSearch);
