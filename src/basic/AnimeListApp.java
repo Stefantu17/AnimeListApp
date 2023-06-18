@@ -94,7 +94,8 @@ public class AnimeListApp extends Application {
         }
 
         userAnimeList = new ArrayList<>();
-        
+        ObservableList<AnimeData> observableUserAnimeList = FXCollections.observableArrayList();
+
         animeListView = new ListView<>();
         animeListView.setItems(FXCollections.observableArrayList(animeList));
         animeListView.setCellFactory(param -> new AnimeListCell());
@@ -185,7 +186,8 @@ public class AnimeListApp extends Application {
     }
 
     private void updateUserAnimeListView(AnimeData anime) {
-        userAnimeListView.getItems().add(anime);
+        observableUserAnimeList.getItems().add(anime);
+        animeListView.setItems(observableUserAnimeList);
     }
 
     private void updateGenrePieChart() {
