@@ -6,7 +6,11 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -28,6 +32,7 @@ public class AnimeListApp extends Application {
     private ListView<AnimeData> userAnimeListView;
     private List<AnimeData> userAnimeList;
     private PieChart genrePieChart;
+    private XYChart.Series<String, Number> series;
 
     public static void main(String[] args) {
         launch(args);
@@ -122,6 +127,25 @@ public class AnimeListApp extends Application {
             }
         });
 
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
+
+        // Create the bar chart
+        BarChart<String, Number> scoreChart = new BarChart<>(xAxis, yAxis);
+        scoreChart.setTitle("Anime Score Chart");
+
+        // Create the data series
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Scores");
+
+        // Add the series to the chart
+        scoreChart.getData().add(series);
+        
+        // Create the VBox to hold the score chart view
+        VBox vbox = new VBox();
+        vbox.setPadding(new Insets(10));
+        vbox.getChildren().add(scoreChart);
+
         Button addButton = new Button("Watched");
         addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList));
         
@@ -170,7 +194,10 @@ public class AnimeListApp extends Application {
         genrePieChart.setTitle("Genre Distribution");
         genreTab.setContent(genrePieChart);
 
-        tabPane.getTabs().addAll(animeListTab, userAnimeListTab, genreTab);
+        Tab scoreChartTab = new Tab("Score Chart");
+        scoreChartTab.setContent(vbox);
+
+        tabPane.getTabs().addAll(animeListTab, userAnimeListTab, genreTab, scoreChartTab);
 
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(tabPane);
@@ -178,6 +205,8 @@ public class AnimeListApp extends Application {
         Scene scene = new Scene(borderPane, 800, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
+
+
     }
 
     private void showAnimeDetails(AnimeData anime) {
@@ -217,6 +246,7 @@ public class AnimeListApp extends Application {
             observableUserAnimeList.add(selectedAnime);
             userAnimeListView.setItems(observableUserAnimeList);
             updateGenrePieChart();
+            updateBarChart();
         }
 
     }
@@ -288,6 +318,13 @@ public class AnimeListApp extends Application {
         
     }
 
+    private void updateBarChart() {
+        for (AnimeData anime : userAnimeList) {
+            int roundedScore = (int) Math.round(anime.getScore());
+            series.getData().add(new XYChart.Data<>(anime.getTitle(), roundedScore));
+        }
+    }
+
     
     private class AnimeListCell extends ListCell<AnimeData> {
         @Override
@@ -300,4 +337,5 @@ public class AnimeListApp extends Application {
             }
         }
     }
+
 }
