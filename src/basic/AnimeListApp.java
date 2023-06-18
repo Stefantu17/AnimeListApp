@@ -43,18 +43,25 @@ public class AnimeListApp extends Application {
                 int UID = Integer.parseInt(line.substring(0, line.indexOf(",")));
                 line = line.substring(line.indexOf(",") + 1);
                 String title = line.substring(0, line.indexOf(","));
-                line = line.substring(line.indexOf(",") + 2);
+                line = line.substring(line.indexOf(",") + 1);
                 String synopsis = "";
-                while (line.charAt(0) != '[' && line.charAt(0) != '(') {
-                    synopsis += line;
+                System.out.println(line);
+                if (line.contains("[") == true) {
+                    line = line.substring(line.indexOf("]"));
+                }
+                else {
+                    while (line.charAt(0) != '[' && line.charAt(0) != '(') {
+                        synopsis += line;
+                        line = reader.readLine();
+                        if (line.contains("[") == true) {
+                            break;
+                        }
+                    }
+                    line = line.substring(line.indexOf(",") + 2);
+                }
+                while (line.length() < 20) {
                     line = reader.readLine();
                 }
-                System.out.println(line);
-                while (line.length() < 30) {
-                    line = reader.readLine();
-                }
-                System.out.println(line);
-                line = line.substring(line.indexOf(",") + 2);
                 String strGenres = line.substring(0, line.indexOf("]"));
                 line = line.substring(line.indexOf("]") + 4);
                 String newGenres = strGenres;
@@ -64,20 +71,14 @@ public class AnimeListApp extends Application {
                 ArrayList<String> genres = new ArrayList<>(Arrays.asList(newGenreList));
                 String aired = line.substring(0, line.indexOf(","));
                 line = line.substring(line.indexOf('"') + 2);
-
-                System.out.println(line);
                 double episodes = Double.parseDouble(line.substring(0, line.indexOf(",")));
                 line = line.substring(line.indexOf(",") + 1);
-                System.out.println(line);
                 double members = Double.parseDouble(line.substring(0, line.indexOf(",")));
                 line = line.substring(line.indexOf(",") + 1);
-                System.out.println(line);
                 double popularity = Double.parseDouble(line.substring(0, line.indexOf(",")));
                 line = line.substring(line.indexOf(",") + 1);
-                System.out.println(line);
                 double rank = Double.parseDouble(line.substring(0, line.indexOf(",")));
                 line = line.substring(line.indexOf(",") + 1);
-                System.out.println(line);
                 double score = Double.parseDouble(line.substring(0, line.indexOf(",")));
                 
                 line = line.substring(line.indexOf(",") + 1);
@@ -86,15 +87,6 @@ public class AnimeListApp extends Application {
                 String animeLink = line;
                 line = line.substring(line.indexOf(",") + 1);
                 AnimeData animeData = new AnimeData(UID, title, synopsis, genres, aired, episodes, members, popularity, rank, score, imageLink, animeLink);
-                System.out.println(animeData.getTitle());
-                System.out.println(animeData.getSynopsis());
-                System.out.println(animeData.getGenresString());
-                System.out.println(animeData.getAired());
-                System.out.println(animeData.getEpisodes());
-                System.out.println(animeData.getPopularity());
-                System.out.println(animeData.getMembers());
-                System.out.println(animeData.getRank());
-                System.out.println(animeData.getScore());
                 animeList.add(animeData);
             }
         } 
