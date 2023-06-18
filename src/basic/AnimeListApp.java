@@ -184,8 +184,6 @@ public class AnimeListApp extends Application {
 
     }
 
-
-
     private void updateGenrePieChart() {
         List<PieChart.Data> genreData = new ArrayList<>();
 
