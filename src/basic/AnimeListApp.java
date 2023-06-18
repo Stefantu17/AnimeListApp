@@ -255,7 +255,13 @@ public class AnimeListApp extends Application {
                 filteredAnimeList.add(anime);
             }
         }
-        animeListView.setItems(filteredAnimeList);
+        if (nsfwFilterEnabled) {
+            animeListView.setItems(filteredAnimeList);
+        } 
+        else {
+            animeListView.setItems(FXCollections.observableArrayList(animeList));
+        }
+        
     }
 
     private class AnimeListCell extends ListCell<AnimeData> {
