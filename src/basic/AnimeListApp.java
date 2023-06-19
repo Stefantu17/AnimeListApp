@@ -8,6 +8,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -24,6 +25,8 @@ import java.util.List;
 
 public class AnimeListApp extends Application {
 
+    private TableView mainTable = new TableView();
+    private TableView userTable = new TableView();
     private ListView<AnimeData> animeListView;
     private ListView<AnimeData> userAnimeListView;
     private List<AnimeData> userAnimeList;
@@ -96,18 +99,37 @@ public class AnimeListApp extends Application {
         }
         userAnimeList = new ArrayList<>();
         ObservableList<AnimeData> observableUserAnimeList = FXCollections.observableArrayList();
+        
 
-        animeListView = new ListView<>();
-        animeListView.setItems(FXCollections.observableArrayList(animeList));
-        animeListView.setCellFactory(param -> new AnimeListCell());
-        animeListView.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                AnimeData selectedAnime = animeListView.getSelectionModel().getSelectedItem();
-                if (selectedAnime != null) {
-                    showAnimeDetails(selectedAnime);
-                }
-            }
-        });
+        // MAIN TABLE
+        mainTable.setEditable(true);
+
+        TableColumn animeTitle = new TableColumn("Name");
+        animeTitle.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("title"));
+
+        TableColumn animeScore = new TableColumn("Score");
+        animeScore.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("score"));
+
+        TableColumn animePopularity = new TableColumn("Popularity");
+        animePopularity.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("popularity"));
+
+        TableColumn animeRank = new TableColumn("Rank");
+        animeRank.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("rank"));
+
+        TableColumn animeViews = new TableColumn("Views");
+        animeViews.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("members"));
+
+        TableColumn animeEpisodes = new TableColumn("Episodes");
+        animeEpisodes.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("episodes"));
+
+        mainTable.setItems(FXCollections.observableArrayList(animeList));
+
+        mainTable.getColumns().addAll(animeTitle, animeScore, animePopularity, animeRank, animeViews, animeEpisodes);
+        mainTable.setOnMouseClicked(event -> {
+                    if (event.getClickCount() == 2) {
+                        //AnimeData selectedAnime =mainTablegetSelectionModel();
+                    }
+                });
 
         userAnimeListView = new ListView<>();
         userAnimeListView.setItems(FXCollections.observableArrayList(userAnimeList));
@@ -120,6 +142,28 @@ public class AnimeListApp extends Application {
                 }
             }
         });
+    
+        userTable.setEditable(true);
+
+        TableColumn userAnimeTitle = new TableColumn("Name");
+        userAnimeTitle.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("title"));
+
+        TableColumn userAnimeScore = new TableColumn("Score");
+        userAnimeScore.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("score"));
+
+        TableColumn userAnimePopularity = new TableColumn("Popularity");
+        userAnimePopularity.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("popularity"));
+
+        TableColumn userAnimeRank = new TableColumn("Rank");
+        userAnimeRank.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("rank"));
+
+        TableColumn userAnimeViews = new TableColumn("Views");
+        userAnimeViews.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("members"));
+
+        TableColumn userAnimeEpisodes = new TableColumn("Episodes");
+        userAnimeEpisodes.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("episodes"));
+
+        userTable.setItems(FXCollections.observableArrayList(animeList));
 
         Button addButton = new Button("Watched");
         addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList));
@@ -130,7 +174,7 @@ public class AnimeListApp extends Application {
         CheckBox nsfwFilterCheckBox = new CheckBox("NSFW Filter");
         nsfwFilterCheckBox.setOnAction(event -> updateAnimeListView(nsfwFilterCheckBox, animeList));
 
-        ChoiceBox sortingChoiceBox = new ChoiceBox(FXCollections.observableArrayList("Name", "Score", "Rank", "Popularity", "Views", "Episodes"));
+        ChoiceBox sortingChoiceBox = new ChoiceBox(FXCollections.observableArrayList("Name", "Score", "Popularity", "Rank", "Views", "Episodes"));
         sortingChoiceBox.setValue("Name");
         animeSorting(animeList, sortingChoiceBox);
         sortingChoiceBox.setOnAction(e -> animeSorting(animeList, sortingChoiceBox));
@@ -150,13 +194,13 @@ public class AnimeListApp extends Application {
 
         VBox vboxAnimeList = new VBox(10);
         vboxAnimeList.getChildren().add(hboxAnimeSearch);
-        vboxAnimeList.getChildren().add(animeListView);
+        vboxAnimeList.getChildren().add(mainTable);
         vboxAnimeList.getChildren().addAll(tabPane, addButton, nsfwFilterCheckBox);
         vboxAnimeList.setAlignment(Pos.CENTER);
         vboxAnimeList.setPadding(new Insets(10));
 
         VBox vboxUserAnimeList = new VBox(10);
-        vboxUserAnimeList.getChildren().add(userAnimeListView);
+        vboxUserAnimeList.getChildren().add(userTable);
         vboxUserAnimeList.getChildren().add(removeButton);
         vboxUserAnimeList.getChildren().add(tabPane);
         vboxUserAnimeList.setAlignment(Pos.CENTER);
@@ -219,7 +263,7 @@ public class AnimeListApp extends Application {
         if (selectedAnime != null && !userAnimeList.contains(selectedAnime)) {
             userAnimeList.add(selectedAnime);
             observableUserAnimeList.add(selectedAnime);
-            userAnimeListView.setItems(observableUserAnimeList);
+            userTable.setItems(observableUserAnimeList);
             updateGenrePieChart();
         }
     }
@@ -275,14 +319,15 @@ public class AnimeListApp extends Application {
         }
 
         ObservableList<AnimeData> observableAnimeList = FXCollections.observableArrayList(searchResults);
-        animeListView.setItems(observableAnimeList);
+        mainTable.setItems(observableAnimeList);
     }
 
     private boolean isDigit(TextField searchField){
         try {
             Double.parseDouble(searchField.getText());
             return true;
-        } catch (NumberFormatException e) {
+        } 
+        catch (NumberFormatException e) {
             return false;
         }
     }
@@ -294,7 +339,7 @@ public class AnimeListApp extends Application {
         if (selectedAnime != null && !userAnimeList.contains(selectedAnime)) {
             userAnimeList.remove(selectedAnime);
             observableUserAnimeList.remove(selectedAnime);
-            userAnimeListView.setItems(observableUserAnimeList);
+            userTable.setItems(observableUserAnimeList);
             updateGenrePieChart();
         }
 
@@ -325,7 +370,7 @@ public class AnimeListApp extends Application {
     private void animeSorting(ArrayList<AnimeData> animeList, ChoiceBox sortingChoiceBox) {
             int selectedIndex = sortingChoiceBox.getSelectionModel().getSelectedIndex();
             AnimeDataSet.mergeSort(animeList, selectedIndex);
-            animeListView.setItems(FXCollections.observableArrayList(animeList));
+            mainTable.setItems(FXCollections.observableArrayList(animeList));
     }
 
     private void updateAnimeListView(CheckBox nsfwFilterCheckBox, ArrayList<AnimeData> animeList) {
@@ -346,10 +391,10 @@ public class AnimeListApp extends Application {
             }
         }
         if (nsfwFilterEnabled) {
-            animeListView.setItems(filteredAnimeList);
+            mainTable.setItems(filteredAnimeList);
         } 
         else {
-            animeListView.setItems(FXCollections.observableArrayList(animeList));
+            mainTable.setItems(FXCollections.observableArrayList(animeList));
         }
         
     }
@@ -363,6 +408,7 @@ public class AnimeListApp extends Application {
                 setText(null);
             } else {
                 setText(anime.getTitle());
+                
             }
         }
     }
