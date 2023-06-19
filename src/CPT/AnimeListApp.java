@@ -303,6 +303,8 @@ public class AnimeListApp extends Application {
             }
             
         } 
+        
+        // If IOException is caught, print stack trace
         catch (IOException e) {
             e.printStackTrace();
         }
@@ -315,7 +317,7 @@ public class AnimeListApp extends Application {
         userAnimeList = new ArrayList<>();
         ObservableList<AnimeData> observableUserAnimeList = FXCollections.observableArrayList();
 
-        // Add column values to main table
+        // Create column values to main table
         mainTable.setEditable(true);
         mainTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
@@ -337,10 +339,13 @@ public class AnimeListApp extends Application {
         TableColumn<AnimeData, String> animeEpisodes = new TableColumn<AnimeData, String>("Episodes");
         animeEpisodes.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("episodes"));
 
+        // Fills the table with data
         mainTable.setItems(FXCollections.observableArrayList(animeList));
+
+        // Add columns to main table
         mainTable.getColumns().addAll(animeTitle, animeScore, animePopularity, animeRank, animeViews, animeEpisodes);
 
-        // Add column values to user table
+        //  column values to user table
         userTable.setEditable(true);
         userTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
@@ -362,11 +367,27 @@ public class AnimeListApp extends Application {
         TableColumn<AnimeData, String> userAnimeEpisodes = new TableColumn<AnimeData, String>("Episodes");
         userAnimeEpisodes.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("episodes"));
 
+        // Add columns to user table
         userTable.getColumns().addAll(userAnimeTitle, userAnimeScore, userAnimePopularity, userAnimeRank, userAnimeViews, userAnimeEpisodes);
 
-        // Show extended info about anime if double clicked on specific anime
-        mainTable.setOnMouseClicked(event -> { if (event.getClickCount() == 2) { AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem(); if (selectedAnime != null) { showAnimeDetails(selectedAnime); }}});
-        userTable.setOnMouseClicked(event -> { if (event.getClickCount() == 2) { AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem(); if (selectedAnime != null) { showAnimeDetails(selectedAnime); }}});
+        // Show extended info about anime if double clicked on. see ShowAnimeDetails method
+        mainTable.setOnMouseClicked(event -> { 
+            if (event.getClickCount() == 2) { 
+                AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem(); 
+                
+                if (selectedAnime != null) { showAnimeDetails(selectedAnime);
+                }
+            }
+        });
+
+        userTable.setOnMouseClicked(event -> { 
+            if (event.getClickCount() == 2) { 
+                AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem(); 
+                
+                if (selectedAnime != null) { showAnimeDetails(selectedAnime); 
+                }
+            }
+        });
         
         // Generate charts
         BarChartGenerator barChart = new BarChartGenerator();
@@ -376,6 +397,7 @@ public class AnimeListApp extends Application {
         Text title = new Text(10, 50, "AnimeList.net");
         title.setFont(new Font(20));
 
+        // Chart Text Setup
         Text averageScore = new Text(10, 50, "Average score: " + barChart.getScoreAverage());
         averageScore.setFont(new Font(20));
 
@@ -394,34 +416,48 @@ public class AnimeListApp extends Application {
         Text medianScore = new Text(10, 50, "Score Median: " + barChart.getScoreMedian());
         medianScore.setFont(new Font(20));
 
+        // Add Watched Button To Main List
         Button addButton = new Button("Watched");
         addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList, barChart, pieChart, averageScore, standardDeviationScore, animeCount, maxScore, minScore, medianScore));
 
+        // Add Remove Button To User List
         Button removeButton = new Button("Remove");
         removeButton.setOnAction(e -> removeAnimeFromUserList(observableUserAnimeList, barChart, pieChart, averageScore, standardDeviationScore, animeCount, maxScore, minScore, medianScore));
 
+        // Adds a checkbox to filter out NSFW anime
         CheckBox nsfwFilterCheckBox = new CheckBox("NSFW Filter");
         nsfwFilterCheckBox.setOnAction(event -> updateAnimeListView(nsfwFilterCheckBox, animeList));
 
+        // Added a choicebox to give user sorting options
         ChoiceBox sortingChoiceBox = new ChoiceBox(FXCollections.observableArrayList("Name", "Score", "Popularity", "Rank", "Views", "Episodes"));
+
+        // sets default sorting option to by name and reorganizes the list
         sortingChoiceBox.setValue("Name");
         animeSorting(animeList, sortingChoiceBox);
+
+        // set action to change sorting option. See AnimeSorting.java and animeSorting method. Uses MergeSort
         sortingChoiceBox.setOnAction(e -> animeSorting(animeList, sortingChoiceBox));
 
+        // Added a textfield to search for anime
         TextField searchField = new TextField();
         searchField.setPromptText("Search for Anime");
+
+        // set action to search for anime. See animeSearch method. Uses Linear Search
         searchField.setOnAction(e -> animeSearch(animeList, searchField));
 
+        // Creates a tabpane to add lists and charts to.
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         // Create Horizontal and Vertical boxes to add elements together
+        // Search Hbox
         HBox hboxAnimeSearch = new HBox(10);
         hboxAnimeSearch.setAlignment(Pos.TOP_CENTER);
         hboxAnimeSearch.setPadding(new Insets(10));
         hboxAnimeSearch.setSpacing(600);
         hboxAnimeSearch.getChildren().addAll(searchField, sortingChoiceBox);
 
+        // Main Anime list VBox
         VBox vboxAnimeList = new VBox(10);
         vboxAnimeList.getChildren().add(hboxAnimeSearch);
         vboxAnimeList.getChildren().add(mainTable);
@@ -429,6 +465,7 @@ public class AnimeListApp extends Application {
         vboxAnimeList.setAlignment(Pos.CENTER);
         vboxAnimeList.setPadding(new Insets(10));
 
+        // User Anime list VBox
         VBox vboxUserAnimeList = new VBox(10);
         vboxUserAnimeList.getChildren().add(userTable);
         vboxUserAnimeList.getChildren().add(removeButton);
@@ -436,21 +473,25 @@ public class AnimeListApp extends Application {
         vboxUserAnimeList.setAlignment(Pos.CENTER);
         vboxUserAnimeList.setPadding(new Insets(10));
 
+        // User Chart Hbox
         HBox hboxUserAnimeData1 = new HBox(10);
         hboxUserAnimeData1.getChildren().addAll(averageScore, standardDeviationScore, animeCount);
         hboxUserAnimeData1.setAlignment(Pos.CENTER);
         hboxUserAnimeData1.setPadding(new Insets(10));
 
+        // Second User Chart Hbox
         HBox hboxUserAnimeData2 = new HBox(10);
         hboxUserAnimeData2.getChildren().addAll(maxScore, minScore, medianScore);
         hboxUserAnimeData2.setAlignment(Pos.CENTER);
         hboxUserAnimeData2.setPadding(new Insets(10));
 
+        // Title Hbox
         HBox hboxTitle = new HBox(10);
         hboxTitle.getChildren().add(title);
         hboxTitle.setAlignment(Pos.CENTER);
         hboxTitle.setPadding(new Insets(10));
 
+        // Bar Graph Tab VBox
         VBox vboxBarGraphTab = new VBox(10);
         vboxBarGraphTab.getChildren().add(barChart.getBarChart());
         vboxBarGraphTab.getChildren().add(hboxUserAnimeData1);
