@@ -3,7 +3,7 @@ package charts;
 import java.util.ArrayList;
 import java.util.List;
 
-import basic.AnimeData;
+import CPT.AnimeData;
 import javafx.collections.FXCollections;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -13,6 +13,7 @@ import javafx.scene.chart.XYChart;
 public class BarChartGenerator {
     
     private BarChart<String, Number> barChart;
+    private ArrayList<Double> scores = new ArrayList<Double>();
 
     public BarChartGenerator() {
 
@@ -23,6 +24,7 @@ public class BarChartGenerator {
         barChart.setTitle("Average Score Distribution for your Animes");
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Values");
+        series.getData().add(new XYChart.Data<>("0", 0));
         series.getData().add(new XYChart.Data<>("1", 0));
         series.getData().add(new XYChart.Data<>("2", 0));
         series.getData().add(new XYChart.Data<>("3", 0));
@@ -32,7 +34,6 @@ public class BarChartGenerator {
         series.getData().add(new XYChart.Data<>("7", 0));
         series.getData().add(new XYChart.Data<>("8", 0));
         series.getData().add(new XYChart.Data<>("9", 0));
-        series.getData().add(new XYChart.Data<>("10", 0));
         barChart.getData().add(series);
 
     }
@@ -43,18 +44,118 @@ public class BarChartGenerator {
 
     }
 
-    public void updateBarChart(AnimeData userSelectedAnime) {
+    public void addToBarChart(AnimeData userSelectedAnime) {
 
         int roundedScore = (int) Math.round(userSelectedAnime.getScore());
 
         XYChart.Series<String, Number> series = barChart.getData().get(0);
         for (XYChart.Data<String, Number> data : series.getData()) {
             if (data.getXValue().equals(Integer.toString(roundedScore))) {
+                scores.add(userSelectedAnime.getScore());
                 int newValue = data.getYValue().intValue() + 1;
                 data.setYValue(newValue);
                 break;
             }
         }
         
+    }
+
+    public void removeFromBarChart(AnimeData userSelectedAnime) {
+
+        int roundedScore = (int) Math.round(userSelectedAnime.getScore());
+
+        XYChart.Series<String, Number> series = barChart.getData().get(0);
+        for (XYChart.Data<String, Number> data : series.getData()) {
+            if (data.getXValue().equals(Integer.toString(roundedScore))) {
+                scores.remove(userSelectedAnime.getScore());
+                int newValue = data.getYValue().intValue() - 1;
+                data.setYValue(newValue);
+                break;
+            }
+        }
+        
+    }
+
+    public double getScoreAverage() {
+        double average = 0;
+        if (scores.isEmpty() == true) {
+            return 0;
+        }
+        for (double num : scores) {
+            average += num;
+        }
+        return Math.round(average/scores.size() * 100.0) / 100.0;
+    }
+
+    public double getStandardDeviation() {
+        double sum = 0.0;
+        if (scores.isEmpty() == true) {
+            return 0;
+        }
+        for (double i : scores) {
+            sum += i;
+        }
+
+
+        int length = scores.size();
+        double mean = sum / length;
+
+        double standardDeviation = 0.0;
+        for (double num : scores) {
+            standardDeviation += Math.pow(num - mean, 2);
+        }
+
+        return Math.round(Math.sqrt(standardDeviation / length) * 100.0) / 100.0;
+    }
+
+    public int getAnimeCount() {
+
+        int count = 0;
+
+        if (scores.isEmpty() == true) {
+            return 0;
+        }
+        for (int i = 0; i < scores.size(); i++) {
+            count += 1;
+        }
+        return count;
+    }
+
+    public double getScoreMax() {
+        double max = 0;
+        
+        if (scores.isEmpty() == true) {
+            return 0;
+        }
+        for (double i : scores) {
+            if (i > max){
+                max = i;
+            }
+        }
+        return Math.round(max * 100.0) / 100.0;
+            
+    }
+
+    public double getScoreMin() {
+        double min = 10;
+        
+        if (scores.isEmpty() == true) {
+            return 0;
+        }
+        for (double i : scores) {
+            if (i < min) {
+                min = i;
+            }
+        }
+        return Math.round(min * 100.0) / 100.0;
+            
+    }
+
+    public double getScoreMedian() {
+        if (scores.isEmpty() == true) {
+            return 0;
+        }
+        double median = scores.get((int)scores.size()/2);
+        return Math.round(median * 100.0) / 100.0;
     }
 }
