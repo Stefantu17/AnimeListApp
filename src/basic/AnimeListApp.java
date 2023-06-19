@@ -47,8 +47,7 @@ public class AnimeListApp extends Application {
             for (int i = 0; i < 19311; i++) {
 
                 ArrayList<String> genres = new ArrayList<>();
-                AnimeData animeData = new AnimeData(0, "", "", genres, "", 0, 0, 0, 0, 0, "", "");
-
+                AnimeData animeData = new AnimeData(0, "", "", genres, "", 0, 0, 0, 999999, 0, "", "");
                 line = reader.readLine();
                 animeData.setUID(Integer.parseInt(line.substring(0, line.indexOf(","))));
      
@@ -65,7 +64,7 @@ public class AnimeListApp extends Application {
                 }
 
                 animeData.setTitle(animeData.getTitle().replace("\"", ""));
-
+       
                 if (line.contains("https") == true) {
                     if (line.contains("['") == true) {
                         line = line.substring(line.indexOf("['"));
@@ -74,7 +73,7 @@ public class AnimeListApp extends Application {
                         line = line.substring(line.indexOf("["));
                     }
                 } 
-
+            
                 else {
                     while (line.contains("https") == false) {
                         animeData.setSynopsis(animeData.getSynopsis() + line);
@@ -92,7 +91,7 @@ public class AnimeListApp extends Application {
                     }
   
                 }
-
+      
                 while (line.length() < 90 && line.contains("https") != true) {
                     line = reader.readLine();
                 }
@@ -107,7 +106,7 @@ public class AnimeListApp extends Application {
                         animeData.setSynopsis(animeData.getSynopsis().substring(0, animeData.getSynopsis().length()-1));
                     }
                 }   
-
+                String strGenres = line.substring(0, line.indexOf("]"));
                 
                 line = line.substring(line.indexOf("]") + 1);
                 if (line.charAt(0) == '"') {
@@ -127,11 +126,11 @@ public class AnimeListApp extends Application {
  
                     }
                 }
-
-                String strGenres = line.substring(0, line.indexOf("]"));
+          
                 strGenres= strGenres.replace("[", "");
                 strGenres = strGenres.replace("'", "");
                 String[] genreList = strGenres.split(", ");
+    
                 animeData.setGenre(new ArrayList<>(Arrays.asList(genreList)));
 
 
@@ -140,87 +139,102 @@ public class AnimeListApp extends Application {
                     line = line.substring(line.indexOf(',') + 1);
                 }
                 else if (line.charAt(0) == '1' || line.charAt(0) == '2') {
+
                     if (line.contains(", ") == true) {
                         animeData.setAired(line.substring(0, line.indexOf('"') + 2));
                         line = line.substring(line.indexOf('"') + 2);
                     }
+
                     else {
                         animeData.setAired(line.substring(0, line.indexOf(',') + 1));
                         line = line.substring(line.indexOf(',') + 1);
                     }
+
                 }
                 else {
-                    aired = line.substring(0, line.indexOf('"'));
+                    animeData.setAired(line.substring(0, line.indexOf('"')));
                     line = line.substring(line.indexOf('"') + 2);
                 }
-                
-                if (aired != "") {
-                    if (aired.charAt(aired.length()-1) == ',') {
-                        aired = aired.substring(0, aired.indexOf(','));
+    
+                if (animeData.getAired() != "") {
+
+                    if (animeData.getAired().charAt(animeData.getAired().length()-1) == ',') {
+                        animeData.setAired(animeData.getAired().substring(0, animeData.getAired().indexOf(',')));
                     }
                 }
                 
-                int episodes = 0;
                 if (line.charAt(0) == ',') {
                     line = line.substring(line.indexOf(",") + 1);
                 }
+
                 else {
-                    episodes = (int) Double.parseDouble(line.substring(0, line.indexOf(",")));
+                    animeData.setEpisodes((int) Double.parseDouble(line.substring(0, line.indexOf(","))));
                     line = line.substring(line.indexOf(",") + 1);
                 }
        
-                int members = 0;
+           
+                if (line.charAt(0) == ',') {
+
+                    line = line.substring(line.indexOf(",") + 1);
+                }
+
+                else {
+
+                    animeData.setMembers((int) Double.parseDouble(line.substring(0, line.indexOf(","))));
+                    line = line.substring(line.indexOf(",") + 1);
+                }
+
+       
                 if (line.charAt(0) == ',') {
 
                     line = line.substring(line.indexOf(",") + 1);
                 }
                 else {
-                    members = (int) Double.parseDouble(line.substring(0, line.indexOf(",")));
+                    
+                    animeData.setPopularity((int) Double.parseDouble(line.substring(0, line.indexOf(","))));
                     line = line.substring(line.indexOf(",") + 1);
                 }
 
-                int popularity = 0;
+     
                 if (line.charAt(0) == ',') {
 
                     line = line.substring(line.indexOf(",") + 1);
                 }
-                else {
-                    popularity = (int) Double.parseDouble(line.substring(0, line.indexOf(",")));
-                    line = line.substring(line.indexOf(",") + 1);
-                }
 
-                int rank = 9999999;
-                if (line.charAt(0) == ',') {
-
-                    line = line.substring(line.indexOf(",") + 1);
-                }
                 else {
-                    rank = (int) Double.parseDouble(line.substring(0, line.indexOf(",")));
+
+                    animeData.setRank((int) Double.parseDouble(line.substring(0, line.indexOf(","))));
                     line = line.substring(line.indexOf(",") + 1);
                 }
-                double score = 0;
+           
+    
                 if (line.charAt(0) == ',') {
                     line = line.substring(line.indexOf(",") + 1);
                 }
+
                 else {
-                    score = Double.parseDouble(line.substring(0, line.indexOf(",")));
+
+                    animeData.setScore(Double.parseDouble(line.substring(0, line.indexOf(","))));
                     line = line.substring(line.indexOf(",") + 1);
                 }
   
-                String imageLink = "";
+
                 if (line.charAt(0) == ',') {
+
                     line = line.substring(line.indexOf(",") + 1);
                 }
+
                 else {
-                    imageLink = line.substring(0, line.indexOf(","));
+
+                    animeData.setImageLink(line.substring(0, line.indexOf(",")));
                     line = line.substring(line.indexOf(",") + 1);
                 }
    
-                String animeLink = "";
+
                 if (line.charAt(0) != ',') {
-                    animeLink = line;
+                    animeData.setAnimeLink(line);
                 }
-                AnimeData animeData = new AnimeData(UID, title, synopsis, genres, aired, episodes, members, popularity, rank, score, imageLink, animeLink);
+
                 animeList.add(animeData);
 
             }
