@@ -11,23 +11,22 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import charts.BarChartGenerator;
+import charts.PieChartGenerator;
 
 public class AnimeListApp extends Application {
 
     private ListView<AnimeData> animeListView;
     private ListView<AnimeData> userAnimeListView;
     private List<AnimeData> userAnimeList;
-    private PieChart genrePieChart;
 
     public static void main(String[] args) {
         launch(args);
@@ -121,11 +120,15 @@ public class AnimeListApp extends Application {
             }
         });
 
+        
+        BarChartGenerator barChart = new BarChartGenerator();
+        PieChartGenerator pieChart = new PieChartGenerator();
+
         Button addButton = new Button("Watched");
-        addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList));
+        addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList, barChart, pieChart));
         
         Button removeButton = new Button("Remove");
-        removeButton.setOnAction(e -> removeAnimeFromUserList(observableUserAnimeList));
+        removeButton.setOnAction(e -> removeAnimeFromUserList(observableUserAnimeList, barChart, pieChart));
 
         CheckBox nsfwFilterCheckBox = new CheckBox("NSFW Filter");
         nsfwFilterCheckBox.setOnAction(event -> updateAnimeListView(nsfwFilterCheckBox, animeList));
@@ -168,11 +171,12 @@ public class AnimeListApp extends Application {
         userAnimeListTab.setContent(vboxUserAnimeList);
 
         Tab genreTab = new Tab("Genre Distribution");
-        genrePieChart = new PieChart();
-        genrePieChart.setTitle("Genre Distribution");
-        genreTab.setContent(genrePieChart);
+        genreTab.setContent(pieChart.getPieChart());
 
-        tabPane.getTabs().addAll(animeListTab, userAnimeListTab, genreTab);
+        Tab scoreChartTab = new Tab("Score Chart");
+        scoreChartTab.setContent(barChart.getBarChart());
+
+        tabPane.getTabs().addAll(animeListTab, userAnimeListTab, genreTab, scoreChartTab);
 
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(tabPane);
@@ -180,6 +184,8 @@ public class AnimeListApp extends Application {
         Scene scene = new Scene(borderPane, 800, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
+
+
     }
 
     private void showAnimeDetails(AnimeData anime) {
@@ -211,15 +217,15 @@ public class AnimeListApp extends Application {
         alert.showAndWait();
     }
 
-    private void addAnimeToUserList(ObservableList<AnimeData> observableUserAnimeList) {
+    private void addAnimeToUserList(ObservableList<AnimeData> observableUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart) {
 
         AnimeData selectedAnime = animeListView.getSelectionModel().getSelectedItem();
-        
         if (selectedAnime != null && !userAnimeList.contains(selectedAnime)) {
             userAnimeList.add(selectedAnime);
             observableUserAnimeList.add(selectedAnime);
             userAnimeListView.setItems(observableUserAnimeList);
-            updateGenrePieChart();
+            pieChart.updateGenrePieChart(userAnimeList);
+            barChart.updateBarChart(selectedAnime);
         }
     }
 
@@ -286,39 +292,18 @@ public class AnimeListApp extends Application {
         }
     }
 
-    private void removeAnimeFromUserList(ObservableList<AnimeData> observableUserAnimeList) {
+    private void removeAnimeFromUserList(ObservableList<AnimeData> observableUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart) {
 
         AnimeData selectedAnime = userAnimeListView.getSelectionModel().getSelectedItem();
-        
-        if (selectedAnime != null && !userAnimeList.contains(selectedAnime)) {
+
+        if (selectedAnime != null && userAnimeList.contains(selectedAnime)) {
             userAnimeList.remove(selectedAnime);
             observableUserAnimeList.remove(selectedAnime);
             userAnimeListView.setItems(observableUserAnimeList);
-            updateGenrePieChart();
+            pieChart.updateGenrePieChart(userAnimeList);
+            barChart.updateBarChart(selectedAnime);
         }
 
-    }
-
-    private void updateGenrePieChart() {
-        List<PieChart.Data> genreData = new ArrayList<>();
-
-        for (AnimeData anime : userAnimeList) {
-            for (String genre : anime.getGenres()) {
-                boolean genreExists = false;
-                for (PieChart.Data data : genreData) {
-                    if (data.getName().equalsIgnoreCase(genre)) {
-                        data.setPieValue(data.getPieValue() + 1);
-                        genreExists = true;
-                        break;
-                    }
-                }
-                if (!genreExists) {
-                    genreData.add(new PieChart.Data(genre, 1));
-                }
-            }
-        }
-
-        genrePieChart.setData(FXCollections.observableArrayList(genreData));
     }
 
     private void animeSorting(ArrayList<AnimeData> animeList, ChoiceBox sortingChoiceBox) {
@@ -352,7 +337,6 @@ public class AnimeListApp extends Application {
         }
         
     }
-
     
     private class AnimeListCell extends ListCell<AnimeData> {
         @Override
@@ -365,4 +349,5 @@ public class AnimeListApp extends Application {
             }
         }
     }
+
 }
