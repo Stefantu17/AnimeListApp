@@ -9,15 +9,15 @@ public class AnimeData {
     private String synopsis;
     private ArrayList<String> genres;
     private String aired;
-    private double episodes;
-    private double members; 
-    private double popularity;
-    private double rank;
+    private int episodes;
+    private int members; 
+    private int popularity;
+    private int rank;
     private double score;
     private String imageLink;
     private String animeLink;
 
-    public AnimeData(int UID, String title, String synopsis, ArrayList<String> genres, String aired, double episodes, double members, double popularity, double rank, double score, String imageLink, String animeLink) {
+    public AnimeData(int UID, String title, String synopsis, ArrayList<String> genres, String aired, int episodes, int members, int popularity, int rank, double score, String imageLink, String animeLink) {
         this.UID = UID;
         this.title = title;
         this.synopsis = synopsis;
@@ -85,40 +85,40 @@ public class AnimeData {
         this.aired = aired;
     }
 
-    public double getEpisodes() {
+    public int getEpisodes() {
         return episodes;
     }
 
-    public void setEpisodes(double episodes) {
+    public void setEpisodes(int episodes) {
         this.episodes = episodes;
     }
 
-    public double getMembers() {
+    public int getMembers() {
         return members;
     }
 
-    public void setMembers(double members) {
+    public void setMembers(int members) {
         this.members = members;
     }
 
-    public double getPopularity() {
+    public int getPopularity() {
         return popularity;
     }
 
-    public void setPopularity(double popularity) {
+    public void setPopularity(int popularity) {
         this.popularity = popularity;
     }
 
-    public double getRank() {
+    public int getRank() {
         return rank;
     }
 
-    public void setRank(double rank) {
+    public void setRank(int rank) {
         this.rank = rank;
     }
 
     public double getScore() {
-        return score;
+        return Math.round(score * 100.0) / 100.0;
     }
 
     public void setScore(double score) {
@@ -149,19 +149,19 @@ public class AnimeData {
         return this.getScore() - animeTwo.getScore();
     }
 
-    public double popularityCompareTo(AnimeData animeTwo) {
+    public int popularityCompareTo(AnimeData animeTwo) {
         return this.getPopularity() - animeTwo.getPopularity();
     }
 
-    public double membersCompareTo(AnimeData animeTwo) {
+    public int membersCompareTo(AnimeData animeTwo) {
         return this.getMembers() - animeTwo.getMembers();
     }
 
-    public double episodesCompareTo(AnimeData animeTwo) {
+    public int episodesCompareTo(AnimeData animeTwo) {
         return this.getEpisodes() - animeTwo.getEpisodes();
     }
 
-    public double rankCompareTo(AnimeData animeTwo) {
+    public int rankCompareTo(AnimeData animeTwo) {
         return this.getRank() - animeTwo.getRank();
     }
 

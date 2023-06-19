@@ -96,9 +96,17 @@ public class AnimeListApp extends Application {
                 while (line.length() < 90 && line.contains("https") != true) {
                     line = reader.readLine();
                 }
-
-    
-
+           
+                if (synopsis != "") {
+                    if (synopsis.charAt(synopsis.length()-1) == '"') {
+          
+                        synopsis = synopsis.substring(0, synopsis.length()-2);
+                    }
+                    else if (synopsis.charAt(synopsis.length()-1) == ',') {
+     
+                        synopsis = synopsis.substring(0, synopsis.length()-1);
+                    }
+                }   
                 String strGenres = line.substring(0, line.indexOf("]"));
                 
                 line = line.substring(line.indexOf("]") + 1);
@@ -149,45 +157,44 @@ public class AnimeListApp extends Application {
                     line = line.substring(line.indexOf('"') + 2);
                 }
 
-                double episodes = 0;
+                int episodes = 0;
                 if (line.charAt(0) == ',') {
                     line = line.substring(line.indexOf(",") + 1);
                 }
                 else {
-                    episodes = Double.parseDouble(line.substring(0, line.indexOf(",")));
+                    episodes = (int) Double.parseDouble(line.substring(0, line.indexOf(",")));
                     line = line.substring(line.indexOf(",") + 1);
                 }
        
-                double members = 0;
+                int members = 0;
                 if (line.charAt(0) == ',') {
 
                     line = line.substring(line.indexOf(",") + 1);
                 }
                 else {
-                    members = Double.parseDouble(line.substring(0, line.indexOf(",")));
+                    members = (int) Double.parseDouble(line.substring(0, line.indexOf(",")));
                     line = line.substring(line.indexOf(",") + 1);
                 }
 
-                double popularity = 0;
+                int popularity = 0;
                 if (line.charAt(0) == ',') {
 
                     line = line.substring(line.indexOf(",") + 1);
                 }
                 else {
-                    popularity = Double.parseDouble(line.substring(0, line.indexOf(",")));
+                    popularity = (int) Double.parseDouble(line.substring(0, line.indexOf(",")));
                     line = line.substring(line.indexOf(",") + 1);
                 }
 
-                double rank = 9999999;
+                int rank = 9999999;
                 if (line.charAt(0) == ',') {
 
                     line = line.substring(line.indexOf(",") + 1);
                 }
                 else {
-                    rank = Double.parseDouble(line.substring(0, line.indexOf(",")));
+                    rank = (int) Double.parseDouble(line.substring(0, line.indexOf(",")));
                     line = line.substring(line.indexOf(",") + 1);
                 }
-  
                 double score = 0;
                 if (line.charAt(0) == ',') {
                     line = line.substring(line.indexOf(",") + 1);
@@ -291,6 +298,9 @@ public class AnimeListApp extends Application {
         BarChartGenerator barChart = new BarChartGenerator();
         PieChartGenerator pieChart = new PieChartGenerator();
 
+        Text title = new Text(10, 50, "AnimeList.net");
+        title.setFont(new Font(20));
+
         Text averageScore = new Text(10, 50, "Average score: " + barChart.getScoreAverage());
         averageScore.setFont(new Font(20));
 
@@ -361,6 +371,11 @@ public class AnimeListApp extends Application {
         hboxUserAnimeData2.setAlignment(Pos.CENTER);
         hboxUserAnimeData2.setPadding(new Insets(10));
 
+        HBox hboxTitle = new HBox(10);
+        hboxTitle.getChildren().add(title);
+        hboxTitle.setAlignment(Pos.CENTER);
+        hboxTitle.setPadding(new Insets(10));
+
         VBox vboxBarGraphTab = new VBox(10);
         vboxBarGraphTab.getChildren().add(barChart.getBarChart());
         vboxBarGraphTab.getChildren().add(hboxUserAnimeData1);
@@ -383,6 +398,7 @@ public class AnimeListApp extends Application {
         tabPane.getTabs().addAll(animeListTab, userAnimeListTab, genreTab, scoreChartTab);
 
         BorderPane borderPane = new BorderPane();
+        borderPane.setTop(hboxTitle);
         borderPane.setCenter(tabPane);
 
         Scene scene = new Scene(borderPane, 850, 600);
@@ -474,7 +490,7 @@ public class AnimeListApp extends Application {
                     searchResults.add(anime);
                 }
 
-                if (anime.getPopularity() == Double.parseDouble(searchText)) {
+                if (anime.getPopularity() == Integer.parseInt(searchText)) {
                     searchResults.add(anime);
                 }
 

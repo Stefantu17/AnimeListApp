@@ -79,7 +79,7 @@ public class AnimeSorting {
                     break;
 
                 case 3:
-                    if (leftAnime.membersCompareTo(rightAnime) > 0) {
+                    if (leftAnime.rankCompareTo(rightAnime) < 0) {
                             list.set(listIndex, leftAnime);
                             leftIndex++;
                         } 
@@ -92,7 +92,7 @@ public class AnimeSorting {
                     break;
 
                 case 4:
-                    if (leftAnime.episodesCompareTo(rightAnime) <= 0) {
+                    if (leftAnime.membersCompareTo(rightAnime) >= 0) {
                             list.set(listIndex, leftAnime);
                             leftIndex++;
                         } 
@@ -105,7 +105,7 @@ public class AnimeSorting {
                     break;
 
                 case 5:
-                    if (leftAnime.rankCompareTo(rightAnime) <= 0) {
+                    if (leftAnime.episodesCompareTo(rightAnime) >= 0) {
                             list.set(listIndex, leftAnime);
                             leftIndex++;
                         } 
