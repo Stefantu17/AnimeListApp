@@ -18,4 +18,8 @@ public class BarChartGenerator {
         barChart.setCategoryGap(50);
         barChart.setTitle("Average Score Distribution for your Animes");
     }
+
+    public BarChart<String, Number> getBarChart() {
+        return barChart;
+    }
 }
