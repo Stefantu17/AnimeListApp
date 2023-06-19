@@ -416,11 +416,11 @@ public class AnimeListApp extends Application {
         Text medianScore = new Text(10, 50, "Score Median: " + barChart.getScoreMedian());
         medianScore.setFont(new Font(20));
 
-        // Add Watched Button To Main List
+        // Add Watched Button To Main List. See addAnimeToUserList method
         Button addButton = new Button("Watched");
         addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList, barChart, pieChart, averageScore, standardDeviationScore, animeCount, maxScore, minScore, medianScore));
 
-        // Add Remove Button To User List
+        // Add Remove Button To User List. 
         Button removeButton = new Button("Remove");
         removeButton.setOnAction(e -> removeAnimeFromUserList(observableUserAnimeList, barChart, pieChart, averageScore, standardDeviationScore, animeCount, maxScore, minScore, medianScore));
 
@@ -656,11 +656,14 @@ public class AnimeListApp extends Application {
 
         if (selectedAnime != null && userAnimeList.contains(selectedAnime)) {
 
+            // removes it from lists and graphs.
             userAnimeList.remove(selectedAnime);
             observableUserAnimeList.remove(selectedAnime);
             userTable.setItems(FXCollections.observableArrayList(userAnimeList));
             pieChart.updateGenrePieChart(userAnimeList);
             barChart.removeFromBarChart(selectedAnime);
+
+            // Updates bars and graphs.
             averageScore.setText("Average score: " + barChart.getScoreAverage());
             standardDeviationScore.setText("Standard Deviation: " + barChart.getStandardDeviation());
             animeCount.setText("Anime Count: " + barChart.getAnimeCount());
@@ -734,6 +737,7 @@ public class AnimeListApp extends Application {
                     filteredAnimeList.add(anime);
                 }
             } 
+
             // Otherwise, add all animes to filtered list, as it is not filtered.
             else {
 
@@ -743,10 +747,12 @@ public class AnimeListApp extends Application {
 
         // Modify tables based on if the nsfw checkbox is checked
         if (nsfwFilterEnabled) {
+
             mainTable.setItems(filteredAnimeList);
         } 
 
         else {
+            
             mainTable.setItems(FXCollections.observableArrayList(animeList));
         }
     }
