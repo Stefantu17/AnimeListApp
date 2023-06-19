@@ -1,4 +1,4 @@
-package cpt;
+package CPT;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
