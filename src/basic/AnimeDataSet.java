@@ -1,19 +1,8 @@
 package basic;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
+
 
 public class AnimeDataSet {
-
-    private ArrayList<AnimeData> data;
-
-    public void addAnimeData(AnimeData animeData) {
-        data.add(animeData);
-    }
 
     public static void mergeSort(ArrayList<AnimeData> list, int comparatorType) {
         if (list == null || list.size() <= 1) {
@@ -31,8 +20,6 @@ public class AnimeDataSet {
         // Merge the sorted halves
         merge(list, left, right, comparatorType);
     }
-
-    
 
     private static void merge(ArrayList<AnimeData> list, ArrayList<AnimeData> left, ArrayList<AnimeData> right, int comparatorType) {
         int leftIndex = 0;
