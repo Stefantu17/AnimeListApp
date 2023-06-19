@@ -26,12 +26,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import charts.BarChartGenerator;
+
 public class AnimeListApp extends Application {
 
     private ListView<AnimeData> animeListView;
     private ListView<AnimeData> userAnimeListView;
     private List<AnimeData> userAnimeList;
     private PieChart genrePieChart;
+    private BarChartGenerator barChart;
 
     public static void main(String[] args) {
         launch(args);
@@ -126,24 +129,10 @@ public class AnimeListApp extends Application {
             }
         });
 
-        CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis();
-
-        // Create the bar chart
-        BarChart<String, Number> scoreChart = new BarChart<>(xAxis, yAxis);
-        scoreChart.setTitle("Anime Score Chart");
-
-        // Create the data series
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Scores");
-
-        // Add the series to the chart
-        scoreChart.getData().add(series);
-
-        // Create the VBox to hold the score chart view
-        VBox vbox = new VBox();
-        vbox.setPadding(new Insets(10));
-        vbox.getChildren().add(scoreChart);
+        
+        BarChartGenerator barChart = new BarChartGenerator();
+        //barChart.createBarChart();
+        
 
         Button addButton = new Button("Watched");
         addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList));
@@ -194,7 +183,7 @@ public class AnimeListApp extends Application {
         genreTab.setContent(genrePieChart);
 
         Tab scoreChartTab = new Tab("Score Chart");
-        scoreChartTab.setContent(vbox);
+        scoreChartTab.setContent(barChart.getBarChart());
 
         tabPane.getTabs().addAll(animeListTab, userAnimeListTab, genreTab, scoreChartTab);
 
@@ -245,7 +234,7 @@ public class AnimeListApp extends Application {
             observableUserAnimeList.add(selectedAnime);
             userAnimeListView.setItems(observableUserAnimeList);
             updateGenrePieChart();
-            updateBarChart();
+            barChart.updateBarChart(selectedAnime);
         }
 
     }
