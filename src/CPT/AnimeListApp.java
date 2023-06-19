@@ -710,20 +710,33 @@ public class AnimeListApp extends Application {
         mainTable.setItems(FXCollections.observableArrayList(animeList));
     }
 
+    /**
+     * Helper method that filters anime results based on genre
+     * 
+     * @param animeList  main anime list
+     * @param filterCheckbox  filter checkbox
+     * @param genre  genre to filter by
+     * @author S. Tuczynski & G. Lui
+     */
     private void genreFilter(ArrayList<AnimeData> animeList, CheckBox filterCheckbox, String genre){
 
+        // Create a blank filtered list
         ObservableList<AnimeData> filteredAnimeList = FXCollections.observableArrayList();
         boolean filterEnabled = filterCheckbox.isSelected();
 
+        // is filter checkbox checked
         if (filterEnabled){
 
+            // loop through main data and add to filtered list
             for (AnimeData anime : animeList){
 
+                // does anime contain genre? if so add to filtered list
                 if (anime.getGenres().contains(genre)){
                     filteredAnimeList.add(anime);
                 }
             }
             
+            // set main table to filtered list
             mainTable.setItems(filteredAnimeList);
         }
     }
