@@ -131,8 +131,6 @@ public class AnimeListApp extends Application {
 
         
         BarChartGenerator barChart = new BarChartGenerator();
-        //barChart.createBarChart();
-        
 
         Button addButton = new Button("Watched");
         addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList));
@@ -234,7 +232,7 @@ public class AnimeListApp extends Application {
             observableUserAnimeList.add(selectedAnime);
             userAnimeListView.setItems(observableUserAnimeList);
             updateGenrePieChart();
-            barChart.updateBarChart(selectedAnime);
+            this.barChart.updateBarChart(selectedAnime);
         }
 
     }
@@ -305,14 +303,6 @@ public class AnimeListApp extends Application {
         }
         
     }
-
-    private void updateBarChart() {
-        for (AnimeData anime : userAnimeList) {
-            int roundedScore = (int) Math.round(anime.getScore());
-            series.getData().add(new XYChart.Data<>(anime.getTitle(), roundedScore));
-        }
-    }
-
     
     private class AnimeListCell extends ListCell<AnimeData> {
         @Override
