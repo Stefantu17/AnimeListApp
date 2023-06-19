@@ -78,11 +78,14 @@ public class AnimeListApp extends Application {
                 line = line.substring(line.indexOf(",") + 1);
 
                 if (line.charAt(0) == '"' && line.charAt(1) != '"') {
+
                     line = line.substring(1);
                     animeData.setTitle(line.substring(0, line.indexOf('"')));
                     line = line.substring(line.indexOf('"') + 2); 
                 }
+
                 else {
+
                     animeData.setTitle(line.substring(0, line.indexOf(','))); 
                     line = line.substring(line.indexOf(',') + 1); 
                 }
@@ -90,26 +93,35 @@ public class AnimeListApp extends Application {
                 animeData.setTitle(animeData.getTitle().replace("\"", ""));
        
                 if (line.contains("https") == true) {
+
                     if (line.contains("['") == true) {
+
                         line = line.substring(line.indexOf("['"));
                     }
+
                     else {
+
                         line = line.substring(line.indexOf("["));
                     }
                 } 
             
                 else {
+
                     while (line.contains("https") == false) {
+
                         animeData.setSynopsis(animeData.getSynopsis() + line);
                         line = reader.readLine();
      
                     }
                     
                     if (line.contains("['") == true) {
+
                         animeData.setSynopsis(animeData.getSynopsis() + line.substring(0, line.indexOf("['")));
                         line = line.substring(line.indexOf("['"));
                     }
+
                     else {
+
                         animeData.setSynopsis(animeData.getSynopsis() + line.substring(0, line.indexOf("[")));
                         line = line.substring(line.indexOf("["));
                     }
@@ -117,65 +129,73 @@ public class AnimeListApp extends Application {
                 }
       
                 while (line.length() < 90 && line.contains("https") != true) {
+
                     line = reader.readLine();
                 }
            
                 if (animeData.getSynopsis() != "") {
+
                     if (animeData.getSynopsis().charAt(animeData.getSynopsis().length()-1) == '"') {
           
                         animeData.setSynopsis(animeData.getSynopsis().substring(0, animeData.getSynopsis().length()-2));
                     }
+
                     else if (animeData.getSynopsis().charAt(animeData.getSynopsis().length()-1) == ',') {
      
                         animeData.setSynopsis(animeData.getSynopsis().substring(0, animeData.getSynopsis().length()-1));
                     }
                 }   
+
                 String strGenres = line.substring(0, line.indexOf("]"));
                 
                 line = line.substring(line.indexOf("]") + 1);
+
                 if (line.charAt(0) == '"') {
+
                     line = line.substring(2);
 
-
                     if (line.charAt(0) == '"') {
-                        line = line.substring(1);
 
+                        line = line.substring(1);
                     }
+
                 }
                 else {
+
                     line = line.substring(1);
-   
                     if (line.charAt(0) == '"') {
+
                         line = line.substring(1);
- 
                     }
                 }
           
                 strGenres= strGenres.replace("[", "");
                 strGenres = strGenres.replace("'", "");
                 String[] genreList = strGenres.split(", ");
-    
                 animeData.setGenre(new ArrayList<>(Arrays.asList(genreList)));
-
 
                 if (line.contains("Not available") == true) {
                     animeData.setAired("Not available");
                     line = line.substring(line.indexOf(',') + 1);
                 }
+
                 else if (line.charAt(0) == '1' || line.charAt(0) == '2') {
 
                     if (line.contains(", ") == true) {
+
                         animeData.setAired(line.substring(0, line.indexOf('"') + 2));
                         line = line.substring(line.indexOf('"') + 2);
                     }
 
                     else {
+
                         animeData.setAired(line.substring(0, line.indexOf(',') + 1));
                         line = line.substring(line.indexOf(',') + 1);
                     }
-
                 }
+
                 else {
+
                     animeData.setAired(line.substring(0, line.indexOf('"')));
                     line = line.substring(line.indexOf('"') + 2);
                 }
@@ -183,15 +203,18 @@ public class AnimeListApp extends Application {
                 if (animeData.getAired() != "") {
 
                     if (animeData.getAired().charAt(animeData.getAired().length()-1) == ',') {
+
                         animeData.setAired(animeData.getAired().substring(0, animeData.getAired().indexOf(',')));
                     }
                 }
                 
                 if (line.charAt(0) == ',') {
+
                     line = line.substring(line.indexOf(",") + 1);
                 }
 
                 else {
+
                     animeData.setEpisodes((int) Double.parseDouble(line.substring(0, line.indexOf(","))));
                     line = line.substring(line.indexOf(",") + 1);
                 }
@@ -233,6 +256,7 @@ public class AnimeListApp extends Application {
            
     
                 if (line.charAt(0) == ',') {
+
                     line = line.substring(line.indexOf(",") + 1);
                 }
 
@@ -321,23 +345,9 @@ public class AnimeListApp extends Application {
 
         userTable.getColumns().addAll(userAnimeTitle, userAnimeScore, userAnimePopularity, userAnimeRank, userAnimeViews, userAnimeEpisodes);
 
-        mainTable.setOnMouseClicked(event -> {
-                    if (event.getClickCount() == 2) {
-                        AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem(); 
-                        if (selectedAnime != null) {
-                            showAnimeDetails(selectedAnime);
-                        }   
-                    }
-                });
+        mainTable.setOnMouseClicked(event -> { if (event.getClickCount() == 2) { AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem(); if (selectedAnime != null) { showAnimeDetails(selectedAnime); }}});
 
-        userTable.setOnMouseClicked(event -> {
-                    if (event.getClickCount() == 2) {
-                        AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem(); 
-                        if (selectedAnime != null) {
-                            showAnimeDetails(selectedAnime);
-                        }   
-                    }
-                });
+        userTable.setOnMouseClicked(event -> { if (event.getClickCount() == 2) { AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem(); if (selectedAnime != null) { showAnimeDetails(selectedAnime); }}});
         
         BarChartGenerator barChart = new BarChartGenerator();
         PieChartGenerator pieChart = new PieChartGenerator();
@@ -381,7 +391,6 @@ public class AnimeListApp extends Application {
         searchField.setPromptText("Search for Anime");
         searchField.setOnAction(e -> animeSearch(animeList, searchField));
 
-       
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
@@ -448,10 +457,14 @@ public class AnimeListApp extends Application {
         Scene scene = new Scene(borderPane, 850, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
-
-
     }
 
+    /**
+     * Shows the details of anime, pops up new page
+     * 
+     * @param anime Specfic anime
+     * 
+     */
     private void showAnimeDetails(AnimeData anime) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Anime Details");
@@ -512,6 +525,20 @@ public class AnimeListApp extends Application {
 
     }
 
+    /**
+     * Helper method that adds anime to the users list based on selection
+     * 
+     * @param observableUserAnimeList  user anime list used for displaying
+     * @param barChart  bar chart
+     * @param pieChart  pie chart
+     * @param averageScore  average score for user animes
+     * @param standardDeviationScore  standard deviation score for user animes
+     * @param animeCount  anime count for user
+     * @param maxScore  max score entry for user
+     * @param minScore  min score entry for user
+     * @param medianScore  median score entry for user
+     * 
+     */
     private void addAnimeToUserList(ObservableList<AnimeData> observableUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart, Text averageScore, Text standardDeviationScore, Text animeCount, Text maxScore, Text minScore, Text medianScore) {
 
         AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem();
@@ -522,7 +549,6 @@ public class AnimeListApp extends Application {
             userTable.setItems(FXCollections.observableArrayList(userAnimeList));
             pieChart.updateGenrePieChart(userAnimeList);
             barChart.addToBarChart(selectedAnime);
-
             averageScore.setText("Average score: " + barChart.getScoreAverage());
             standardDeviationScore.setText("Standard Deviation: " + barChart.getStandardDeviation());
             animeCount.setText("Anime Count: " + barChart.getAnimeCount());
@@ -533,17 +559,31 @@ public class AnimeListApp extends Application {
         }
     }
 
+    /**
+     * Helper method that removes an anime off the users list based on selection
+     * 
+     * @param observableUserAnimeList  user anime list used for displaying
+     * @param barChart  bar chart
+     * @param pieChart  pie chart
+     * @param averageScore  average score for user animes
+     * @param standardDeviationScore  standard deviation score for user animes
+     * @param animeCount  anime count for user
+     * @param maxScore  max score entry for user
+     * @param minScore  min score entry for user
+     * @param medianScore  median score entry for user
+     * 
+     */
     private void removeAnimeFromUserList(ObservableList<AnimeData> observableUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart, Text averageScore, Text standardDeviationScore, Text animeCount, Text maxScore, Text minScore, Text medianScore) {
 
         AnimeData selectedAnime = (AnimeData) userTable.getSelectionModel().getSelectedItem();
 
         if (selectedAnime != null && userAnimeList.contains(selectedAnime)) {
+
             userAnimeList.remove(selectedAnime);
             observableUserAnimeList.remove(selectedAnime);
             userTable.setItems(FXCollections.observableArrayList(userAnimeList));
             pieChart.updateGenrePieChart(userAnimeList);
             barChart.removeFromBarChart(selectedAnime);
-
             averageScore.setText("Average score: " + barChart.getScoreAverage());
             standardDeviationScore.setText("Standard Deviation: " + barChart.getStandardDeviation());
             animeCount.setText("Anime Count: " + barChart.getAnimeCount());
@@ -554,7 +594,15 @@ public class AnimeListApp extends Application {
 
     }
 
+    /**
+     * Helper method that applies linear search and updates the anime list based on results
+     * 
+     * @param animeList  main anime list
+     * @param searchField  text search field
+     * 
+     */
     private void animeSearch(ArrayList<AnimeData> animeList, TextField searchField) {
+
         String searchText = searchField.getText().toLowerCase();
         ArrayList<AnimeData> searchResults = new ArrayList<>();
         AnimeSorting.linearSearch(animeList, searchField, searchText, searchResults);
@@ -562,37 +610,54 @@ public class AnimeListApp extends Application {
         mainTable.setItems(observableAnimeList);
     }
 
-    
+    /**
+     * Helper method that applies merge sort and updates the anime list based the sorted list
+     * 
+     * @param animeList  main anime list
+     * @param sortingChoiceBox  sorting choice box
+     * 
+     */
     private void animeSorting(ArrayList<AnimeData> animeList, ChoiceBox sortingChoiceBox) {
+
         int selectedIndex = sortingChoiceBox.getSelectionModel().getSelectedIndex();
         AnimeSorting.mergeSort(animeList, selectedIndex);
         mainTable.setItems(FXCollections.observableArrayList(animeList));
     }
 
+    /**
+     * Helper method that filters anime results to ignore NSFW results
+     * 
+     * @param nsfwFilterCheckBox  nsfw check box
+     * @param animeList  main anime list
+     * 
+     */
     private void updateAnimeListView(CheckBox nsfwFilterCheckBox, ArrayList<AnimeData> animeList) {
 
         ObservableList<AnimeData> filteredAnimeList = FXCollections.observableArrayList();
-
         boolean nsfwFilterEnabled = nsfwFilterCheckBox.isSelected();
 
         for (AnimeData anime : animeList) {
+
             if (nsfwFilterEnabled) {
+
                 boolean isNsfw = anime.getGenres().contains("Hentai") || anime.getGenres().contains("Ecchi") || anime.getGenres().contains("Harem");
                 if (!isNsfw) {
+
                     filteredAnimeList.add(anime);
                 }
             } 
             else {
+
                 filteredAnimeList.add(anime);
             }
         }
+
         if (nsfwFilterEnabled) {
             mainTable.setItems(filteredAnimeList);
         } 
+
         else {
             mainTable.setItems(FXCollections.observableArrayList(animeList));
         }
-        
     }
-
 }
