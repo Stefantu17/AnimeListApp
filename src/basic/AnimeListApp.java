@@ -130,7 +130,7 @@ public class AnimeListApp extends Application {
 
         
         BarChartGenerator barChart = new BarChartGenerator();
-
+        PieChartGenerator barChart = new BarChartGenerator();
         Button addButton = new Button("Watched");
         addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList, barChart));
         
@@ -175,8 +175,6 @@ public class AnimeListApp extends Application {
         userAnimeListTab.setContent(vboxUserAnimeList);
 
         Tab genreTab = new Tab("Genre Distribution");
-        genrePieChart = new PieChart();
-        genrePieChart.setTitle("Genre Distribution");
         genreTab.setContent(genrePieChart);
 
         Tab scoreChartTab = new Tab("Score Chart");
