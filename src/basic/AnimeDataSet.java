@@ -83,8 +83,19 @@ public class AnimeDataSet {
                     }
 
                     break;
-
                 case 3:
+                    if (leftAnime.rankCompareTo(rightAnime) <= 0) {
+                            list.set(listIndex, leftAnime);
+                            leftIndex++;
+                        } 
+                    
+                    else {
+                        list.set(listIndex, rightAnime);
+                        rightIndex++;
+                    }
+
+                    break;
+                case 4:
                     if (leftAnime.membersCompareTo(rightAnime) > 0) {
                             list.set(listIndex, leftAnime);
                             leftIndex++;
@@ -97,7 +108,7 @@ public class AnimeDataSet {
 
                     break;
 
-                case 4:
+                case 5:
                     if (leftAnime.episodesCompareTo(rightAnime) <= 0) {
                             list.set(listIndex, leftAnime);
                             leftIndex++;
@@ -109,20 +120,7 @@ public class AnimeDataSet {
                     }
 
                     break;
-
-                case 5:
-                    if (leftAnime.rankCompareTo(rightAnime) <= 0) {
-                            list.set(listIndex, leftAnime);
-                            leftIndex++;
-                        } 
-                    
-                    else {
-                        list.set(listIndex, rightAnime);
-                        rightIndex++;
-                    }
-
-                    break;
-            }
+                }
  
             listIndex++;
         }
@@ -140,28 +138,5 @@ public class AnimeDataSet {
             rightIndex++;
             listIndex++;
         }
-    }
-
-    public static int binarySearch(ArrayList<Integer> list, int target) {
-        int left = 0;
-        int right = list.size() - 1;
-
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-
-            if (list.get(mid) == target) {
-                return mid; // Found the target element
-            } else if (list.get(mid) < target) {
-                left = mid + 1; // Target is in the right half
-            } else {
-                right = mid - 1; // Target is in the left half
-            }
-        }
-        
-        return -1;
-    }
-
-    public ArrayList<AnimeData> getAnimeDataSet() {
-        return data;
     }
 }
