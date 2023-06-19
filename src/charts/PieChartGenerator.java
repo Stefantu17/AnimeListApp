@@ -1,6 +1,6 @@
 package charts;
 
-import CPT.AnimeData;
+import cpt.AnimeData;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.FXCollections;
