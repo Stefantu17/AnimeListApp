@@ -13,13 +13,12 @@ import javafx.scene.chart.XYChart;
 public class BarChartGenerator {
     
     private BarChart<String, Number> barChart;
-    private ArrayList<Double> scores;
+    private ArrayList<Double> scores = new ArrayList<Double>();
 
     public BarChartGenerator() {
 
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
-        ArrayList<Double> scores = new ArrayList<Double>();
         barChart = new BarChart<>(xAxis, yAxis);
         barChart.setCategoryGap(50);
         barChart.setTitle("Average Score Distribution for your Animes");
@@ -79,6 +78,9 @@ public class BarChartGenerator {
 
     public double getScoreAverage() {
         double average = 0;
+        if (scores.isEmpty() == true) {
+            return 0;
+        }
         for (double num : scores) {
             average += num;
         }
@@ -87,6 +89,9 @@ public class BarChartGenerator {
 
     public  double getStandardDeviation() {
         double sum = 0.0;
+        if (scores.isEmpty() == true) {
+            return 0;
+        }
         for (double i : scores) {
             sum += i;
         }

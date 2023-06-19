@@ -12,6 +12,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -306,6 +308,12 @@ public class AnimeListApp extends Application {
         searchField.setPromptText("Search for Anime");
         searchField.setOnAction(e -> animeSearch(animeList, searchField));
 
+        Text averageScore = new Text(10, 50, "Average score: " + barChart.getScoreAverage());
+        averageScore.setFont(new Font(20));
+
+        Text standardDeviationScore = new Text(10, 50, "Standard Deviation Score: " + barChart.getStandardDeviation());
+        standardDeviationScore.setFont(new Font(20));
+
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
@@ -329,12 +337,12 @@ public class AnimeListApp extends Application {
         vboxUserAnimeList.setAlignment(Pos.CENTER);
         vboxUserAnimeList.setPadding(new Insets(10));
 
-        VBox vboxAnimeList = new VBox(10);
-        vboxAnimeList.getChildren().add(hboxAnimeSearch);
-        vboxAnimeList.getChildren().add(mainTable);
-        vboxAnimeList.getChildren().addAll(tabPane, addButton, nsfwFilterCheckBox);
-        vboxAnimeList.setAlignment(Pos.CENTER);
-        vboxAnimeList.setPadding(new Insets(10));
+        VBox vboxScoreData = new VBox(10);
+        vboxScoreData.getChildren().add(barChart.getBarChart());
+        vboxScoreData.getChildren().add(averageScore);
+        vboxScoreData.getChildren().add(standardDeviationScore);
+        vboxScoreData.setAlignment(Pos.CENTER);
+        vboxScoreData.setPadding(new Insets(10));
 
         Tab animeListTab = new Tab("Anime List");
         animeListTab.setContent(vboxAnimeList);
@@ -346,7 +354,7 @@ public class AnimeListApp extends Application {
         genreTab.setContent(pieChart.getPieChart());
 
         Tab scoreChartTab = new Tab("Score Chart");
-        scoreChartTab.setContent(barChart.getBarChart());
+        scoreChartTab.setContent(vboxScoreData);
 
         tabPane.getTabs().addAll(animeListTab, userAnimeListTab, genreTab, scoreChartTab);
 
