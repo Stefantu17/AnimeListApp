@@ -533,67 +533,12 @@ public class AnimeListApp extends Application {
     private void animeSearch(ArrayList<AnimeData> animeList, TextField searchField) {
         String searchText = searchField.getText().toLowerCase();
         ArrayList<AnimeData> searchResults = new ArrayList<>();
-
-        for (AnimeData anime : animeList) {
-
-            if (isDigit(searchField)){
-                if (anime.getRank() == Double.parseDouble(searchText)) {
-                    searchResults.add(anime);
-                }
-
-                if (anime.getPopularity() == Integer.parseInt(searchText)) {
-                    searchResults.add(anime);
-                }
-
-                if (anime.getMembers() == Double.parseDouble(searchText)) {
-                    searchResults.add(anime);
-                }
-
-                if (anime.getEpisodes() == Double.parseDouble(searchText)) {
-                    searchResults.add(anime);
-                }
-
-                if (anime.getScore() == Double.parseDouble(searchText)) {
-                    searchResults.add(anime);
-                }
-                
-            }
-
-            else {
-
-                if (anime.getTitle().toLowerCase().contains(searchText)) {
-                    searchResults.add(anime);
-                }
-
-                if (anime.getGenresString().toLowerCase().contains(searchText)) {
-                    searchResults.add(anime);
-                }
-
-                if (anime.getAired().toLowerCase().contains(searchText)) {
-                    searchResults.add(anime);
-                }
-
-            }
-
-            if (searchText == ""){
-                break;
-            }
-        }
-
+        AnimeSorting.linearSearch(animeList, searchField, searchText, searchResults);
         ObservableList<AnimeData> observableAnimeList = FXCollections.observableArrayList(searchResults);
         mainTable.setItems(observableAnimeList);
     }
 
-    private boolean isDigit(TextField searchField){
-        try {
-            Double.parseDouble(searchField.getText());
-            return true;
-        } 
-        catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
+    
     private void animeSorting(ArrayList<AnimeData> animeList, ChoiceBox sortingChoiceBox) {
         int selectedIndex = sortingChoiceBox.getSelectionModel().getSelectedIndex();
         AnimeSorting.mergeSort(animeList, selectedIndex);
