@@ -257,17 +257,14 @@ public class AnimeListApp extends Application {
                     }
                 });
 
-        userAnimeListView = new ListView<>();
-        userAnimeListView.setItems(FXCollections.observableArrayList(userAnimeList));
-        userAnimeListView.setCellFactory(param -> new AnimeListCell());
-        userAnimeListView.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                AnimeData selectedAnime = animeListView.getSelectionModel().getSelectedItem();
-                if (selectedAnime != null) {
-                    showAnimeDetails(selectedAnime);
-                }
-            }
-        });
+        userTable.setOnMouseClicked(event -> {
+                    if (event.getClickCount() == 2) {
+                        AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem(); 
+                        if (selectedAnime != null) {
+                            showAnimeDetails(selectedAnime);
+                        }   
+                    }
+                });
     
         userTable.setEditable(true);
 
@@ -396,7 +393,6 @@ public class AnimeListApp extends Application {
             userAnimeList.add(selectedAnime);
             observableUserAnimeList.add(selectedAnime);
             userTable.setItems(FXCollections.observableArrayList(userAnimeList));
-            userAnimeListView.setItems(observableUserAnimeList);
             pieChart.updateGenrePieChart(userAnimeList);
             barChart.updateBarChart(selectedAnime);
         }
@@ -468,13 +464,12 @@ public class AnimeListApp extends Application {
 
     private void removeAnimeFromUserList(ObservableList<AnimeData> observableUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart) {
 
-        AnimeData selectedAnime = userAnimeListView.getSelectionModel().getSelectedItem();
+        AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem();
 
         if (selectedAnime != null && userAnimeList.contains(selectedAnime)) {
             userAnimeList.remove(selectedAnime);
             observableUserAnimeList.remove(selectedAnime);
-            userTable.setItems(observableUserAnimeList);
-            userAnimeListView.setItems(observableUserAnimeList);
+            userTable.setItems(FXCollections.observableArrayList(userAnimeList));
             pieChart.updateGenrePieChart(userAnimeList);
             barChart.updateBarChart(selectedAnime);
 
@@ -512,19 +507,6 @@ public class AnimeListApp extends Application {
             mainTable.setItems(FXCollections.observableArrayList(animeList));
         }
         
-    }
-    
-    private class AnimeListCell extends ListCell<AnimeData> {
-        @Override
-        protected void updateItem(AnimeData anime, boolean empty) {
-            super.updateItem(anime, empty);
-            if (empty || anime == null) {
-                setText(null);
-            } else {
-                setText(anime.getTitle());
-                
-            }
-        }
     }
 
 }
