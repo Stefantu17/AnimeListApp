@@ -1,6 +1,6 @@
 package charts;
 
-import CPT.AnimeData;
+import cpt.AnimeData;
 import java.util.ArrayList;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
