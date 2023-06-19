@@ -7,13 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class AnimeDataSet {
-
-    private ArrayList<AnimeData> data;
-
-    public void addAnimeData(AnimeData animeData) {
-        data.add(animeData);
-    }
+public class AnimeSorting {
 
     public static void mergeSort(ArrayList<AnimeData> list, int comparatorType) {
         if (list == null || list.size() <= 1) {
@@ -159,9 +153,5 @@ public class AnimeDataSet {
         }
         
         return -1;
-    }
-
-    public ArrayList<AnimeData> getAnimeDataSet() {
-        return data;
     }
 }

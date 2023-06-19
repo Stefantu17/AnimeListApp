@@ -25,10 +25,8 @@ import charts.PieChartGenerator;
 
 public class AnimeListApp extends Application {
 
-    private TableView mainTable = new TableView();
-    private TableView userTable = new TableView();
-    private ListView<AnimeData> animeListView;
-    private ListView<AnimeData> userAnimeListView;
+    private TableView<AnimeData> mainTable = new TableView<AnimeData>();
+    private TableView<AnimeData>  userTable = new TableView<AnimeData>();
     private List<AnimeData> userAnimeList;
 
     public static void main(String[] args) {
@@ -40,7 +38,7 @@ public class AnimeListApp extends Application {
         primaryStage.setTitle("Anime List App");
             
         ArrayList<AnimeData> animeList = new ArrayList<>(); 
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/basic/animes - copy.csv"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/basic/animes.csv"))) {
             String line = reader.readLine();
             for (int i = 0; i < 19311; i++) {
                 line = reader.readLine();
@@ -221,33 +219,55 @@ public class AnimeListApp extends Application {
         }
         userAnimeList = new ArrayList<>();
         ObservableList<AnimeData> observableUserAnimeList = FXCollections.observableArrayList();
-        
 
-        // MAIN TABLE
         mainTable.setEditable(true);
 
-        TableColumn animeTitle = new TableColumn("Name");
+        TableColumn<AnimeData, String>  animeTitle = new TableColumn<AnimeData, String>("Name");
         animeTitle.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("title"));
 
-        TableColumn animeScore = new TableColumn("Score");
+        TableColumn<AnimeData, String> animeScore = new TableColumn<AnimeData, String>("Score");
         animeScore.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("score"));
 
-        TableColumn animePopularity = new TableColumn("Popularity");
+        TableColumn<AnimeData, String> animePopularity = new TableColumn<AnimeData, String>("Popularity");
         animePopularity.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("popularity"));
 
-        TableColumn animeRank = new TableColumn("Rank");
+        TableColumn<AnimeData, String> animeRank = new TableColumn<AnimeData, String>("Rank");
         animeRank.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("rank"));
 
-        TableColumn animeViews = new TableColumn("Views");
+        TableColumn<AnimeData, String> animeViews = new TableColumn<AnimeData, String>("Views");
         animeViews.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("members"));
 
-        TableColumn animeEpisodes = new TableColumn("Episodes");
+        TableColumn<AnimeData, String> animeEpisodes = new TableColumn<AnimeData, String>("Episodes");
         animeEpisodes.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("episodes"));
 
         mainTable.setItems(FXCollections.observableArrayList(animeList));
 
         mainTable.getColumns().addAll(animeTitle, animeScore, animePopularity, animeRank, animeViews, animeEpisodes);
         
+        userTable.setEditable(true);
+
+        TableColumn<AnimeData, String> userAnimeTitle = new TableColumn<AnimeData, String>("Name");
+        userAnimeTitle.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("title"));
+
+        TableColumn<AnimeData, String> userAnimeScore = new TableColumn<AnimeData, String>("Score");
+        userAnimeScore.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("score"));
+
+        TableColumn<AnimeData, String> userAnimePopularity = new TableColumn<AnimeData, String>("Popularity");
+        userAnimePopularity.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("popularity"));
+
+        TableColumn<AnimeData, String> userAnimeRank = new TableColumn<AnimeData, String>("Rank");
+        userAnimeRank.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("rank"));
+
+        TableColumn<AnimeData, String> userAnimeViews = new TableColumn<AnimeData, String>("Views");
+        userAnimeViews.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("members"));
+
+        TableColumn<AnimeData, String> userAnimeEpisodes = new TableColumn<AnimeData, String>("Episodes");
+        userAnimeEpisodes.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("episodes"));
+            
+        userTable.setItems(FXCollections.observableArrayList(animeList));
+
+        userTable.getColumns().addAll(userAnimeTitle, userAnimeScore, userAnimePopularity, userAnimeRank, userAnimeViews, userAnimeEpisodes);
+
         mainTable.setOnMouseClicked(event -> {
                     if (event.getClickCount() == 2) {
                         AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem(); 
@@ -265,28 +285,6 @@ public class AnimeListApp extends Application {
                         }   
                     }
                 });
-    
-        userTable.setEditable(true);
-
-        TableColumn userAnimeTitle = new TableColumn("Name");
-        userAnimeTitle.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("title"));
-
-        TableColumn userAnimeScore = new TableColumn("Score");
-        userAnimeScore.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("score"));
-
-        TableColumn userAnimePopularity = new TableColumn("Popularity");
-        userAnimePopularity.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("popularity"));
-
-        TableColumn userAnimeRank = new TableColumn("Rank");
-        userAnimeRank.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("rank"));
-
-        TableColumn userAnimeViews = new TableColumn("Views");
-        userAnimeViews.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("members"));
-
-        TableColumn userAnimeEpisodes = new TableColumn("Episodes");
-        userAnimeEpisodes.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("episodes"));
-
-        userTable.getColumns().addAll(userAnimeTitle, userAnimeScore, userAnimePopularity, userAnimeRank, userAnimeViews, userAnimeEpisodes);
         
         BarChartGenerator barChart = new BarChartGenerator();
         PieChartGenerator pieChart = new PieChartGenerator();
@@ -349,7 +347,7 @@ public class AnimeListApp extends Application {
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(tabPane);
 
-        Scene scene = new Scene(borderPane, 800, 600);
+        Scene scene = new Scene(borderPane, 850, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
 
@@ -478,9 +476,9 @@ public class AnimeListApp extends Application {
     }
 
     private void animeSorting(ArrayList<AnimeData> animeList, ChoiceBox sortingChoiceBox) {
-            int selectedIndex = sortingChoiceBox.getSelectionModel().getSelectedIndex();
-            AnimeDataSet.mergeSort(animeList, selectedIndex);
-            mainTable.setItems(FXCollections.observableArrayList(animeList));
+        int selectedIndex = sortingChoiceBox.getSelectionModel().getSelectedIndex();
+        AnimeSorting.mergeSort(animeList, selectedIndex);
+        mainTable.setItems(FXCollections.observableArrayList(animeList));
     }
 
     private void updateAnimeListView(CheckBox nsfwFilterCheckBox, ArrayList<AnimeData> animeList) {
