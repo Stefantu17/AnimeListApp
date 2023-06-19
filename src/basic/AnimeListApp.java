@@ -120,7 +120,7 @@ public class AnimeListApp extends Application {
                 }
             }
         });
-    
+
         Button addButton = new Button("Watched");
         addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList));
         
