@@ -32,7 +32,6 @@ public class AnimeListApp extends Application {
     private ListView<AnimeData> userAnimeListView;
     private List<AnimeData> userAnimeList;
     private PieChart genrePieChart;
-    private XYChart.Series<String, Number> series;
 
     public static void main(String[] args) {
         launch(args);
@@ -140,7 +139,7 @@ public class AnimeListApp extends Application {
 
         // Add the series to the chart
         scoreChart.getData().add(series);
-        
+
         // Create the VBox to hold the score chart view
         VBox vbox = new VBox();
         vbox.setPadding(new Insets(10));
