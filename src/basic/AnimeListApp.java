@@ -37,38 +37,28 @@ public class AnimeListApp extends Application {
         primaryStage.setTitle("Anime List App");
 
         ArrayList<AnimeData> animeList = new ArrayList<>(); 
-
         try (BufferedReader reader = new BufferedReader(new FileReader("src/basic/animes - copy.csv"))) {
             String line = reader.readLine();
-            for (int i = 0; i < 40000; i++) {
+            for (int i = 0; i < 19311; i++) {
                 line = reader.readLine();
 
                 int UID = Integer.parseInt(line.substring(0, line.indexOf(","))); // good
-                
-                System.out.println(line);
-                System.out.println(1);
+     
                 
                 line = line.substring(line.indexOf(",") + 1); // good
 
-
-                System.out.println(line);
-                System.out.println(2);
                 String title = "";
 
                 if (line.charAt(0) == '"') {
                     line = line.substring(1);
                     title = line.substring(0, line.indexOf('"')); // good
                     line = line.substring(line.indexOf('"') + 2); // good
-                    System.out.println(line);
                 }
                 else {
                     title = line.substring(0, line.indexOf(',')); // good
                     line = line.substring(line.indexOf(',') + 1); // good
-                    System.out.println(line);
                 }
 
-                System.out.println(line);
-                System.out.println(3);
 
                 String synopsis = "";
 
@@ -88,17 +78,23 @@ public class AnimeListApp extends Application {
                         line = reader.readLine();
      
                     }
-        
-                    line = line.substring(line.indexOf('"') + 3);
+                    
+                    if (line.contains("['") == true) {
+                        synopsis += line.substring(0, line.indexOf("['"));
+                        line = line.substring(line.indexOf("['"));
+                    }
+                    else {
+                        synopsis += line.substring(0, line.indexOf("["));
+                        line = line.substring(line.indexOf("["));
+                    }
   
                 }
 
-                while (line.length() < 90) {
+                while (line.length() < 90 && line.contains("https") != true) {
                     line = reader.readLine();
                 }
 
-                System.out.println(line);
-                System.out.println(77);
+    
 
                 String strGenres = line.substring(0, line.indexOf("]"));
                 
@@ -106,31 +102,27 @@ public class AnimeListApp extends Application {
                 if (line.charAt(0) == '"') {
                     line = line.substring(2);
 
-                    System.out.println(line);
+
                     if (line.charAt(0) == '"') {
                         line = line.substring(1);
-                        System.out.println(line);
+
                     }
                 }
                 else {
                     line = line.substring(1);
-                    System.out.println(line);
+   
                     if (line.charAt(0) == '"') {
                         line = line.substring(1);
-                        System.out.println(line);
+ 
                     }
                 }
 
-                System.out.println(line);
-                System.out.println(5);
 
                 String newGenres = strGenres;
                 newGenres = newGenres.replace("[", "");
                 newGenres = newGenres.replace("'", "");
                 String[] newGenreList = newGenres.split(", ");
 
-                System.out.println(line);
-                System.out.println(6);
 
 
                 ArrayList<String> genres = new ArrayList<>(Arrays.asList(newGenreList));
@@ -183,7 +175,7 @@ public class AnimeListApp extends Application {
                     line = line.substring(line.indexOf(",") + 1);
                 }
 
-                double rank = 0;
+                double rank = 9999999;
                 if (line.charAt(0) == ',') {
 
                     line = line.substring(line.indexOf(",") + 1);
@@ -201,8 +193,7 @@ public class AnimeListApp extends Application {
                     score = Double.parseDouble(line.substring(0, line.indexOf(",")));
                     line = line.substring(line.indexOf(",") + 1);
                 }
-                System.out.println(line);
-                System.out.println(6);
+  
                 String imageLink = "";
                 if (line.charAt(0) == ',') {
                     line = line.substring(line.indexOf(",") + 1);
@@ -211,15 +202,16 @@ public class AnimeListApp extends Application {
                     imageLink = line.substring(0, line.indexOf(","));
                     line = line.substring(line.indexOf(",") + 1);
                 }
-                System.out.println(line);
-                System.out.println(6);
+   
                 String animeLink = "";
                 if (line.charAt(0) != ',') {
                     animeLink = line;
                 }
                 AnimeData animeData = new AnimeData(UID, title, synopsis, genres, aired, episodes, members, popularity, rank, score, imageLink, animeLink);
                 animeList.add(animeData);
+
             }
+            
         } 
         catch (IOException e) {
             e.printStackTrace();
