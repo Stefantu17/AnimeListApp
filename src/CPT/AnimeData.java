@@ -325,29 +325,64 @@ public class AnimeData {
      * Title compare method for merge sort operation
      * 
      * @param animeTwo  the anime it is comparing
-     * @return  the integer different between the title it is comparing to
+     * @return  the integer difference between the title it is comparing to
      * 
      */
     public int titleCompareTo(AnimeData animeTwo) {
         return this.getTitle().toLowerCase().compareTo(animeTwo.getTitle().toLowerCase());
     }
-
+    
+    /**
+     * Score compare method for merge sort operation
+     * 
+     * @param animeTwo  the anime it is comparing
+     * @return  the integer difference between the score it is comparing to
+     * 
+     */
     public double scoreCompareTo(AnimeData animeTwo) {
         return this.getScore() - animeTwo.getScore();
     }
 
+    /**
+     * Popularity ranking compare method for merge sort operation
+     * 
+     * @param animeTwo  the anime it is comparing
+     * @return  the integer difference between the popularity ranking it is comparing to
+     * 
+     */
     public int popularityCompareTo(AnimeData animeTwo) {
         return this.getPopularity() - animeTwo.getPopularity();
     }
 
+    /**
+     * User watched count compare method for merge sort operation
+     * 
+     * @param animeTwo  the anime it is comparing
+     * @return  the integer difference between the User watched count it is comparing to
+     * 
+     */
     public int membersCompareTo(AnimeData animeTwo) {
         return this.getMembers() - animeTwo.getMembers();
     }
 
+    /**
+     * Episode count compare method for merge sort operation
+     * 
+     * @param animeTwo  the anime it is comparing
+     * @return  the integer different between the episode count it is comparing to
+     * 
+     */
     public int episodesCompareTo(AnimeData animeTwo) {
         return this.getEpisodes() - animeTwo.getEpisodes();
     }
 
+    /**
+     * Score ranking compare method for merge sort operation
+     * 
+     * @param animeTwo  the anime it is comparing
+     * @return  the integer different between the score ranking it is comparing to
+     * 
+     */
     public int rankCompareTo(AnimeData animeTwo) {
         return this.getRank() - animeTwo.getRank();
     }
