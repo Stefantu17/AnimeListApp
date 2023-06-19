@@ -633,10 +633,13 @@ public class AnimeListApp extends Application {
      */
     private void animeSearch(ArrayList<AnimeData> animeList, TextField searchField) {
 
+        // Setup variables and apply linear search
         String searchText = searchField.getText().toLowerCase();
         ArrayList<AnimeData> searchResults = new ArrayList<>();
         AnimeSorting.linearSearch(animeList, searchField, searchText, searchResults);
         ObservableList<AnimeData> observableAnimeList = FXCollections.observableArrayList(searchResults);
+
+        // Modify table
         mainTable.setItems(observableAnimeList);
     }
 
@@ -649,8 +652,11 @@ public class AnimeListApp extends Application {
      */
     private void animeSorting(ArrayList<AnimeData> animeList, ChoiceBox sortingChoiceBox) {
 
+        // Setup variables and apply merge sort
         int selectedIndex = sortingChoiceBox.getSelectionModel().getSelectedIndex();
         AnimeSorting.mergeSort(animeList, selectedIndex);
+
+        // Modify table
         mainTable.setItems(FXCollections.observableArrayList(animeList));
     }
 
@@ -663,25 +669,32 @@ public class AnimeListApp extends Application {
      */
     private void updateAnimeListView(CheckBox nsfwFilterCheckBox, ArrayList<AnimeData> animeList) {
 
+        // Create a blank filtered list
         ObservableList<AnimeData> filteredAnimeList = FXCollections.observableArrayList();
         boolean nsfwFilterEnabled = nsfwFilterCheckBox.isSelected();
 
+        // Iterate through animes in main anime list
         for (AnimeData anime : animeList) {
 
+            // If box is checked
             if (nsfwFilterEnabled) {
 
                 boolean isNsfw = anime.getGenres().contains("Hentai") || anime.getGenres().contains("Ecchi") || anime.getGenres().contains("Harem");
+
+                // If anime is not nsfw, add it to new list
                 if (!isNsfw) {
 
                     filteredAnimeList.add(anime);
                 }
             } 
+            // Otherwise, add all animes to filtered list, as it is not filtered.
             else {
 
                 filteredAnimeList.add(anime);
             }
         }
 
+        // Modify tables based on if the nsfw checkbox is checked
         if (nsfwFilterEnabled) {
             mainTable.setItems(filteredAnimeList);
         } 
