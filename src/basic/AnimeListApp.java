@@ -3,6 +3,7 @@ package basic;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -21,6 +22,7 @@ import javafx.stage.Stage;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -316,7 +318,7 @@ public class AnimeListApp extends Application {
         
         BarChartGenerator barChart = new BarChartGenerator();
         PieChartGenerator pieChart = new PieChartGenerator();
-
+            
         Text title = new Text(10, 50, "AnimeList.net");
         title.setFont(new Font(20));
 
@@ -446,15 +448,19 @@ public class AnimeListApp extends Application {
         gridPane.addRow(6, new Label("Rank:"), new Label(String.valueOf(anime.getRank())));
         gridPane.addRow(7, new Label("Average Score:"), new Label(String.valueOf(anime.getScore())));
 
-        
-        gridPane.addRow(8, new Label("Average Score:"), new Label(String.valueOf(anime.getScore())));
+        Hyperlink hyperLink = new Hyperlink(anime.getAnimeLink());
+
+        hyperLink.setOnAction(e -> {
+            getHostServices().showDocument(anime.getAnimeLink());
+        });
+   
 
         TextArea summaryTextArea = new TextArea(anime.getSynopsis());
         summaryTextArea.setEditable(false);
         summaryTextArea.setWrapText(true);
         summaryTextArea.setMaxWidth(Double.MAX_VALUE);
         summaryTextArea.setMaxHeight(Double.MAX_VALUE);
-        gridPane.addRow(9, new Label("Summary:"), summaryTextArea);
+        gridPane.addRow(8, new Label("Summary:"), summaryTextArea);
 
         if (anime.getImageLink() != ""  && !anime.getGenres().contains("Hentai") && !anime.getGenres().contains("Harem") && !anime.getGenres().contains("Ecchi")) {
             Group root = new Group();
@@ -466,7 +472,12 @@ public class AnimeListApp extends Application {
             animeInfo.getChildren().add(root);
             animeInfo.setAlignment(Pos.CENTER);
             animeInfo.setPadding(new Insets(10));
-            alert.getDialogPane().setContent(animeInfo);
+            VBox animePage = new VBox();
+            animePage.getChildren().add(animeInfo);
+            animePage.getChildren().add(hyperLink);
+            animePage.setAlignment(Pos.CENTER);
+            animeInfo.setPadding(new Insets(10));
+            alert.getDialogPane().setContent(animePage);
             alert.showAndWait();
         }
 
