@@ -230,13 +230,62 @@ public class AnimeListApp extends Application {
         ArrayList<AnimeData> searchResults = new ArrayList<>();
 
         for (AnimeData anime : animeList) {
-            if (anime.getTitle().toLowerCase().contains(searchText)) {
-                searchResults.add(anime);
+
+            if (isDigit(searchField)){
+                if (anime.getRank() == Double.parseDouble(searchText)) {
+                    searchResults.add(anime);
+                }
+
+                if (anime.getPopularity() == Double.parseDouble(searchText)) {
+                    searchResults.add(anime);
+                }
+
+                if (anime.getMembers() == Double.parseDouble(searchText)) {
+                    searchResults.add(anime);
+                }
+
+                if (anime.getEpisodes() == Double.parseDouble(searchText)) {
+                    searchResults.add(anime);
+                }
+
+                if (anime.getScore() == Double.parseDouble(searchText)) {
+                    searchResults.add(anime);
+                }
+                
+            }
+
+            else {
+
+                if (anime.getTitle().contains(searchText)) {
+                    searchResults.add(anime);
+                }
+
+                if (anime.getGenresString().contains(searchText)) {
+                    searchResults.add(anime);
+                }
+
+                if (anime.getAired().contains(searchText)) {
+                    searchResults.add(anime);
+                }
+
+            }
+
+            if (searchText == ""){
+                break;
             }
         }
 
         ObservableList<AnimeData> observableAnimeList = FXCollections.observableArrayList(searchResults);
         animeListView.setItems(observableAnimeList);
+    }
+
+    private boolean isDigit(TextField searchField){
+        try {
+            Double.parseDouble(searchField.getText());
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     private void removeAnimeFromUserList(ObservableList<AnimeData> observableUserAnimeList) {
