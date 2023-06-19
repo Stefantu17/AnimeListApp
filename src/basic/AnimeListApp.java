@@ -304,7 +304,7 @@ public class AnimeListApp extends Application {
         addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList, barChart, pieChart, averageScore, standardDeviationScore, animeCount));
 
         Button removeButton = new Button("Remove");
-        removeButton.setOnAction(e -> removeAnimeFromUserList(observableUserAnimeList, barChart, pieChart));
+        removeButton.setOnAction(e -> removeAnimeFromUserList(observableUserAnimeList, barChart, pieChart, averageScore, standardDeviationScore, animeCount));
 
         CheckBox nsfwFilterCheckBox = new CheckBox("NSFW Filter");
         nsfwFilterCheckBox.setOnAction(event -> updateAnimeListView(nsfwFilterCheckBox, animeList));
@@ -420,9 +420,27 @@ public class AnimeListApp extends Application {
 
             averageScore.setText("Average score: " + barChart.getScoreAverage());
             standardDeviationScore.setText("Standard Deviation: " + barChart.getStandardDeviation());
-            animeCount.setText("Anime Count: " + barChart.getStandardDeviation());
+            animeCount.setText("Anime Count: " + barChart.getAnimeCount());
             
         }
+    }
+
+    private void removeAnimeFromUserList(ObservableList<AnimeData> observableUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart, Text averageScore, Text standardDeviationScore, Text animeCount) {
+
+        AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem();
+
+        if (selectedAnime != null && userAnimeList.contains(selectedAnime)) {
+            userAnimeList.remove(selectedAnime);
+            observableUserAnimeList.remove(selectedAnime);
+            userTable.setItems(FXCollections.observableArrayList(userAnimeList));
+            pieChart.updateGenrePieChart(userAnimeList);
+            barChart.removeFromBarChart(selectedAnime);
+
+            averageScore.setText("Average score: " + barChart.getScoreAverage());
+            standardDeviationScore.setText("Standard Deviation: " + barChart.getStandardDeviation());
+            animeCount.setText("Anime Count: " + barChart.getAnimeCount());
+        }
+
     }
 
     private void animeSearch(ArrayList<AnimeData> animeList, TextField searchField) {
@@ -487,21 +505,6 @@ public class AnimeListApp extends Application {
         catch (NumberFormatException e) {
             return false;
         }
-    }
-
-    private void removeAnimeFromUserList(ObservableList<AnimeData> observableUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart) {
-
-        AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem();
-
-        if (selectedAnime != null && userAnimeList.contains(selectedAnime)) {
-            userAnimeList.remove(selectedAnime);
-            observableUserAnimeList.remove(selectedAnime);
-            userTable.setItems(FXCollections.observableArrayList(userAnimeList));
-            pieChart.updateGenrePieChart(userAnimeList);
-            barChart.removeFromBarChart(selectedAnime);
-            updateHBoxUserAnimeData(barChart);
-        }
-
     }
 
     private void animeSorting(ArrayList<AnimeData> animeList, ChoiceBox sortingChoiceBox) {

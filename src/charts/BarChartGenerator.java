@@ -84,7 +84,7 @@ public class BarChartGenerator {
         for (double num : scores) {
             average += num;
         }
-        return average/scores.size();
+        return Math.round(average/scores.size() * 100.0) / 100.0;
     }
 
     public double getStandardDeviation() {
@@ -105,7 +105,7 @@ public class BarChartGenerator {
             standardDeviation += Math.pow(num - mean, 2);
         }
 
-        return Math.sqrt(standardDeviation / length);
+        return Math.round(Math.sqrt(standardDeviation / length) * 100.0) / 100.0;
     }
 
     public int getAnimeCount() {
