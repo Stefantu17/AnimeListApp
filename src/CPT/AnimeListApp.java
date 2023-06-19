@@ -1,4 +1,4 @@
-package basic;
+package CPT;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -22,7 +22,6 @@ import javafx.stage.Stage;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,7 +45,7 @@ public class AnimeListApp extends Application {
         primaryStage.setTitle("Anime List App");
             
         ArrayList<AnimeData> animeList = new ArrayList<>(); 
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/basic/animes.csv"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/CPT/animes.csv"))) {
             String line = reader.readLine();
             for (int i = 0; i < 19311; i++) {
 
@@ -440,7 +439,7 @@ public class AnimeListApp extends Application {
         gridPane.setPadding(new Insets(10));
 
         gridPane.addRow(0, new Label("UID:"), new Label(String.valueOf(anime.getUID())));
-        gridPane.addRow(1, new Label("Genres:"), new Label(anime.getGenresString()));
+        gridPane.addRow(1, new Label("Genre(s):"), new Label(anime.getGenresString()));
         gridPane.addRow(2, new Label("Date Aired:"), new Label(anime.getAired()));
         gridPane.addRow(3, new Label("Episode Count:"), new Label(String.valueOf(anime.getEpisodes())));
         gridPane.addRow(4, new Label("Popularity Rank:"), new Label(String.valueOf(anime.getPopularity())));

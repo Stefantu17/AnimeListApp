@@ -3,7 +3,7 @@ package charts;
 import java.util.ArrayList;
 import java.util.List;
 
-import basic.AnimeData;
+import CPT.AnimeData;
 import javafx.collections.FXCollections;
 import javafx.scene.chart.PieChart;
 
