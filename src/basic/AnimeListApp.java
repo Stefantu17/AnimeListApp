@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.rmi.server.UID;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,37 +38,33 @@ public class AnimeListApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+
         primaryStage.setTitle("Anime List App");
             
         ArrayList<AnimeData> animeList = new ArrayList<>(); 
         try (BufferedReader reader = new BufferedReader(new FileReader("src/basic/animes.csv"))) {
             String line = reader.readLine();
             for (int i = 0; i < 19311; i++) {
+
+                ArrayList<String> genres = new ArrayList<>();
+                AnimeData animeData = new AnimeData(0, "", "", genres, "", 0, 0, 0, 0, 0, "", "");
+
                 line = reader.readLine();
-
-                int UID = Integer.parseInt(line.substring(0, line.indexOf(","))); // good
+                animeData.setUID(Integer.parseInt(line.substring(0, line.indexOf(","))));
      
-                
-                line = line.substring(line.indexOf(",") + 1); // good
-
-                String title = "";
-
-            
+                line = line.substring(line.indexOf(",") + 1);
 
                 if (line.charAt(0) == '"' && line.charAt(1) != '"') {
                     line = line.substring(1);
-                    title = line.substring(0, line.indexOf('"'));
+                    animeData.setTitle(line.substring(0, line.indexOf('"')));
                     line = line.substring(line.indexOf('"') + 2); 
                 }
                 else {
-                    title = line.substring(0, line.indexOf(',')); 
+                    animeData.setTitle(line.substring(0, line.indexOf(','))); 
                     line = line.substring(line.indexOf(',') + 1); 
                 }
 
-                title = title.replace("\"", "");
-
-                String synopsis = "";
-
+                animeData.setTitle(animeData.getTitle().replace("\"", ""));
 
                 if (line.contains("https") == true) {
                     if (line.contains("['") == true) {
@@ -80,17 +77,17 @@ public class AnimeListApp extends Application {
 
                 else {
                     while (line.contains("https") == false) {
-                        synopsis += line;
+                        animeData.setSynopsis(animeData.getSynopsis() + line);
                         line = reader.readLine();
      
                     }
                     
                     if (line.contains("['") == true) {
-                        synopsis += line.substring(0, line.indexOf("['"));
+                        animeData.setSynopsis(animeData.getSynopsis() + line.substring(0, line.indexOf("['")));
                         line = line.substring(line.indexOf("['"));
                     }
                     else {
-                        synopsis += line.substring(0, line.indexOf("["));
+                        animeData.setSynopsis(animeData.getSynopsis() + line.substring(0, line.indexOf("[")));
                         line = line.substring(line.indexOf("["));
                     }
   
@@ -100,17 +97,17 @@ public class AnimeListApp extends Application {
                     line = reader.readLine();
                 }
            
-                if (synopsis != "") {
-                    if (synopsis.charAt(synopsis.length()-1) == '"') {
+                if (animeData.getSynopsis() != "") {
+                    if (animeData.getSynopsis().charAt(animeData.getSynopsis().length()-1) == '"') {
           
-                        synopsis = synopsis.substring(0, synopsis.length()-2);
+                        animeData.setSynopsis(animeData.getSynopsis().substring(0, animeData.getSynopsis().length()-2));
                     }
-                    else if (synopsis.charAt(synopsis.length()-1) == ',') {
+                    else if (animeData.getSynopsis().charAt(animeData.getSynopsis().length()-1) == ',') {
      
-                        synopsis = synopsis.substring(0, synopsis.length()-1);
+                        animeData.setSynopsis(animeData.getSynopsis().substring(0, animeData.getSynopsis().length()-1));
                     }
                 }   
-                String strGenres = line.substring(0, line.indexOf("]"));
+
                 
                 line = line.substring(line.indexOf("]") + 1);
                 if (line.charAt(0) == '"') {
@@ -131,28 +128,25 @@ public class AnimeListApp extends Application {
                     }
                 }
 
+                String strGenres = line.substring(0, line.indexOf("]"));
+                strGenres= strGenres.replace("[", "");
+                strGenres = strGenres.replace("'", "");
+                String[] genreList = strGenres.split(", ");
+                animeData.setGenre(new ArrayList<>(Arrays.asList(genreList)));
 
-                String newGenres = strGenres;
-                newGenres = newGenres.replace("[", "");
-                newGenres = newGenres.replace("'", "");
-                String[] newGenreList = newGenres.split(", ");
 
-
-
-                ArrayList<String> genres = new ArrayList<>(Arrays.asList(newGenreList));
-                String aired = "";
                 if (line.contains("Not available") == true) {
-                    aired = "Not available";
+                    animeData.setAired("Not available");
                     line = line.substring(line.indexOf(',') + 1);
                 }
                 else if (line.charAt(0) == '1' || line.charAt(0) == '2') {
                     if (line.contains(", ") == true) {
-                        aired = line.substring(0, line.indexOf('"') + 2);
+                        animeData.setAired(line.substring(0, line.indexOf('"') + 2));
                         line = line.substring(line.indexOf('"') + 2);
                     }
                     else {
-                    aired = line.substring(0, line.indexOf(',') + 1);
-                    line = line.substring(line.indexOf(',') + 1);
+                        animeData.setAired(line.substring(0, line.indexOf(',') + 1));
+                        line = line.substring(line.indexOf(',') + 1);
                     }
                 }
                 else {
