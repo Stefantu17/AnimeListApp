@@ -453,7 +453,6 @@ public class AnimeListApp extends Application {
         hyperLink.setOnAction(e -> {
             getHostServices().showDocument(anime.getAnimeLink());
         });
-   
 
         TextArea summaryTextArea = new TextArea(anime.getSynopsis());
         summaryTextArea.setEditable(false);
