@@ -187,7 +187,7 @@ public class AnimeSorting {
                     searchResults.add(anime);
                 }
 
-                if (anime.getPopularity() == Integer.parseInt(searchText)) {
+                if (anime.getPopularity() == Double.parseDouble(searchText)) {
 
                     searchResults.add(anime);
                 }
