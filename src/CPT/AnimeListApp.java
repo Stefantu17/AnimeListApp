@@ -71,7 +71,14 @@ public class AnimeListApp extends Application {
             // Runs while there are still entries
             while((line = reader.readLine()) != null) {
 
+                /*
+                 * Note: The processing of this data was very complex, as there are many inconsistencies in the data that make buffered reader processing
+                 * much more complicated compared to standard csv file processing. The bulk of this section is a lot of conditional statements and 
+                 * substringing to process all this data. 
+                 */
                 ArrayList<String> genres = new ArrayList<>();
+
+                // A rank of 999999 means no one has scored it and a episode count of 0 means it is still airing
                 AnimeData animeData = new AnimeData(0, "", "", genres, "", 0, 0, 0, 999999, 0, "", "");
                 animeData.setUID(Integer.parseInt(line.substring(0, line.indexOf(","))));
      
@@ -160,6 +167,7 @@ public class AnimeListApp extends Application {
                     }
 
                 }
+
                 else {
 
                     line = line.substring(1);
@@ -283,6 +291,7 @@ public class AnimeListApp extends Application {
                     animeData.setAnimeLink(line);
                 }
 
+                // Add anime data to anime list
                 animeList.add(animeData);
 
             }
@@ -292,12 +301,15 @@ public class AnimeListApp extends Application {
             e.printStackTrace();
         }
 
+        // Setup tables
         mainTable = new TableView<AnimeData>();
         userTable = new TableView<AnimeData>();
 
+        // Create lists
         userAnimeList = new ArrayList<>();
         ObservableList<AnimeData> observableUserAnimeList = FXCollections.observableArrayList();
 
+        // Add column values to main table
         mainTable.setEditable(true);
         mainTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
@@ -321,7 +333,8 @@ public class AnimeListApp extends Application {
 
         mainTable.setItems(FXCollections.observableArrayList(animeList));
         mainTable.getColumns().addAll(animeTitle, animeScore, animePopularity, animeRank, animeViews, animeEpisodes);
-        
+
+        // Add column values to user table
         userTable.setEditable(true);
         userTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
@@ -345,13 +358,15 @@ public class AnimeListApp extends Application {
 
         userTable.getColumns().addAll(userAnimeTitle, userAnimeScore, userAnimePopularity, userAnimeRank, userAnimeViews, userAnimeEpisodes);
 
+        // Show extended info about anime if double clicked on specific anime
         mainTable.setOnMouseClicked(event -> { if (event.getClickCount() == 2) { AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem(); if (selectedAnime != null) { showAnimeDetails(selectedAnime); }}});
-
         userTable.setOnMouseClicked(event -> { if (event.getClickCount() == 2) { AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem(); if (selectedAnime != null) { showAnimeDetails(selectedAnime); }}});
         
+        // Generate charts
         BarChartGenerator barChart = new BarChartGenerator();
         PieChartGenerator pieChart = new PieChartGenerator();
-            
+        
+        // Setup interactivity and UI elements
         Text title = new Text(10, 50, "AnimeList.net");
         title.setFont(new Font(20));
 
@@ -394,6 +409,7 @@ public class AnimeListApp extends Application {
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
+        // Create Horizontal and Vertical boxes to add elements together
         HBox hboxAnimeSearch = new HBox(10);
         hboxAnimeSearch.setAlignment(Pos.TOP_CENTER);
         hboxAnimeSearch.setPadding(new Insets(10));
@@ -436,6 +452,7 @@ public class AnimeListApp extends Application {
         vboxBarGraphTab.setAlignment(Pos.CENTER);
         vboxBarGraphTab.setPadding(new Insets(10));
 
+        // Create tabs
         Tab animeListTab = new Tab("Anime List");
         animeListTab.setContent(vboxAnimeList);
 
@@ -448,12 +465,15 @@ public class AnimeListApp extends Application {
         Tab scoreChartTab = new Tab("Score Chart");
         scoreChartTab.setContent(vboxBarGraphTab);
 
+        // Add all tabs to tabPane
         tabPane.getTabs().addAll(animeListTab, userAnimeListTab, genreTab, scoreChartTab);
 
+        // Create border plane
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(hboxTitle);
         borderPane.setCenter(tabPane);
 
+        // Finish scene
         Scene scene = new Scene(borderPane, 850, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -466,15 +486,19 @@ public class AnimeListApp extends Application {
      * 
      */
     private void showAnimeDetails(AnimeData anime) {
+
+        // Setup alert
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Anime Details");
         alert.setHeaderText(anime.getTitle());
         
+        // Setup gridPane
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);
         gridPane.setVgap(5);
         gridPane.setPadding(new Insets(10));
 
+        // Add information
         gridPane.addRow(0, new Label("UID:"), new Label(String.valueOf(anime.getUID())));
         gridPane.addRow(1, new Label("Genre(s):"), new Label(anime.getGenresString()));
         gridPane.addRow(2, new Label("Date Aired:"), new Label(anime.getAired()));
@@ -484,12 +508,11 @@ public class AnimeListApp extends Application {
         gridPane.addRow(6, new Label("Rank:"), new Label(String.valueOf(anime.getRank())));
         gridPane.addRow(7, new Label("Average Score:"), new Label(String.valueOf(anime.getScore())));
 
+        // Setup hyperlink
         Hyperlink hyperLink = new Hyperlink(anime.getAnimeLink());
+        hyperLink.setOnAction(e -> { getHostServices().showDocument(anime.getAnimeLink()); });
 
-        hyperLink.setOnAction(e -> {
-            getHostServices().showDocument(anime.getAnimeLink());
-        });
-
+        // Add summary text area
         TextArea summaryTextArea = new TextArea(anime.getSynopsis());
         summaryTextArea.setEditable(false);
         summaryTextArea.setWrapText(true);
@@ -497,6 +520,7 @@ public class AnimeListApp extends Application {
         summaryTextArea.setMaxHeight(Double.MAX_VALUE);
         gridPane.addRow(8, new Label("Summary:"), summaryTextArea);
 
+        // If anime has an image link and isn't NSFW, add image and link to information
         if (anime.getImageLink() != ""  && !anime.getGenres().contains("Hentai") && !anime.getGenres().contains("Harem") && !anime.getGenres().contains("Ecchi")) {
             Group root = new Group();
             Image image = new Image(anime.getImageLink());
@@ -515,7 +539,7 @@ public class AnimeListApp extends Application {
             alert.getDialogPane().setContent(animePage);
             alert.showAndWait();
         }
-
+        
         else {
 
             alert.getDialogPane().setContent(gridPane);
@@ -543,19 +567,25 @@ public class AnimeListApp extends Application {
 
         AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem();
 
+        // If an anime is selected and the userlist doesnt have the anime already
         if (selectedAnime != null && !userAnimeList.contains(selectedAnime)) {
+
+            // Add anime
             userAnimeList.add(selectedAnime);
             observableUserAnimeList.add(selectedAnime);
             userTable.setItems(FXCollections.observableArrayList(userAnimeList));
+
+            // Update charts
             pieChart.updateGenrePieChart(userAnimeList);
             barChart.addToBarChart(selectedAnime);
+
+            // Update text
             averageScore.setText("Average score: " + barChart.getScoreAverage());
             standardDeviationScore.setText("Standard Deviation: " + barChart.getStandardDeviation());
             animeCount.setText("Anime Count: " + barChart.getAnimeCount());
             maxScore.setText("Maximum Score: " + barChart.getScoreMax());
             minScore.setText("Minimum Score: " + barChart.getScoreMin());
             medianScore.setText("Median Score: " + barChart.getScoreMedian());
-            
         }
     }
 
