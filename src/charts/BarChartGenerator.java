@@ -120,4 +120,42 @@ public class BarChartGenerator {
         }
         return count;
     }
+
+    public double getScoreMax() {
+        double max = 0;
+        
+        if (scores.isEmpty() == true) {
+            return 0;
+        }
+        for (double i : scores) {
+            if (i > max){
+                max = i;
+            }
+        }
+        return Math.round(max * 100.0) / 100.0;
+            
+    }
+
+    public double getScoreMin() {
+        double min = 10;
+        
+        if (scores.isEmpty() == true) {
+            return 0;
+        }
+        for (double i : scores) {
+            if (i < min) {
+                min = i;
+            }
+        }
+        return Math.round(min * 100.0) / 100.0;
+            
+    }
+
+    public double getScoreMedian() {
+        if (scores.isEmpty() == true) {
+            return 0;
+        }
+        double median = scores.get((int)scores.size()/2);
+        return Math.round(median * 100.0) / 100.0;
+    }
 }

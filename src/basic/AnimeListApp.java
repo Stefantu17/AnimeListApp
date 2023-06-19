@@ -300,11 +300,20 @@ public class AnimeListApp extends Application {
         Text animeCount = new Text(10, 50, "Anime Count: " + barChart.getAnimeCount());
         animeCount.setFont(new Font(20));
 
+        Text maxScore = new Text(10, 50, "Maximum Score: " + barChart.getScoreMax());
+        maxScore.setFont(new Font(20));
+
+        Text minScore = new Text(10, 50, "Minimum Score: " + barChart.getScoreMin());
+        minScore.setFont(new Font(20));
+
+        Text medianScore = new Text(10, 50, "Score Median: " + barChart.getScoreMedian());
+        medianScore.setFont(new Font(20));
+
         Button addButton = new Button("Watched");
-        addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList, barChart, pieChart, averageScore, standardDeviationScore, animeCount));
+        addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList, barChart, pieChart, averageScore, standardDeviationScore, animeCount, maxScore, minScore, medianScore));
 
         Button removeButton = new Button("Remove");
-        removeButton.setOnAction(e -> removeAnimeFromUserList(observableUserAnimeList, barChart, pieChart, averageScore, standardDeviationScore, animeCount));
+        removeButton.setOnAction(e -> removeAnimeFromUserList(observableUserAnimeList, barChart, pieChart, averageScore, standardDeviationScore, animeCount, maxScore, minScore, medianScore));
 
         CheckBox nsfwFilterCheckBox = new CheckBox("NSFW Filter");
         nsfwFilterCheckBox.setOnAction(event -> updateAnimeListView(nsfwFilterCheckBox, animeList));
@@ -342,15 +351,20 @@ public class AnimeListApp extends Application {
         vboxUserAnimeList.setAlignment(Pos.CENTER);
         vboxUserAnimeList.setPadding(new Insets(10));
 
-        HBox hboxUserAnimeData = new HBox(10);
-        hboxUserAnimeData.getChildren().addAll(averageScore, standardDeviationScore);
-        hboxUserAnimeData.getChildren().add(animeCount);
-        hboxUserAnimeData.setAlignment(Pos.CENTER);
-        hboxUserAnimeData.setPadding(new Insets(10));
+        HBox hboxUserAnimeData1 = new HBox(10);
+        hboxUserAnimeData1.getChildren().addAll(averageScore, standardDeviationScore, animeCount);
+        hboxUserAnimeData1.setAlignment(Pos.CENTER);
+        hboxUserAnimeData1.setPadding(new Insets(10));
+
+        HBox hboxUserAnimeData2 = new HBox(10);
+        hboxUserAnimeData2.getChildren().addAll(maxScore, minScore, medianScore);
+        hboxUserAnimeData2.setAlignment(Pos.CENTER);
+        hboxUserAnimeData2.setPadding(new Insets(10));
 
         VBox vboxBarGraphTab = new VBox(10);
         vboxBarGraphTab.getChildren().add(barChart.getBarChart());
-        vboxBarGraphTab.getChildren().add(hboxUserAnimeData);
+        vboxBarGraphTab.getChildren().add(hboxUserAnimeData1);
+        vboxBarGraphTab.getChildren().add(hboxUserAnimeData2);
         vboxBarGraphTab.setAlignment(Pos.CENTER);
         vboxBarGraphTab.setPadding(new Insets(10));
 
@@ -407,7 +421,7 @@ public class AnimeListApp extends Application {
         alert.showAndWait();
     }
 
-    private void addAnimeToUserList(ObservableList<AnimeData> observableUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart, Text averageScore, Text standardDeviationScore, Text animeCount) {
+    private void addAnimeToUserList(ObservableList<AnimeData> observableUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart, Text averageScore, Text standardDeviationScore, Text animeCount, Text maxScore, Text minScore, Text medianScore) {
 
         AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem();
 
@@ -421,11 +435,14 @@ public class AnimeListApp extends Application {
             averageScore.setText("Average score: " + barChart.getScoreAverage());
             standardDeviationScore.setText("Standard Deviation: " + barChart.getStandardDeviation());
             animeCount.setText("Anime Count: " + barChart.getAnimeCount());
+            maxScore.setText("Maximum Score: " + barChart.getScoreMax());
+            minScore.setText("Minimum Score: " + barChart.getScoreMin());
+            medianScore.setText("Median Score: " + barChart.getScoreMedian());
             
         }
     }
 
-    private void removeAnimeFromUserList(ObservableList<AnimeData> observableUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart, Text averageScore, Text standardDeviationScore, Text animeCount) {
+    private void removeAnimeFromUserList(ObservableList<AnimeData> observableUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart, Text averageScore, Text standardDeviationScore, Text animeCount, Text maxScore, Text minScore, Text medianScore) {
 
         AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem();
 
@@ -439,6 +456,9 @@ public class AnimeListApp extends Application {
             averageScore.setText("Average score: " + barChart.getScoreAverage());
             standardDeviationScore.setText("Standard Deviation: " + barChart.getStandardDeviation());
             animeCount.setText("Anime Count: " + barChart.getAnimeCount());
+            maxScore.setText("Maximum Score: " + barChart.getScoreMax());
+            minScore.setText("Minimum Score: " + barChart.getScoreMin());
+            medianScore.setText("Median Score: " + barChart.getScoreMedian());
         }
 
     }
