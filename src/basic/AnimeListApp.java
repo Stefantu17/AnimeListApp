@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
@@ -290,9 +291,18 @@ public class AnimeListApp extends Application {
         BarChartGenerator barChart = new BarChartGenerator();
         PieChartGenerator pieChart = new PieChartGenerator();
 
+        Text averageScore = new Text(10, 50, "Average score: " + barChart.getScoreAverage());
+        averageScore.setFont(new Font(20));
+
+        Text standardDeviationScore = new Text(10, 50, "Standard Deviation Score: " + barChart.getStandardDeviation());
+        standardDeviationScore.setFont(new Font(20));
+
+        Text animeCount = new Text(10, 50, "Anime Count: " + barChart.getAnimeCount());
+        animeCount.setFont(new Font(20));
+
         Button addButton = new Button("Watched");
-        addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList, barChart, pieChart));
-        
+        addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList, barChart, pieChart, averageScore, standardDeviationScore, animeCount));
+
         Button removeButton = new Button("Remove");
         removeButton.setOnAction(e -> removeAnimeFromUserList(observableUserAnimeList, barChart, pieChart));
 
@@ -308,12 +318,7 @@ public class AnimeListApp extends Application {
         searchField.setPromptText("Search for Anime");
         searchField.setOnAction(e -> animeSearch(animeList, searchField));
 
-        Text averageScore = new Text(10, 50, "Average score: " + barChart.getScoreAverage());
-        averageScore.setFont(new Font(20));
-
-        Text standardDeviationScore = new Text(10, 50, "Standard Deviation Score: " + barChart.getStandardDeviation());
-        standardDeviationScore.setFont(new Font(20));
-
+       
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
@@ -337,12 +342,17 @@ public class AnimeListApp extends Application {
         vboxUserAnimeList.setAlignment(Pos.CENTER);
         vboxUserAnimeList.setPadding(new Insets(10));
 
-        VBox vboxScoreData = new VBox(10);
-        vboxScoreData.getChildren().add(barChart.getBarChart());
-        vboxScoreData.getChildren().add(averageScore);
-        vboxScoreData.getChildren().add(standardDeviationScore);
-        vboxScoreData.setAlignment(Pos.CENTER);
-        vboxScoreData.setPadding(new Insets(10));
+        HBox hboxUserAnimeData = new HBox(10);
+        hboxUserAnimeData.getChildren().addAll(averageScore, standardDeviationScore);
+        hboxUserAnimeData.getChildren().add(animeCount);
+        hboxUserAnimeData.setAlignment(Pos.CENTER);
+        hboxUserAnimeData.setPadding(new Insets(10));
+
+        VBox vboxBarGraphTab = new VBox(10);
+        vboxBarGraphTab.getChildren().add(barChart.getBarChart());
+        vboxBarGraphTab.getChildren().add(hboxUserAnimeData);
+        vboxBarGraphTab.setAlignment(Pos.CENTER);
+        vboxBarGraphTab.setPadding(new Insets(10));
 
         Tab animeListTab = new Tab("Anime List");
         animeListTab.setContent(vboxAnimeList);
@@ -354,7 +364,7 @@ public class AnimeListApp extends Application {
         genreTab.setContent(pieChart.getPieChart());
 
         Tab scoreChartTab = new Tab("Score Chart");
-        scoreChartTab.setContent(vboxScoreData);
+        scoreChartTab.setContent(vboxBarGraphTab);
 
         tabPane.getTabs().addAll(animeListTab, userAnimeListTab, genreTab, scoreChartTab);
 
@@ -397,7 +407,7 @@ public class AnimeListApp extends Application {
         alert.showAndWait();
     }
 
-    private void addAnimeToUserList(ObservableList<AnimeData> observableUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart) {
+    private void addAnimeToUserList(ObservableList<AnimeData> observableUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart, Text averageScore, Text standardDeviationScore, Text animeCount) {
 
         AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem();
 
@@ -407,6 +417,11 @@ public class AnimeListApp extends Application {
             userTable.setItems(FXCollections.observableArrayList(userAnimeList));
             pieChart.updateGenrePieChart(userAnimeList);
             barChart.addToBarChart(selectedAnime);
+
+            averageScore.setText("Average score: " + barChart.getScoreAverage());
+            standardDeviationScore.setText("Standard Deviation: " + barChart.getStandardDeviation());
+            animeCount.setText("Anime Count: " + barChart.getStandardDeviation());
+            
         }
     }
 
@@ -484,7 +499,7 @@ public class AnimeListApp extends Application {
             userTable.setItems(FXCollections.observableArrayList(userAnimeList));
             pieChart.updateGenrePieChart(userAnimeList);
             barChart.removeFromBarChart(selectedAnime);
-
+            updateHBoxUserAnimeData(barChart);
         }
 
     }

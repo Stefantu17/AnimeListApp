@@ -87,7 +87,7 @@ public class BarChartGenerator {
         return average/scores.size();
     }
 
-    public  double getStandardDeviation() {
+    public double getStandardDeviation() {
         double sum = 0.0;
         if (scores.isEmpty() == true) {
             return 0;
@@ -106,5 +106,18 @@ public class BarChartGenerator {
         }
 
         return Math.sqrt(standardDeviation / length);
+    }
+
+    public int getAnimeCount() {
+
+        int count = 0;
+
+        if (scores.isEmpty() == true) {
+            return 0;
+        }
+        for (double i : scores) {
+            count += 1;
+        }
+        return count;
     }
 }
