@@ -42,7 +42,7 @@ public class AnimeListApp extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        primaryStage.setTitle("Anime List App");
+        primaryStage.setTitle("AnimeList");
             
         ArrayList<AnimeData> animeList = new ArrayList<>(); 
         try (BufferedReader reader = new BufferedReader(new FileReader("src/CPT/animes.csv"))) {
