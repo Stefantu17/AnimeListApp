@@ -58,7 +58,7 @@ public class AnimeListApp extends Application {
      */
     public void start(Stage primaryStage) {
 
-        // Set title
+        // Set program title
         primaryStage.setTitle("AnimeList");
 
 
@@ -84,6 +84,7 @@ public class AnimeListApp extends Application {
      
                 line = line.substring(line.indexOf(",") + 1);
 
+                // Processes title
                 if (line.charAt(0) == '"' && line.charAt(1) != '"') {
 
                     line = line.substring(1);
@@ -99,6 +100,7 @@ public class AnimeListApp extends Application {
 
                 animeData.setTitle(animeData.getTitle().replace("\"", ""));
        
+                // Processes Synopsis
                 if (line.contains("https") == true) {
 
                     if (line.contains("['") == true) {
@@ -153,6 +155,7 @@ public class AnimeListApp extends Application {
                     }
                 }   
 
+                // Processes genre
                 String strGenres = line.substring(0, line.indexOf("]"));
                 
                 line = line.substring(line.indexOf("]") + 1);
@@ -182,6 +185,7 @@ public class AnimeListApp extends Application {
                 String[] genreList = strGenres.split(", ");
                 animeData.setGenre(new ArrayList<>(Arrays.asList(genreList)));
 
+                // Processes Aired Date
                 if (line.contains("Not available") == true) {
                     animeData.setAired("Not available");
                     line = line.substring(line.indexOf(',') + 1);
@@ -216,6 +220,7 @@ public class AnimeListApp extends Application {
                     }
                 }
                 
+                // Processes Episode amount
                 if (line.charAt(0) == ',') {
 
                     line = line.substring(line.indexOf(",") + 1);
@@ -240,6 +245,7 @@ public class AnimeListApp extends Application {
                 }
 
        
+                // Processes Popularity
                 if (line.charAt(0) == ',') {
 
                     line = line.substring(line.indexOf(",") + 1);
@@ -250,7 +256,7 @@ public class AnimeListApp extends Application {
                     line = line.substring(line.indexOf(",") + 1);
                 }
 
-     
+                // Processes Rank
                 if (line.charAt(0) == ',') {
 
                     line = line.substring(line.indexOf(",") + 1);
@@ -262,7 +268,7 @@ public class AnimeListApp extends Application {
                     line = line.substring(line.indexOf(",") + 1);
                 }
            
-    
+                // Processes Score
                 if (line.charAt(0) == ',') {
 
                     line = line.substring(line.indexOf(",") + 1);
@@ -274,7 +280,7 @@ public class AnimeListApp extends Application {
                     line = line.substring(line.indexOf(",") + 1);
                 }
   
-
+                // Processes Image Link
                 if (line.charAt(0) == ',') {
 
                     line = line.substring(line.indexOf(",") + 1);
