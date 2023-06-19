@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import basic.AnimeData;
+import javafx.collections.FXCollections;
 import javafx.scene.chart.PieChart;
 
 public class PieChartGenerator {
@@ -21,7 +22,8 @@ public class PieChartGenerator {
         return genrePieChart;
     }
     
-    public void updateGenrePieChart() {
+    public void updateGenrePieChart(List<AnimeData> userAnimeList) {
+
         List<PieChart.Data> genreData = new ArrayList<>();
 
         for (AnimeData anime : userAnimeList) {
@@ -39,5 +41,6 @@ public class PieChartGenerator {
                 }
             }
         }
+        genrePieChart.setData(FXCollections.observableArrayList(genreData));
     }
 }
