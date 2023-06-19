@@ -36,7 +36,7 @@ public class AnimeListApp extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Anime List App");
-
+            
         ArrayList<AnimeData> animeList = new ArrayList<>(); 
         try (BufferedReader reader = new BufferedReader(new FileReader("src/basic/animesShort.csv"))) {
             String line = reader.readLine();
@@ -94,7 +94,6 @@ public class AnimeListApp extends Application {
         catch (IOException e) {
             e.printStackTrace();
         }
-
         userAnimeList = new ArrayList<>();
         ObservableList<AnimeData> observableUserAnimeList = FXCollections.observableArrayList();
 
@@ -121,10 +120,6 @@ public class AnimeListApp extends Application {
                 }
             }
         });
-
-        ComboBox<String> sortComboBox = new ComboBox<>();
-        sortComboBox.setItems(FXCollections.observableArrayList("Sort by Name", "Sort by Date", "Sort by Popularity", "Sort by Score"));
-        sortComboBox.getSelectionModel().selectFirst();
     
         Button addButton = new Button("Watched");
         addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList));
@@ -135,11 +130,16 @@ public class AnimeListApp extends Application {
         CheckBox nsfwFilterCheckBox = new CheckBox("NSFW Filter");
         nsfwFilterCheckBox.setOnAction(event -> updateAnimeListView(nsfwFilterCheckBox, animeList));
 
-        TextField genreSearchField = new TextField();
-
-        ChoiceBox sortingChoiceBox = new ChoiceBox(FXCollections.observableArrayList("Title", "Score", "Popularity", "Members", "Episodes", "Rank"));
         
+
+        ChoiceBox sortingChoiceBox = new ChoiceBox(FXCollections.observableArrayList("Name", "Score", "Rank", "Popularity", "Views", "Episodes"));
+        sortingChoiceBox.setValue("Name");
+        animeSorting(animeList, sortingChoiceBox);
         sortingChoiceBox.setOnAction(e -> animeSorting(animeList, sortingChoiceBox));
+
+        TextField genreSearchField = new TextField();
+        genreSearchField.setOnAction(e -> animeSearch(animeList, genreSearchField));
+
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
@@ -147,7 +147,7 @@ public class AnimeListApp extends Application {
         hboxAnimeSearch.setAlignment(Pos.TOP_LEFT);
         hboxAnimeSearch.setPadding(new Insets(10));
         hboxAnimeSearch.setSpacing(500);
-        hboxAnimeSearch.getChildren().addAll(genreSearchField, sortComboBox);
+        hboxAnimeSearch.getChildren().addAll(genreSearchField, sortingChoiceBox);
 
         VBox vboxAnimeList = new VBox(10);
         vboxAnimeList.getChildren().add(hboxAnimeSearch);
@@ -196,10 +196,10 @@ public class AnimeListApp extends Application {
 
         gridPane.addRow(0, new Label("Genres:"), new Label(anime.getGenresString()));
         gridPane.addRow(1, new Label("Date Aired:"), new Label(anime.getAired()));
-        gridPane.addRow(2, new Label("Episode Count:"), new Label(String.valueOf(anime.getEpisodes())));
-        gridPane.addRow(3, new Label("Popularity Rank:"), new Label(String.valueOf(anime.getPopularity())));
-        gridPane.addRow(4, new Label("People Watching:"), new Label(String.valueOf(anime.getMembers())));
-        gridPane.addRow(5, new Label("Rank:"), new Label(String.valueOf(anime.getRank())));
+        gridPane.addRow(2, new Label("Episode Count:"), new Label(String.valueOf((int) anime.getEpisodes())));
+        gridPane.addRow(3, new Label("Popularity Rank:"), new Label(String.valueOf((int) anime.getPopularity())));
+        gridPane.addRow(4, new Label("People Watching:"), new Label(String.valueOf((int) anime.getMembers())));
+        gridPane.addRow(5, new Label("Rank:"), new Label(String.valueOf((int) anime.getRank())));
         gridPane.addRow(6, new Label("Average Score:"), new Label(String.valueOf(anime.getScore())));
 
         TextArea summaryTextArea = new TextArea(anime.getSynopsis());
@@ -223,7 +223,20 @@ public class AnimeListApp extends Application {
             userAnimeListView.setItems(observableUserAnimeList);
             updateGenrePieChart();
         }
+    }
 
+    private void animeSearch(ArrayList<AnimeData> animeList, TextField searchField) {
+        String searchText = searchField.getText();
+        ArrayList<AnimeData> searchResults = new ArrayList<>();
+
+        for (AnimeData anime : animeList) {
+            if (anime.getTitle().toLowerCase().contains(searchText)) {
+                searchResults.add(anime);
+            }
+        }
+
+        ObservableList<AnimeData> observableAnimeList = FXCollections.observableArrayList(searchResults);
+        animeListView.setItems(observableAnimeList);
     }
 
     private void removeAnimeFromUserList(ObservableList<AnimeData> observableUserAnimeList) {
