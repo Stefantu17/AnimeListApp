@@ -120,7 +120,7 @@ public class AnimeListApp extends Application {
                 }
             }
         });
-    
+
         Button addButton = new Button("Watched");
         addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList));
         
@@ -129,8 +129,6 @@ public class AnimeListApp extends Application {
 
         CheckBox nsfwFilterCheckBox = new CheckBox("NSFW Filter");
         nsfwFilterCheckBox.setOnAction(event -> updateAnimeListView(nsfwFilterCheckBox, animeList));
-
-        
 
         ChoiceBox sortingChoiceBox = new ChoiceBox(FXCollections.observableArrayList("Name", "Score", "Rank", "Popularity", "Views", "Episodes"));
         sortingChoiceBox.setValue("Name");
