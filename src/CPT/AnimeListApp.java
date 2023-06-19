@@ -710,6 +710,24 @@ public class AnimeListApp extends Application {
         mainTable.setItems(FXCollections.observableArrayList(animeList));
     }
 
+    private void genreFilter(ArrayList<AnimeData> animeList, CheckBox filterCheckbox, String genre){
+
+        ObservableList<AnimeData> filteredAnimeList = FXCollections.observableArrayList();
+        boolean filterEnabled = filterCheckbox.isSelected();
+
+        if (filterEnabled){
+
+            for (AnimeData anime : animeList){
+
+                if (anime.getGenres().contains(genre)){
+                    filteredAnimeList.add(anime);
+                }
+            }
+            
+            mainTable.setItems(filteredAnimeList);
+        }
+    }
+
     /**
      * Helper method that filters anime results to ignore NSFW results
      * 
