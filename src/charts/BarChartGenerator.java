@@ -9,7 +9,7 @@ import javafx.scene.chart.XYChart;
 
 /**
  * A class that generates and updates a Bar Chart
- * @author S. Tuczynski
+ * @author S. Tuczynski & G. Lui
  * 
  */
 public class BarChartGenerator {
@@ -197,7 +197,7 @@ public class BarChartGenerator {
      * 
      */
     public double getScoreMax() {
-        
+
         double max = 0;
         
         if (scores.isEmpty() == true) {

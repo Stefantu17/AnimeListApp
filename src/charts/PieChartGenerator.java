@@ -8,7 +8,7 @@ import javafx.scene.chart.PieChart;
 
 /**
  * A class that generates and updates a pie chart
- * @author S. Tuczynski
+ * @author S. Tuczynski & G. Lui
  * 
  */
 public class PieChartGenerator {

@@ -7,6 +7,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
+/**
+ * A class which contains methods that is used for sorting and reflects what we've learned in the algorithms unit.
+ * @author S. Tuczynski & G. Lui
+ * 
+ */
 public class AnimeSorting {
 
     public static void mergeSort(ArrayList<AnimeData> list, int comparatorType) {
