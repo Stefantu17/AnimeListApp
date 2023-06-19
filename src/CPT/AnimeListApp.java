@@ -3,7 +3,6 @@ package CPT;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -28,30 +27,52 @@ import java.util.List;
 import charts.BarChartGenerator;
 import charts.PieChartGenerator;
 
-
+/**
+ * A class that runs the AnimeList program
+ * @author: S. Tuczynski & G. Lui
+ * 
+ */
 public class AnimeListApp extends Application {
 
-    private TableView<AnimeData> mainTable = new TableView<AnimeData>();
-    private TableView<AnimeData>  userTable = new TableView<AnimeData>();
+    // Instance variables
+    private TableView<AnimeData> mainTable;
+    private TableView<AnimeData> userTable;
     private List<AnimeData> userAnimeList;
 
+    /**
+     * Main method
+     * 
+     * @param args  String[] args
+     * 
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
+    /**
+     * Method that runs the program
+     * 
+     * @param primaryStage  primary stage
+     * 
+     */
     public void start(Stage primaryStage) {
 
+        // Set title
         primaryStage.setTitle("AnimeList");
-            
+
+
+        // Processes data from CSV file, File I/O
         ArrayList<AnimeData> animeList = new ArrayList<>(); 
         try (BufferedReader reader = new BufferedReader(new FileReader("src/CPT/animes.csv"))) {
+
             String line = reader.readLine();
-            for (int i = 0; i < 19311; i++) {
+
+            // Runs while there are still entries
+            while((line = reader.readLine()) != null) {
 
                 ArrayList<String> genres = new ArrayList<>();
                 AnimeData animeData = new AnimeData(0, "", "", genres, "", 0, 0, 0, 999999, 0, "", "");
-                line = reader.readLine();
                 animeData.setUID(Integer.parseInt(line.substring(0, line.indexOf(","))));
      
                 line = line.substring(line.indexOf(",") + 1);
@@ -246,6 +267,9 @@ public class AnimeListApp extends Application {
         catch (IOException e) {
             e.printStackTrace();
         }
+
+        mainTable = new TableView<AnimeData>();
+        userTable = new TableView<AnimeData>();
 
         userAnimeList = new ArrayList<>();
         ObservableList<AnimeData> observableUserAnimeList = FXCollections.observableArrayList();
