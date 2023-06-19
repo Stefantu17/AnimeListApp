@@ -530,7 +530,7 @@ public class AnimeListApp extends Application {
      * Shows the details of anime, pops up new page
      * 
      * @param anime Specfic anime
-     * 
+     * @author S. Tuczynski & G. Lui
      */
     private void showAnimeDetails(AnimeData anime) {
 
@@ -608,7 +608,7 @@ public class AnimeListApp extends Application {
      * @param maxScore  max score entry for user
      * @param minScore  min score entry for user
      * @param medianScore  median score entry for user
-     * 
+     * @author S. Tuczynski & G. Lui
      */
     private void addAnimeToUserList(ObservableList<AnimeData> observableUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart, Text averageScore, Text standardDeviationScore, Text animeCount, Text maxScore, Text minScore, Text medianScore) {
 
@@ -648,7 +648,7 @@ public class AnimeListApp extends Application {
      * @param maxScore  max score entry for user
      * @param minScore  min score entry for user
      * @param medianScore  median score entry for user
-     * 
+     * @author S. Tuczynski & G. Lui
      */
     private void removeAnimeFromUserList(ObservableList<AnimeData> observableUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart, Text averageScore, Text standardDeviationScore, Text animeCount, Text maxScore, Text minScore, Text medianScore) {
 
@@ -676,7 +676,7 @@ public class AnimeListApp extends Application {
      * 
      * @param animeList  main anime list
      * @param searchField  text search field
-     * 
+     * @author S. Tuczynski & G. Lui
      */
     private void animeSearch(ArrayList<AnimeData> animeList, TextField searchField) {
 
@@ -695,7 +695,7 @@ public class AnimeListApp extends Application {
      * 
      * @param animeList  main anime list
      * @param sortingChoiceBox  sorting choice box
-     * 
+     * @author S. Tuczynski & G. Lui
      */
     private void animeSorting(ArrayList<AnimeData> animeList, ChoiceBox sortingChoiceBox) {
 
@@ -712,7 +712,7 @@ public class AnimeListApp extends Application {
      * 
      * @param nsfwFilterCheckBox  nsfw check box
      * @param animeList  main anime list
-     * 
+     * @author S. Tuczynski & G. Lui
      */
     private void updateAnimeListView(CheckBox nsfwFilterCheckBox, ArrayList<AnimeData> animeList) {
 
