@@ -159,7 +159,13 @@ public class AnimeListApp extends Application {
                     aired = line.substring(0, line.indexOf('"'));
                     line = line.substring(line.indexOf('"') + 2);
                 }
-
+                
+                if (aired != "") {
+                    if (aired.charAt(aired.length()-1) == ',') {
+                        aired = aired.substring(0, aired.indexOf(','));
+                    }
+                }
+                
                 int episodes = 0;
                 if (line.charAt(0) == ',') {
                     line = line.substring(line.indexOf(",") + 1);
@@ -463,7 +469,7 @@ public class AnimeListApp extends Application {
 
     private void removeAnimeFromUserList(ObservableList<AnimeData> observableUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart, Text averageScore, Text standardDeviationScore, Text animeCount, Text maxScore, Text minScore, Text medianScore) {
 
-        AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem();
+        AnimeData selectedAnime = (AnimeData) userTable.getSelectionModel().getSelectedItem();
 
         if (selectedAnime != null && userAnimeList.contains(selectedAnime)) {
             userAnimeList.remove(selectedAnime);
