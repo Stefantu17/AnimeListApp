@@ -130,15 +130,14 @@ public class AnimeListApp extends Application {
         CheckBox nsfwFilterCheckBox = new CheckBox("NSFW Filter");
         nsfwFilterCheckBox.setOnAction(event -> updateAnimeListView(nsfwFilterCheckBox, animeList));
 
-        
-
         ChoiceBox sortingChoiceBox = new ChoiceBox(FXCollections.observableArrayList("Name", "Score", "Rank", "Popularity", "Views", "Episodes"));
         sortingChoiceBox.setValue("Name");
         animeSorting(animeList, sortingChoiceBox);
         sortingChoiceBox.setOnAction(e -> animeSorting(animeList, sortingChoiceBox));
 
-        TextField genreSearchField = new TextField();
-        genreSearchField.setOnAction(e -> animeSearch(animeList, genreSearchField));
+        TextField searchField = new TextField();
+        searchField.setPromptText("Search for Anime");
+        searchField.setOnAction(e -> animeSearch(animeList, searchField));
 
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
@@ -147,7 +146,7 @@ public class AnimeListApp extends Application {
         hboxAnimeSearch.setAlignment(Pos.TOP_LEFT);
         hboxAnimeSearch.setPadding(new Insets(10));
         hboxAnimeSearch.setSpacing(500);
-        hboxAnimeSearch.getChildren().addAll(genreSearchField, sortingChoiceBox);
+        hboxAnimeSearch.getChildren().addAll(searchField, sortingChoiceBox);
 
         VBox vboxAnimeList = new VBox(10);
         vboxAnimeList.getChildren().add(hboxAnimeSearch);
@@ -226,7 +225,7 @@ public class AnimeListApp extends Application {
     }
 
     private void animeSearch(ArrayList<AnimeData> animeList, TextField searchField) {
-        String searchText = searchField.getText();
+        String searchText = searchField.getText().toLowerCase();
         ArrayList<AnimeData> searchResults = new ArrayList<>();
 
         for (AnimeData anime : animeList) {
@@ -256,15 +255,15 @@ public class AnimeListApp extends Application {
 
             else {
 
-                if (anime.getTitle().contains(searchText)) {
+                if (anime.getTitle().toLowerCase().contains(searchText)) {
                     searchResults.add(anime);
                 }
 
-                if (anime.getGenresString().contains(searchText)) {
+                if (anime.getGenresString().toLowerCase().contains(searchText)) {
                     searchResults.add(anime);
                 }
 
-                if (anime.getAired().contains(searchText)) {
+                if (anime.getAired().toLowerCase().contains(searchText)) {
                     searchResults.add(anime);
                 }
 
