@@ -1,5 +1,4 @@
 package basic;
-
 import java.util.ArrayList;
 
 public class AnimeData {
@@ -66,6 +65,7 @@ public class AnimeData {
 
     public String getGenresString() {
         String str = "";
+        
         for (int i = 0; i < genres.size(); i++) {
             if (i == genres.size() - 1) {
                 str += genres.get(i);
@@ -74,6 +74,7 @@ public class AnimeData {
                 str += genres.get(i) + ", ";
             }
         }
+
         return str;
     }
 
