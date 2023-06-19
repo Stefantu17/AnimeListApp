@@ -13,11 +13,13 @@ import javafx.scene.chart.XYChart;
 public class BarChartGenerator {
     
     private BarChart<String, Number> barChart;
+    private ArrayList<Double> scores;
 
     public BarChartGenerator() {
 
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
+        ArrayList<Double> scores = new ArrayList<Double>();
         barChart = new BarChart<>(xAxis, yAxis);
         barChart.setCategoryGap(50);
         barChart.setTitle("Average Score Distribution for your Animes");
@@ -50,6 +52,7 @@ public class BarChartGenerator {
         XYChart.Series<String, Number> series = barChart.getData().get(0);
         for (XYChart.Data<String, Number> data : series.getData()) {
             if (data.getXValue().equals(Integer.toString(roundedScore))) {
+                scores.add(userSelectedAnime.getScore());
                 int newValue = data.getYValue().intValue() + 1;
                 data.setYValue(newValue);
                 break;
@@ -65,11 +68,38 @@ public class BarChartGenerator {
         XYChart.Series<String, Number> series = barChart.getData().get(0);
         for (XYChart.Data<String, Number> data : series.getData()) {
             if (data.getXValue().equals(Integer.toString(roundedScore))) {
+                scores.remove(userSelectedAnime.getScore());
                 int newValue = data.getYValue().intValue() - 1;
                 data.setYValue(newValue);
                 break;
             }
         }
         
+    }
+
+    public double getScoreAverage() {
+        double average = 0;
+        for (double num : scores) {
+            average += num;
+        }
+        return average/scores.size();
+    }
+
+    public  double getStandardDeviation() {
+        double sum = 0.0;
+        for (double i : scores) {
+            sum += i;
+        }
+
+
+        int length = scores.size();
+        double mean = sum / length;
+
+        double standardDeviation = 0.0;
+        for (double num : scores) {
+            standardDeviation += Math.pow(num - mean, 2);
+        }
+
+        return Math.sqrt(standardDeviation / length);
     }
 }

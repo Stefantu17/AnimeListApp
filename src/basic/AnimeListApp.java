@@ -329,6 +329,13 @@ public class AnimeListApp extends Application {
         vboxUserAnimeList.setAlignment(Pos.CENTER);
         vboxUserAnimeList.setPadding(new Insets(10));
 
+        VBox vboxAnimeList = new VBox(10);
+        vboxAnimeList.getChildren().add(hboxAnimeSearch);
+        vboxAnimeList.getChildren().add(mainTable);
+        vboxAnimeList.getChildren().addAll(tabPane, addButton, nsfwFilterCheckBox);
+        vboxAnimeList.setAlignment(Pos.CENTER);
+        vboxAnimeList.setPadding(new Insets(10));
+
         Tab animeListTab = new Tab("Anime List");
         animeListTab.setContent(vboxAnimeList);
 
