@@ -179,8 +179,13 @@ public class AnimeSorting {
         //Iterate through animeList
         for (AnimeData anime : animeList) {
 
+            // If search is nothing
+            if (searchText.length() == 0){
+                searchResults.add(anime);
+            }
+
             // If search is numbers
-            if (isDigit(searchField)){
+            else if (isDigit(searchField)){
 
                 if (anime.getRank() == Double.parseDouble(searchText)) {
 
@@ -211,7 +216,6 @@ public class AnimeSorting {
 
             // If search is strings
             else {
-
                 if (anime.getTitle().toLowerCase().contains(searchText)) {
 
                     searchResults.add(anime);
@@ -227,11 +231,6 @@ public class AnimeSorting {
                     searchResults.add(anime);
                 }
 
-            }
-
-            // If search is nothing
-            if (searchText == ""){
-                break;
             }
         }
     }
