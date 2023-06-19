@@ -6,7 +6,6 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
@@ -52,12 +51,12 @@ public class AnimeListApp extends Application {
 
                 if (line.charAt(0) == '"' && line.charAt(1) != '"') {
                     line = line.substring(1);
-                    title = line.substring(0, line.indexOf('"')); // good
-                    line = line.substring(line.indexOf('"') + 2); // good
+                    title = line.substring(0, line.indexOf('"'));
+                    line = line.substring(line.indexOf('"') + 2); 
                 }
                 else {
-                    title = line.substring(0, line.indexOf(',')); // good
-                    line = line.substring(line.indexOf(',') + 1); // good
+                    title = line.substring(0, line.indexOf(',')); 
+                    line = line.substring(line.indexOf(',') + 1); 
                 }
 
 
@@ -221,6 +220,7 @@ public class AnimeListApp extends Application {
         ObservableList<AnimeData> observableUserAnimeList = FXCollections.observableArrayList();
 
         mainTable.setEditable(true);
+        mainTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
         TableColumn<AnimeData, String>  animeTitle = new TableColumn<AnimeData, String>("Name");
         animeTitle.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("title"));
@@ -241,7 +241,6 @@ public class AnimeListApp extends Application {
         animeEpisodes.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("episodes"));
 
         mainTable.setItems(FXCollections.observableArrayList(animeList));
-
         mainTable.getColumns().addAll(animeTitle, animeScore, animePopularity, animeRank, animeViews, animeEpisodes);
         
         userTable.setEditable(true);
