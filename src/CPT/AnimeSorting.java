@@ -1,4 +1,4 @@
-package CPT;
+package cpt;
 
 
 import java.util.ArrayList;
