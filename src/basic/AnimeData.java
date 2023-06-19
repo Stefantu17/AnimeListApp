@@ -142,7 +142,7 @@ public class AnimeData {
     }
 
     public int titleCompareTo(AnimeData animeTwo) {
-        return this.getTitle().compareTo(animeTwo.getTitle());
+        return this.getTitle().toLowerCase().compareTo(animeTwo.getTitle().toLowerCase());
     }
 
     public double scoreCompareTo(AnimeData animeTwo) {

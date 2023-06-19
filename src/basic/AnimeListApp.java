@@ -52,6 +52,8 @@ public class AnimeListApp extends Application {
 
                 String title = "";
 
+            
+
                 if (line.charAt(0) == '"' && line.charAt(1) != '"') {
                     line = line.substring(1);
                     title = line.substring(0, line.indexOf('"'));
@@ -62,6 +64,7 @@ public class AnimeListApp extends Application {
                     line = line.substring(line.indexOf(',') + 1); 
                 }
 
+                title = title.replace("\"", "");
 
                 String synopsis = "";
 
