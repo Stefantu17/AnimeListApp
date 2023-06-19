@@ -34,7 +34,6 @@ public class AnimeListApp extends Application {
     private ListView<AnimeData> userAnimeListView;
     private List<AnimeData> userAnimeList;
     private PieChart genrePieChart;
-    private BarChartGenerator barChart;
 
     public static void main(String[] args) {
         launch(args);
@@ -133,7 +132,7 @@ public class AnimeListApp extends Application {
         BarChartGenerator barChart = new BarChartGenerator();
 
         Button addButton = new Button("Watched");
-        addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList));
+        addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList, barChart));
         
         Button removeButton = new Button("Remove");
         removeButton.setOnAction(e -> removeAnimeFromUserList(observableUserAnimeList));
@@ -224,7 +223,7 @@ public class AnimeListApp extends Application {
         alert.showAndWait();
     }
 
-    private void addAnimeToUserList(ObservableList<AnimeData> observableUserAnimeList) {
+    private void addAnimeToUserList(ObservableList<AnimeData> observableUserAnimeList, BarChartGenerator barChart) {
 
         AnimeData selectedAnime = animeListView.getSelectionModel().getSelectedItem();
         if (selectedAnime != null && !userAnimeList.contains(selectedAnime)) {
@@ -232,7 +231,7 @@ public class AnimeListApp extends Application {
             observableUserAnimeList.add(selectedAnime);
             userAnimeListView.setItems(observableUserAnimeList);
             updateGenrePieChart();
-            this.barChart.updateBarChart(selectedAnime);
+            barChart.updateBarChart(selectedAnime);
         }
 
     }
