@@ -1,18 +1,32 @@
 package CPT;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+
 import java.util.ArrayList;
+import javafx.scene.control.TextField;
 
 
+/**
+ * A class which contains methods that is used for sorting and reflects what we've learned in the algorithms unit.
+ * @author S. Tuczynski & G. Lui
+ * 
+ */
 public class AnimeSorting {
 
+    /**
+     * Merge sort method, recursive split portion
+     * 
+     * @param list  Anime data list displayed on main page
+     * @param comparatorType  Comparator value
+     */
     public static void mergeSort(ArrayList<AnimeData> list, int comparatorType) {
+
         if (list == null || list.size() <= 1) {
-            return; // Base case: already sorted
+            
+            // Base case: already sorted
+            return; 
         }
 
+        // Split list into two halves
         int mid = list.size() / 2;
         ArrayList<AnimeData> left = new ArrayList<>(list.subList(0, mid));
         ArrayList<AnimeData> right = new ArrayList<>(list.subList(mid, list.size()));
@@ -25,6 +39,14 @@ public class AnimeSorting {
         merge(list, left, right, comparatorType);
     }
 
+    /**
+     * Merge sort method, merge portion. 
+     * 
+     * @param list  Anime data list 
+     * @param left  Left side 
+     * @param right  Right side
+     * @param comparatorType  Comparator value
+     */
     private static void merge(ArrayList<AnimeData> list, ArrayList<AnimeData> left, ArrayList<AnimeData> right, int comparatorType) {
         int leftIndex = 0;
         int rightIndex = 0;
@@ -32,23 +54,29 @@ public class AnimeSorting {
 
         // Compare first data types of objects from left and right lists
         while (leftIndex < left.size() && rightIndex < right.size()) {
+
             AnimeData leftAnime = left.get(leftIndex);
             AnimeData rightAnime = right.get(rightIndex);
 
             switch (comparatorType){
+
+                // Title
                 case 0:
                     if (leftAnime.titleCompareTo(rightAnime) <= 0) {
+
                         list.set(listIndex, leftAnime);
                         leftIndex++;
                     } 
                     
                     else {
                         list.set(listIndex, rightAnime);
+
                         rightIndex++;
                     }
 
                     break;
 
+                // Score
                 case 1:
                     if (leftAnime.scoreCompareTo(rightAnime) > 0) {
                             list.set(listIndex, leftAnime);
@@ -62,6 +90,7 @@ public class AnimeSorting {
 
                     break;
                 
+                // Popularity ranking
                 case 2:
                     if (leftAnime.popularityCompareTo(rightAnime) <= 0) {
                             list.set(listIndex, leftAnime);
@@ -74,6 +103,8 @@ public class AnimeSorting {
                     }
 
                     break;
+
+                // Score ranking
                 case 3:
                     if (leftAnime.rankCompareTo(rightAnime) < 0) {
                             list.set(listIndex, leftAnime);
@@ -86,7 +117,8 @@ public class AnimeSorting {
                     }
 
                     break;
-
+                
+                // User watched count 
                 case 4:
                     if (leftAnime.membersCompareTo(rightAnime) >= 0) {
                             list.set(listIndex, leftAnime);
@@ -100,6 +132,7 @@ public class AnimeSorting {
 
                     break;
 
+                // Episode count
                 case 5:
                     if (leftAnime.episodesCompareTo(rightAnime) >= 0) {
                             list.set(listIndex, leftAnime);
@@ -132,23 +165,91 @@ public class AnimeSorting {
         }
     }
 
-    public static int binarySearch(ArrayList<Integer> list, int target) {
-        int left = 0;
-        int right = list.size() - 1;
+    /**
+     * Linear search algorithm method to use in search bar on main anime list
+     * 
+     * @param animeList  main anime list
+     * @param searchField  search field
+     * @param searchText  the inputted user text
+     * @param searchResults  the list of animeresults
+     * 
+     */
+    public static void linearSearch(ArrayList<AnimeData> animeList, TextField searchField, String searchText, ArrayList<AnimeData> searchResults) {
+        
+        //Iterate through animeList
+        for (AnimeData anime : animeList) {
 
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
+            // If search is numbers
+            if (isDigit(searchField)){
 
-            if (list.get(mid) == target) {
-                return mid; // Found the target element
-            } else if (list.get(mid) < target) {
-                left = mid + 1; // Target is in the right half
-            } else {
-                right = mid - 1; // Target is in the left half
+                if (anime.getRank() == Double.parseDouble(searchText)) {
+
+                    searchResults.add(anime);
+                }
+
+                if (anime.getPopularity() == Integer.parseInt(searchText)) {
+
+                    searchResults.add(anime);
+                }
+
+                if (anime.getMembers() == Double.parseDouble(searchText)) {
+
+                    searchResults.add(anime);
+                }
+
+                if (anime.getEpisodes() == Double.parseDouble(searchText)) {
+
+                    searchResults.add(anime);
+                }
+
+                if (anime.getScore() == Double.parseDouble(searchText)) {
+
+                    searchResults.add(anime);
+                }
+                
+            }
+
+            // If search is strings
+            else {
+
+                if (anime.getTitle().toLowerCase().contains(searchText)) {
+
+                    searchResults.add(anime);
+                }
+
+                if (anime.getGenresString().toLowerCase().contains(searchText)) {
+
+                    searchResults.add(anime);
+                }
+
+                if (anime.getAired().toLowerCase().contains(searchText)) {
+
+                    searchResults.add(anime);
+                }
+
+            }
+
+            // If search is nothing
+            if (searchText == ""){
+                break;
             }
         }
-        
-        return -1;
+    }
+
+    /**
+     * Helper method to determine if search is a number or string
+     * 
+     * @param searchField  the search field
+     * @return  whether search is number or string
+     */
+    private static boolean isDigit(TextField searchField){
+        try {
+            Double.parseDouble(searchField.getText());
+            return true;
+        } 
+        catch (NumberFormatException e) {
+            return false;
+        }
     }
     
 }
