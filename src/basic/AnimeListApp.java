@@ -5,10 +5,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -19,12 +21,12 @@ import javafx.stage.Stage;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.rmi.server.UID;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import charts.BarChartGenerator;
 import charts.PieChartGenerator;
+
 
 public class AnimeListApp extends Application {
 
@@ -435,23 +437,46 @@ public class AnimeListApp extends Application {
         gridPane.setVgap(5);
         gridPane.setPadding(new Insets(10));
 
-        gridPane.addRow(0, new Label("Genres:"), new Label(anime.getGenresString()));
-        gridPane.addRow(1, new Label("Date Aired:"), new Label(anime.getAired()));
-        gridPane.addRow(2, new Label("Episode Count:"), new Label(String.valueOf((int) anime.getEpisodes())));
-        gridPane.addRow(3, new Label("Popularity Rank:"), new Label(String.valueOf((int) anime.getPopularity())));
-        gridPane.addRow(4, new Label("People Watching:"), new Label(String.valueOf((int) anime.getMembers())));
-        gridPane.addRow(5, new Label("Rank:"), new Label(String.valueOf((int) anime.getRank())));
-        gridPane.addRow(6, new Label("Average Score:"), new Label(String.valueOf(anime.getScore())));
+        gridPane.addRow(0, new Label("UID:"), new Label(String.valueOf(anime.getUID())));
+        gridPane.addRow(1, new Label("Genres:"), new Label(anime.getGenresString()));
+        gridPane.addRow(2, new Label("Date Aired:"), new Label(anime.getAired()));
+        gridPane.addRow(3, new Label("Episode Count:"), new Label(String.valueOf(anime.getEpisodes())));
+        gridPane.addRow(4, new Label("Popularity Rank:"), new Label(String.valueOf(anime.getPopularity())));
+        gridPane.addRow(5, new Label("People Watching:"), new Label(String.valueOf(anime.getMembers())));
+        gridPane.addRow(6, new Label("Rank:"), new Label(String.valueOf(anime.getRank())));
+        gridPane.addRow(7, new Label("Average Score:"), new Label(String.valueOf(anime.getScore())));
+
+        
+        gridPane.addRow(8, new Label("Average Score:"), new Label(String.valueOf(anime.getScore())));
 
         TextArea summaryTextArea = new TextArea(anime.getSynopsis());
         summaryTextArea.setEditable(false);
         summaryTextArea.setWrapText(true);
         summaryTextArea.setMaxWidth(Double.MAX_VALUE);
         summaryTextArea.setMaxHeight(Double.MAX_VALUE);
-        gridPane.addRow(7, new Label("Summary:"), summaryTextArea);
+        gridPane.addRow(9, new Label("Summary:"), summaryTextArea);
 
-        alert.getDialogPane().setContent(gridPane);
-        alert.showAndWait();
+        if (anime.getImageLink() != ""  && !anime.getGenres().contains("Hentai") && !anime.getGenres().contains("Harem") && !anime.getGenres().contains("Ecchi")) {
+            Group root = new Group();
+            Image image = new Image(anime.getImageLink());
+            ImageView imageView = new ImageView(image);
+            root.getChildren().add(imageView);
+            HBox animeInfo = new HBox(); 
+            animeInfo.getChildren().add(gridPane);
+            animeInfo.getChildren().add(root);
+            animeInfo.setAlignment(Pos.CENTER);
+            animeInfo.setPadding(new Insets(10));
+            alert.getDialogPane().setContent(animeInfo);
+            alert.showAndWait();
+        }
+
+        else {
+
+            alert.getDialogPane().setContent(gridPane);
+            alert.showAndWait();
+
+        }
+
     }
 
     private void addAnimeToUserList(ObservableList<AnimeData> observableUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart, Text averageScore, Text standardDeviationScore, Text animeCount, Text maxScore, Text minScore, Text medianScore) {

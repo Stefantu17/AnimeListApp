@@ -115,7 +115,7 @@ public class BarChartGenerator {
         if (scores.isEmpty() == true) {
             return 0;
         }
-        for (double i : scores) {
+        for (int i = 0; i < scores.size(); i++) {
             count += 1;
         }
         return count;
