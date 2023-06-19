@@ -4,6 +4,7 @@ package CPT;
 import java.util.ArrayList;
 import javafx.scene.control.TextField;
 
+
 /**
  * A class which contains methods that is used for sorting and reflects what we've learned in the algorithms unit.
  * @author S. Tuczynski & G. Lui
@@ -38,7 +39,6 @@ public class AnimeSorting {
         merge(list, left, right, comparatorType);
     }
 
-    
     /**
      * Merge sort method, merge portion. 
      * 
@@ -103,7 +103,7 @@ public class AnimeSorting {
                     }
 
                     break;
-                
+
                 // Score ranking
                 case 3:
                     if (leftAnime.rankCompareTo(rightAnime) < 0) {

@@ -143,7 +143,6 @@ public class AnimeData {
     public String getGenresString() {
 
         String str = "";
-
         for (int i = 0; i < genres.size(); i++) {
 
             // End of list, no comma
@@ -158,6 +157,7 @@ public class AnimeData {
                 str += genres.get(i) + ", ";
             }
         }
+
         return str;
     }
 
