@@ -216,6 +216,7 @@ public class AnimeListApp extends Application {
         catch (IOException e) {
             e.printStackTrace();
         }
+
         userAnimeList = new ArrayList<>();
         ObservableList<AnimeData> observableUserAnimeList = FXCollections.observableArrayList();
 
@@ -244,6 +245,7 @@ public class AnimeListApp extends Application {
         mainTable.getColumns().addAll(animeTitle, animeScore, animePopularity, animeRank, animeViews, animeEpisodes);
         
         userTable.setEditable(true);
+        userTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
         TableColumn<AnimeData, String> userAnimeTitle = new TableColumn<AnimeData, String>("Name");
         userAnimeTitle.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("title"));
@@ -262,8 +264,6 @@ public class AnimeListApp extends Application {
 
         TableColumn<AnimeData, String> userAnimeEpisodes = new TableColumn<AnimeData, String>("Episodes");
         userAnimeEpisodes.setCellValueFactory(new PropertyValueFactory<AnimeData, String>("episodes"));
-            
-        userTable.setItems(FXCollections.observableArrayList(animeList));
 
         userTable.getColumns().addAll(userAnimeTitle, userAnimeScore, userAnimePopularity, userAnimeRank, userAnimeViews, userAnimeEpisodes);
 
@@ -310,9 +310,9 @@ public class AnimeListApp extends Application {
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         HBox hboxAnimeSearch = new HBox(10);
-        hboxAnimeSearch.setAlignment(Pos.TOP_LEFT);
+        hboxAnimeSearch.setAlignment(Pos.TOP_CENTER);
         hboxAnimeSearch.setPadding(new Insets(10));
-        hboxAnimeSearch.setSpacing(500);
+        hboxAnimeSearch.setSpacing(600);
         hboxAnimeSearch.getChildren().addAll(searchField, sortingChoiceBox);
 
         VBox vboxAnimeList = new VBox(10);
@@ -391,7 +391,7 @@ public class AnimeListApp extends Application {
             observableUserAnimeList.add(selectedAnime);
             userTable.setItems(FXCollections.observableArrayList(userAnimeList));
             pieChart.updateGenrePieChart(userAnimeList);
-            barChart.updateBarChart(selectedAnime);
+            barChart.addToBarChart(selectedAnime);
         }
     }
 
@@ -468,7 +468,7 @@ public class AnimeListApp extends Application {
             observableUserAnimeList.remove(selectedAnime);
             userTable.setItems(FXCollections.observableArrayList(userAnimeList));
             pieChart.updateGenrePieChart(userAnimeList);
-            barChart.updateBarChart(selectedAnime);
+            barChart.removeFromBarChart(selectedAnime);
 
         }
 

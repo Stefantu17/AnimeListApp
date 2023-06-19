@@ -23,6 +23,7 @@ public class BarChartGenerator {
         barChart.setTitle("Average Score Distribution for your Animes");
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Values");
+        series.getData().add(new XYChart.Data<>("0", 0));
         series.getData().add(new XYChart.Data<>("1", 0));
         series.getData().add(new XYChart.Data<>("2", 0));
         series.getData().add(new XYChart.Data<>("3", 0));
@@ -32,7 +33,6 @@ public class BarChartGenerator {
         series.getData().add(new XYChart.Data<>("7", 0));
         series.getData().add(new XYChart.Data<>("8", 0));
         series.getData().add(new XYChart.Data<>("9", 0));
-        series.getData().add(new XYChart.Data<>("10", 0));
         barChart.getData().add(series);
 
     }
@@ -43,7 +43,7 @@ public class BarChartGenerator {
 
     }
 
-    public void updateBarChart(AnimeData userSelectedAnime) {
+    public void addToBarChart(AnimeData userSelectedAnime) {
 
         int roundedScore = (int) Math.round(userSelectedAnime.getScore());
 
@@ -51,6 +51,21 @@ public class BarChartGenerator {
         for (XYChart.Data<String, Number> data : series.getData()) {
             if (data.getXValue().equals(Integer.toString(roundedScore))) {
                 int newValue = data.getYValue().intValue() + 1;
+                data.setYValue(newValue);
+                break;
+            }
+        }
+        
+    }
+
+    public void removeFromBarChart(AnimeData userSelectedAnime) {
+
+        int roundedScore = (int) Math.round(userSelectedAnime.getScore());
+
+        XYChart.Series<String, Number> series = barChart.getData().get(0);
+        for (XYChart.Data<String, Number> data : series.getData()) {
+            if (data.getXValue().equals(Integer.toString(roundedScore))) {
+                int newValue = data.getYValue().intValue() - 1;
                 data.setYValue(newValue);
                 break;
             }
