@@ -221,12 +221,12 @@ public class AnimeSorting {
                     searchResults.add(anime);
                 }
 
-                if (anime.getGenresString().toLowerCase().contains(searchText)) {
+                else if (anime.getGenresString().toLowerCase().contains(searchText)) {
 
                     searchResults.add(anime);
                 }
 
-                if (anime.getAired().toLowerCase().contains(searchText)) {
+                else if (anime.getAired().toLowerCase().contains(searchText)) {
 
                     searchResults.add(anime);
                 }
