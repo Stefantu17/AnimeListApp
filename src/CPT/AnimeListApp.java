@@ -698,7 +698,7 @@ public class AnimeListApp extends Application {
      * 
      * @param animeList  main anime list
      * @param searchField  text search field
-     * @author S. Tuczynski & G. Lui
+     * 
      */
     private void animeSearch(ArrayList<AnimeData> currentAnimeList, TextField searchField) {
 
@@ -718,7 +718,7 @@ public class AnimeListApp extends Application {
      * 
      * @param animeList  main anime list
      * @param sortingChoiceBox  sorting choice box
-     * @author S. Tuczynski & G. Lui
+     * 
      */
     private void animeSorting(ArrayList<AnimeData> currentAnimeList, ChoiceBox sortingChoiceBox) {
 
@@ -732,8 +732,6 @@ public class AnimeListApp extends Application {
     }
 
     /**
-<<<<<<< Updated upstream
-=======
      * Helper method that filters anime results based on genre
      * 
      * @param animeList  main anime list
@@ -753,7 +751,8 @@ public class AnimeListApp extends Application {
             for (AnimeData anime : currentAnimeList){
 
                 // does anime contain genre? if so add to filtered list
-                if (anime.getGenres().contains(genre)){
+                if (anime.getGenres().contains(genre)) {
+
                     filteredAnimeList.add(anime);
                 }
             }
@@ -767,10 +766,13 @@ public class AnimeListApp extends Application {
             for (AnimeData anime : animeList){
 
                 // does anime contain genre? if so add to filtered list
-                if (!anime.getGenres().contains(genre) && !currentAnimeList.contains(anime)){
+                if (!anime.getGenres().contains(genre) && !currentAnimeList.contains(anime)) {
+
                     currentAnimeList.add(anime);
                 }
             }
+
+            // Sort data, add it to main table and update current anime list
             animeSorting(currentAnimeList, sortingChoiceBox);
             mainTable.setItems(FXCollections.observableArrayList(currentAnimeList));
             this.currentAnimeList = currentAnimeList;
@@ -778,7 +780,6 @@ public class AnimeListApp extends Application {
     }
 
     /**
->>>>>>> Stashed changes
      * Helper method that filters anime results to ignore NSFW results
      * 
      * @param nsfwFilterCheckBox  nsfw check box
@@ -792,6 +793,7 @@ public class AnimeListApp extends Application {
         if (nsfwFilterCheckBox.isSelected()) {
         // Iterate through animes in main anime list
             for (AnimeData anime : currentAnimeList) {
+
                 // If anime is not nsfw, add it to new list
                 if (!anime.getGenres().contains("Hentai") && !anime.getGenres().contains("Ecchi") && !anime.getGenres().contains("Harem")) {
 
@@ -799,6 +801,7 @@ public class AnimeListApp extends Application {
                 }
             } 
 
+            // Update main table and current list
             mainTable.setItems(FXCollections.observableArrayList(filteredAnimeList));
             this.currentAnimeList = filteredAnimeList;
         }
@@ -808,12 +811,14 @@ public class AnimeListApp extends Application {
 
             for (AnimeData anime : animeList){
 
-                // does anime contain genre? if so add to filtered list
-                if ((anime.getGenres().contains("Hentai") || anime.getGenres().contains("Ecchi") || anime.getGenres().contains("Harem")) && !currentAnimeList.contains(anime)){
+                // if anime is nsfw and is not in current anime list
+                if ((anime.getGenres().contains("Hentai") || anime.getGenres().contains("Ecchi") || anime.getGenres().contains("Harem")) && !currentAnimeList.contains(anime)) {
+
                     currentAnimeList.add(anime);
                 }
             }
 
+            // Sort data and add to main table, update current anime list
             animeSorting(currentAnimeList, sortingChoiceBox);
             mainTable.setItems(FXCollections.observableArrayList(currentAnimeList));
             this.currentAnimeList = currentAnimeList;
