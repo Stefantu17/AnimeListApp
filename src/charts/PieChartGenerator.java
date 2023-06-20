@@ -46,7 +46,7 @@ public class PieChartGenerator {
     public void updateGenrePieChart(List<AnimeData> userAnimeList) {
 
         List<PieChart.Data> genreData = new ArrayList<>();
-
+        
         // Iterates through the user list
         for (AnimeData anime : userAnimeList) {
 

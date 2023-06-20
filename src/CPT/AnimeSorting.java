@@ -4,7 +4,6 @@ package CPT;
 import java.util.ArrayList;
 import javafx.scene.control.TextField;
 
-
 /**
  * A class which contains methods that is used for sorting and reflects what we've learned in the algorithms unit.
  * @author S. Tuczynski & G. Lui
@@ -23,7 +22,7 @@ public class AnimeSorting {
 
         if (list == null || list.size() <= 1) {
             
-            // Base case: already sorted
+            // Base case: has one item or nothing
             return; 
         }
 
@@ -193,17 +192,17 @@ public class AnimeSorting {
                     searchResults.add(anime);
                 }
 
-                if (anime.getPopularity() == Double.parseDouble(searchText)) {
+                else if (anime.getPopularity() == Double.parseDouble(searchText)) {
 
                     searchResults.add(anime);
                 }
 
-                if (anime.getMembers() == Double.parseDouble(searchText)) {
+                else if (anime.getMembers() == Double.parseDouble(searchText)) {
 
                     searchResults.add(anime);
                 }
 
-                if (anime.getEpisodes() == Double.parseDouble(searchText)) {
+                else if (anime.getEpisodes() == Double.parseDouble(searchText)) {
 
                     searchResults.add(anime);
                 }
@@ -217,6 +216,7 @@ public class AnimeSorting {
 
             // If search is strings
             else {
+
                 if (anime.getTitle().toLowerCase().contains(searchText)) {
 
                     searchResults.add(anime);
