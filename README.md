@@ -10,5 +10,5 @@ We selected this data because as we believe that people should have an easy way 
 
 ### Video Links
 * [Demo Video](https://drive.google.com/file/d/1oSvCrznMnH7Bve4UQPMshAmREmIQXtIn/view?usp=sharing)
-* Stefan's Code Walkthrough Video
+* [Stefan's Code Walkthrough Video](https://drive.google.com/file/d/1cRFZRunT7clGMn7vZZPcGZixY5Cw1r-q/view?usp=sharing)
 * [Greg's Code Walkthrough Video](https://drive.google.com/file/d/1KqRHXfQPDMXp0OP1mO2UZmM9jo4pFdki/view)
