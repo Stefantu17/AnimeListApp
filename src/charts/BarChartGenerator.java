@@ -175,19 +175,7 @@ public class BarChartGenerator {
      */
     public int getAnimeCount() {
 
-        int count = 0;
-
-        if (scores.isEmpty() == true) {
-
-            return 0;
-        }
-
-        for (int i = 0; i < scores.size(); i++) {
-
-            count += 1;
-        }
-
-        return count;
+        return scores.size();
     }
 
     /**

@@ -2,7 +2,6 @@ package CPT;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -23,9 +22,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 
 import charts.BarChartGenerator;
 import charts.PieChartGenerator;
@@ -560,7 +558,7 @@ public class AnimeListApp extends Application {
      * Shows the details of anime, pops up new page
      * 
      * @param anime Specfic anime
-     * @author S. Tuczynski & G. Lui
+     * 
      */
     private void showAnimeDetails(AnimeData anime) {
 
@@ -638,7 +636,7 @@ public class AnimeListApp extends Application {
      * @param maxScore  max score entry for user
      * @param minScore  min score entry for user
      * @param medianScore  median score entry for user
-     * @author S. Tuczynski & G. Lui
+     * 
      */
     private void addAnimeToUserList(ArrayList<AnimeData> currentUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart, Text averageScore, Text standardDeviationScore, Text animeCount, Text maxScore, Text minScore, Text medianScore) {
 
@@ -707,7 +705,9 @@ public class AnimeListApp extends Application {
     /**
      * Helper method that applies linear search and updates the anime list based on results
      * 
+     * @param animeList  the main unmodified
      * @param searchField  text search field
+     * @param sortingChoiceBox  sorting choicebox
      * 
      */
     private void animeSearch(ArrayList<AnimeData> animeList, TextField searchField, ChoiceBox sortingChoiceBox) {
@@ -745,9 +745,14 @@ public class AnimeListApp extends Application {
     /**
      * Helper method that filters anime results based on genre
      * 
-     * @param animeList  main anime list
-     * @param filterCheckbox  filter checkbox
-     * @param genre  genre to filter by
+     * @param animeList  the main unmodified animelist
+     * @param filterCheckBox1  the first checkbox
+     * @param filterCheckBox2  the second checkbox
+     * @param filterCheckBox3  the third checkbox
+     * @param genre1  the first genre
+     * @param genre2  the second genre
+     * @param genre3  the third genre
+     * @param sortingChoiceBox  the sortingChoiceBox
      * 
      */
     private void genreFilter(ArrayList<AnimeData> animeList, CheckBox filterCheckBox1, CheckBox filterCheckBox2, CheckBox filterCheckBox3, String genre1, String genre2, String genre3, ChoiceBox sortingChoiceBox){
@@ -778,30 +783,44 @@ public class AnimeListApp extends Application {
             // loop through main data and add to filtered list
             for (AnimeData anime : animeList){
 
-                // does anime contain genre? if so add to filtered list
+                // If the anime doesnt contain the genre and is not in the list
                 if (!anime.getGenres().contains(genre1) && !this.currentAnimeList.contains(anime)) {
 
+                    // If both other boxes are checked
                     if (filterCheckBox2.isSelected() && filterCheckBox3.isSelected()) {
+
+                        // Check if anime contains all other 2 genres
                         if (anime.getGenres().contains(genre2) && anime.getGenres().contains(genre3)) {
                             this.currentAnimeList.add(anime);
                         }
                     }
+
+                    // If the first other box is selected
                     else if (filterCheckBox2.isSelected() && !filterCheckBox3.isSelected()) {
+
+                        // Check if anime contains all other 2 genres
                         if (anime.getGenres().contains(genre2) && anime.getGenres().contains(genre3)) {
                             this.currentAnimeList.add(anime);
                         }
-                    }
+                    }  
+
+                    // If the second other box is selected
                     else if (filterCheckBox3.isSelected() && !filterCheckBox2.isSelected()) {
+
+                        // Check if anime contains all other 2 genres
                         if (anime.getGenres().contains(genre3) && anime.getGenres().contains(genre2)) {
                             this.currentAnimeList.add(anime);
                         }
                     }
+
+                    // If neither are selected add the anime
                     else {
                         this.currentAnimeList.add(anime);
                     }
                 
                 }
             }
+
             // Sort data, add it to main table and update current anime list
             animeSorting(sortingChoiceBox);
             refreshCurrentAnimeList();
@@ -847,6 +866,9 @@ public class AnimeListApp extends Application {
      * @param nsfwFilterCheckBox  nsfw check box
      * @param animeList  main anime list
      * @param sortingChoiceBox  choice box 
+     * @param comedyCheck  the comedy checkbox
+     * @param actionCheck  the action checkbox
+     * @param romanceCheck  the romance checkbox
      * 
      */
     private void nsfwFilter(CheckBox nsfwFilterCheckBox, ArrayList<AnimeData> animeList, ChoiceBox sortingChoiceBox, CheckBox comedyCheck, CheckBox actionCheck, CheckBox romanceCheck) {

@@ -9,7 +9,6 @@ The dataset being modelled in this JavaFX application is a Anime records list ta
 We selected this data because as we believe that people should have an easy way to track which animes they have watched, not only to keep track of what they've watched, but also to see interesting data about themselves and how the internet sees the Animes the user has enjoyed. This data helped us create a meaningful program that can help someone looking for a way to track their watched Anime. 
 
 ### Video Links
-* Greg's Demo Video
-* Greg's Code Walkthrough Video
-* Stefan's Demo Video
-* Stefan's Code Walkthrough Video
+* [Demo Video](https://drive.google.com/file/d/1oSvCrznMnH7Bve4UQPMshAmREmIQXtIn/view?usp=sharing)
+* [Stefan's Code Walkthrough Video](https://drive.google.com/file/d/1cRFZRunT7clGMn7vZZPcGZixY5Cw1r-q/view?usp=sharing)
+* [Greg's Code Walkthrough Video](https://drive.google.com/file/d/1KqRHXfQPDMXp0OP1mO2UZmM9jo4pFdki/view)

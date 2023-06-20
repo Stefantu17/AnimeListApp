@@ -38,6 +38,7 @@ public class AnimeData {
      * @param score  average score based on users
      * @param imageLink  image link
      * @param animeLink  anime link to MyAnimeList
+     * 
      */
     public AnimeData(int UID, String title, String synopsis, ArrayList<String> genres, String aired, int episodes, int members, int popularity, int rank, double score, String imageLink, String animeLink) {
         this.UID = UID;
@@ -143,18 +144,18 @@ public class AnimeData {
     public String getGenresString() {
 
         String str = "";
-        for (int i = 0; i < genres.size(); i++) {
+        for (int i = 0; i < this.genres.size(); i++) {
 
             // End of list, no comma
-            if (i == genres.size() - 1) {
+            if (i == this.genres.size() - 1) {
 
-                str += genres.get(i);
+                str += this.genres.get(i);
             }
 
             // Continue adding commas
             else {
 
-                str += genres.get(i) + ", ";
+                str += this.genres.get(i) + ", ";
             }
         }
 
