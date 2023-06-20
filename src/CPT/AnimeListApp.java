@@ -390,7 +390,7 @@ public class AnimeListApp extends Application {
 
         userTable.setOnMouseClicked(event -> { 
             if (event.getClickCount() == 2) { 
-                AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem(); 
+                AnimeData selectedAnime = (AnimeData) userTable.getSelectionModel().getSelectedItem(); 
                 
                 if (selectedAnime != null) { showAnimeDetails(selectedAnime); 
                 }
