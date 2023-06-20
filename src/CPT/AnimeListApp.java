@@ -38,6 +38,7 @@ public class AnimeListApp extends Application {
     private TableView<AnimeData> mainTable;
     private TableView<AnimeData> userTable;
     private List<AnimeData> userAnimeList;
+    private ArrayList<AnimeData> currentAnimeList;
 
     /**
      * Main method
@@ -64,6 +65,7 @@ public class AnimeListApp extends Application {
 
         // Processes data from CSV file, File I/O
         ArrayList<AnimeData> animeList = new ArrayList<>(); 
+
         try (BufferedReader reader = new BufferedReader(new FileReader("src/CPT/animes.csv"))) {
 
             String line = reader.readLine();
@@ -315,7 +317,8 @@ public class AnimeListApp extends Application {
 
         // Create lists
         userAnimeList = new ArrayList<>();
-        ObservableList<AnimeData> observableUserAnimeList = FXCollections.observableArrayList();
+        ArrayList<AnimeData> currentUserAnimeList = new ArrayList<>();
+        this.currentAnimeList = new ArrayList<>(animeList);
 
         // Create column values to main table
         mainTable.setEditable(true);
@@ -418,39 +421,55 @@ public class AnimeListApp extends Application {
 
         // Add Watched Button To Main List. See addAnimeToUserList method
         Button addButton = new Button("Watched");
-        addButton.setOnAction(e -> addAnimeToUserList(observableUserAnimeList, barChart, pieChart, averageScore, standardDeviationScore, animeCount, maxScore, minScore, medianScore));
+        addButton.setOnAction(e -> addAnimeToUserList(currentUserAnimeList, barChart, pieChart, averageScore, standardDeviationScore, animeCount, maxScore, minScore, medianScore));
 
         // Add Remove Button To User List. 
         Button removeButton = new Button("Remove");
-        removeButton.setOnAction(e -> removeAnimeFromUserList(observableUserAnimeList, barChart, pieChart, averageScore, standardDeviationScore, animeCount, maxScore, minScore, medianScore));
-
-        // Adds a checkbox to filter out NSFW anime
-        CheckBox nsfwFilterCheckBox = new CheckBox("NSFW Filter");
-        nsfwFilterCheckBox.setOnAction(event -> updateAnimeListView(nsfwFilterCheckBox, animeList));
+        removeButton.setOnAction(e -> removeAnimeFromUserList(currentUserAnimeList, barChart, pieChart, averageScore, standardDeviationScore, animeCount, maxScore, minScore, medianScore));
 
         // Added a choicebox to give user sorting options
         ChoiceBox sortingChoiceBox = new ChoiceBox(FXCollections.observableArrayList("Name", "Score", "Popularity", "Rank", "Views", "Episodes"));
 
         // sets default sorting option to by name and reorganizes the list
         sortingChoiceBox.setValue("Name");
-        animeSorting(animeList, sortingChoiceBox);
+        animeSorting(this.currentAnimeList, sortingChoiceBox);
 
         // set action to change sorting option. See AnimeSorting.java and animeSorting method. Uses MergeSort
-        sortingChoiceBox.setOnAction(e -> animeSorting(animeList, sortingChoiceBox));
+        sortingChoiceBox.setOnAction(e -> animeSorting(this.currentAnimeList, sortingChoiceBox));
+
+        // Adds a checkbox to filter out NSFW anime
+        CheckBox nsfwFilterCheckBox = new CheckBox("NSFW Filter");
+        nsfwFilterCheckBox.setOnAction(event -> nsfwFilter(nsfwFilterCheckBox, this.currentAnimeList, animeList, sortingChoiceBox));
+
+        CheckBox comedyFilter = new CheckBox("Comedy Only");
+        comedyFilter.setOnAction(event -> genreFilter(this.currentAnimeList, animeList, comedyFilter, "Comedy", sortingChoiceBox));
+
+        CheckBox actionFilter = new CheckBox("Action Only");
+        actionFilter.setOnAction(event -> genreFilter(this.currentAnimeList, animeList, actionFilter, "Action", sortingChoiceBox));
+
+        CheckBox romanceFilter = new CheckBox("Romance Only");
+        romanceFilter.setOnAction(event -> genreFilter(this.currentAnimeList, animeList, romanceFilter, "Romance", sortingChoiceBox));
 
         // Added a textfield to search for anime
         TextField searchField = new TextField();
         searchField.setPromptText("Search for Anime");
 
         // set action to search for anime. See animeSearch method. Uses Linear Search
-        searchField.setOnAction(e -> animeSearch(animeList, searchField));
+        searchField.setOnAction(e -> animeSearch(this.currentAnimeList, searchField));
 
         // Creates a tabpane to add lists and charts to.
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         // Create Horizontal and Vertical boxes to add elements together
-        // Search Hbox
+
+        // Genrefilter HBox
+        HBox hboxGenreFilters = new HBox(10);
+        hboxGenreFilters.setAlignment(Pos.TOP_CENTER);
+        hboxGenreFilters.setPadding(new Insets(10));
+        hboxGenreFilters.getChildren().addAll(nsfwFilterCheckBox, comedyFilter, actionFilter, romanceFilter);
+
+        // Search HBox
         HBox hboxAnimeSearch = new HBox(10);
         hboxAnimeSearch.setAlignment(Pos.TOP_CENTER);
         hboxAnimeSearch.setPadding(new Insets(10));
@@ -461,7 +480,7 @@ public class AnimeListApp extends Application {
         VBox vboxAnimeList = new VBox(10);
         vboxAnimeList.getChildren().add(hboxAnimeSearch);
         vboxAnimeList.getChildren().add(mainTable);
-        vboxAnimeList.getChildren().addAll(tabPane, addButton, nsfwFilterCheckBox);
+        vboxAnimeList.getChildren().addAll(tabPane, addButton, hboxGenreFilters);
         vboxAnimeList.setAlignment(Pos.CENTER);
         vboxAnimeList.setPadding(new Insets(10));
 
@@ -599,7 +618,7 @@ public class AnimeListApp extends Application {
     /**
      * Helper method that adds anime to the users list based on selection
      * 
-     * @param observableUserAnimeList  user anime list used for displaying
+     * @param currentUserAnimeList  user anime list used for displaying
      * @param barChart  bar chart
      * @param pieChart  pie chart
      * @param averageScore  average score for user animes
@@ -610,7 +629,7 @@ public class AnimeListApp extends Application {
      * @param medianScore  median score entry for user
      * @author S. Tuczynski & G. Lui
      */
-    private void addAnimeToUserList(ObservableList<AnimeData> observableUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart, Text averageScore, Text standardDeviationScore, Text animeCount, Text maxScore, Text minScore, Text medianScore) {
+    private void addAnimeToUserList(ArrayList<AnimeData> currentUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart, Text averageScore, Text standardDeviationScore, Text animeCount, Text maxScore, Text minScore, Text medianScore) {
 
         AnimeData selectedAnime = (AnimeData) mainTable.getSelectionModel().getSelectedItem();
 
@@ -619,7 +638,7 @@ public class AnimeListApp extends Application {
 
             // Add anime
             userAnimeList.add(selectedAnime);
-            observableUserAnimeList.add(selectedAnime);
+            currentUserAnimeList.add(selectedAnime);
             userTable.setItems(FXCollections.observableArrayList(userAnimeList));
 
             // Update charts
@@ -639,7 +658,7 @@ public class AnimeListApp extends Application {
     /**
      * Helper method that removes an anime off the users list based on selection
      * 
-     * @param observableUserAnimeList  user anime list used for displaying
+     * @param currentUserAnimeList  user anime list used for displaying
      * @param barChart  bar chart
      * @param pieChart  pie chart
      * @param averageScore  average score for user animes
@@ -650,7 +669,7 @@ public class AnimeListApp extends Application {
      * @param medianScore  median score entry for user
      * @author S. Tuczynski & G. Lui
      */
-    private void removeAnimeFromUserList(ObservableList<AnimeData> observableUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart, Text averageScore, Text standardDeviationScore, Text animeCount, Text maxScore, Text minScore, Text medianScore) {
+    private void removeAnimeFromUserList(ArrayList<AnimeData> currentUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart, Text averageScore, Text standardDeviationScore, Text animeCount, Text maxScore, Text minScore, Text medianScore) {
 
         AnimeData selectedAnime = (AnimeData) userTable.getSelectionModel().getSelectedItem();
 
@@ -658,7 +677,7 @@ public class AnimeListApp extends Application {
 
             // removes it from lists and graphs.
             userAnimeList.remove(selectedAnime);
-            observableUserAnimeList.remove(selectedAnime);
+            currentUserAnimeList.remove(selectedAnime);
             userTable.setItems(FXCollections.observableArrayList(userAnimeList));
             pieChart.updateGenrePieChart(userAnimeList);
             barChart.removeFromBarChart(selectedAnime);
@@ -681,16 +700,17 @@ public class AnimeListApp extends Application {
      * @param searchField  text search field
      * @author S. Tuczynski & G. Lui
      */
-    private void animeSearch(ArrayList<AnimeData> animeList, TextField searchField) {
+    private void animeSearch(ArrayList<AnimeData> currentAnimeList, TextField searchField) {
 
         // Setup variables and apply linear search
         String searchText = searchField.getText().toLowerCase();
         ArrayList<AnimeData> searchResults = new ArrayList<>();
-        AnimeSorting.linearSearch(animeList, searchField, searchText, searchResults);
-        ObservableList<AnimeData> observableAnimeList = FXCollections.observableArrayList(searchResults);
+        AnimeSorting.linearSearch(currentAnimeList, searchField, searchText, searchResults);
+        ArrayList<AnimeData> newAnimeList = new ArrayList<>(searchResults);
 
         // Modify table
-        mainTable.setItems(observableAnimeList);
+        mainTable.setItems(FXCollections.observableArrayList(newAnimeList));
+        this.currentAnimeList = newAnimeList;
     }
 
     /**
@@ -700,60 +720,104 @@ public class AnimeListApp extends Application {
      * @param sortingChoiceBox  sorting choice box
      * @author S. Tuczynski & G. Lui
      */
-    private void animeSorting(ArrayList<AnimeData> animeList, ChoiceBox sortingChoiceBox) {
+    private void animeSorting(ArrayList<AnimeData> currentAnimeList, ChoiceBox sortingChoiceBox) {
 
         // Setup variables and apply merge sort
         int selectedIndex = sortingChoiceBox.getSelectionModel().getSelectedIndex();
-        AnimeSorting.mergeSort(animeList, selectedIndex);
+        AnimeSorting.mergeSort(currentAnimeList, selectedIndex);
 
         // Modify table
-        mainTable.setItems(FXCollections.observableArrayList(animeList));
+        mainTable.setItems(FXCollections.observableArrayList(currentAnimeList));
+        this.currentAnimeList = currentAnimeList;
     }
 
     /**
+<<<<<<< Updated upstream
+=======
+     * Helper method that filters anime results based on genre
+     * 
+     * @param animeList  main anime list
+     * @param filterCheckbox  filter checkbox
+     * @param genre  genre to filter by
+     * 
+     */
+    private void genreFilter(ArrayList<AnimeData> currentAnimeList, ArrayList<AnimeData> animeList, CheckBox filterCheckBox, String genre, ChoiceBox sortingChoiceBox){
+
+        // Create a blank filtered list
+        ArrayList<AnimeData> filteredAnimeList = new ArrayList<>();
+
+        // is filter checkbox checked
+        if (filterCheckBox.isSelected()){
+
+            // loop through main data and add to filtered list
+            for (AnimeData anime : currentAnimeList){
+
+                // does anime contain genre? if so add to filtered list
+                if (anime.getGenres().contains(genre)){
+                    filteredAnimeList.add(anime);
+                }
+            }
+            
+            // set main table to filtered list
+            mainTable.setItems(FXCollections.observableArrayList(filteredAnimeList));
+            this.currentAnimeList = filteredAnimeList;
+        }
+        else {
+            // loop through main data and add to filtered list
+            for (AnimeData anime : animeList){
+
+                // does anime contain genre? if so add to filtered list
+                if (!anime.getGenres().contains(genre) && !currentAnimeList.contains(anime)){
+                    currentAnimeList.add(anime);
+                }
+            }
+            animeSorting(currentAnimeList, sortingChoiceBox);
+            mainTable.setItems(FXCollections.observableArrayList(currentAnimeList));
+            this.currentAnimeList = currentAnimeList;
+        }
+    }
+
+    /**
+>>>>>>> Stashed changes
      * Helper method that filters anime results to ignore NSFW results
      * 
      * @param nsfwFilterCheckBox  nsfw check box
      * @param animeList  main anime list
-     * @author S. Tuczynski & G. Lui
+     * 
      */
-    private void updateAnimeListView(CheckBox nsfwFilterCheckBox, ArrayList<AnimeData> animeList) {
+    private void nsfwFilter(CheckBox nsfwFilterCheckBox, ArrayList<AnimeData> currentAnimeList, ArrayList<AnimeData> animeList, ChoiceBox sortingChoiceBox) {
 
         // Create a blank filtered list
-        ObservableList<AnimeData> filteredAnimeList = FXCollections.observableArrayList();
-        boolean nsfwFilterEnabled = nsfwFilterCheckBox.isSelected();
-
+        ArrayList<AnimeData> filteredAnimeList = new ArrayList<>();
+        if (nsfwFilterCheckBox.isSelected()) {
         // Iterate through animes in main anime list
-        for (AnimeData anime : animeList) {
-
-            // If box is checked
-            if (nsfwFilterEnabled) {
-
-                boolean isNsfw = anime.getGenres().contains("Hentai") || anime.getGenres().contains("Ecchi") || anime.getGenres().contains("Harem");
-
+            for (AnimeData anime : currentAnimeList) {
                 // If anime is not nsfw, add it to new list
-                if (!isNsfw) {
+                if (!anime.getGenres().contains("Hentai") && !anime.getGenres().contains("Ecchi") && !anime.getGenres().contains("Harem")) {
 
                     filteredAnimeList.add(anime);
                 }
             } 
 
-            // Otherwise, add all animes to filtered list, as it is not filtered.
-            else {
-
-                filteredAnimeList.add(anime);
-            }
+            mainTable.setItems(FXCollections.observableArrayList(filteredAnimeList));
+            this.currentAnimeList = filteredAnimeList;
         }
 
-        // Modify tables based on if the nsfw checkbox is checked
-        if (nsfwFilterEnabled) {
-
-            mainTable.setItems(filteredAnimeList);
-        } 
-
+        // Otherwise, add all animes to filtered list, as it is not filtered.
         else {
-            
-            mainTable.setItems(FXCollections.observableArrayList(animeList));
+
+            for (AnimeData anime : animeList){
+
+                // does anime contain genre? if so add to filtered list
+                if ((anime.getGenres().contains("Hentai") || anime.getGenres().contains("Ecchi") || anime.getGenres().contains("Harem")) && !currentAnimeList.contains(anime)){
+                    currentAnimeList.add(anime);
+                }
+            }
+
+            animeSorting(currentAnimeList, sortingChoiceBox);
+            mainTable.setItems(FXCollections.observableArrayList(currentAnimeList));
+            this.currentAnimeList = currentAnimeList;
+        
         }
     }
 }
