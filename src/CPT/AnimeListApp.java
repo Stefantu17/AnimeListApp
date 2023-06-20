@@ -466,7 +466,7 @@ public class AnimeListApp extends Application {
         searchField.setPromptText("Enter a keyword");
 
         // set action to search for anime. See animeSearch method. Uses Linear Search
-        searchField.setOnAction(e -> animeSearch(searchField));
+        searchField.setOnAction(e -> animeSearch(animeList, searchField, sortingChoiceBox));
 
         // Creates a tabpane to add lists and charts to.
         TabPane tabPane = new TabPane();
@@ -711,17 +711,20 @@ public class AnimeListApp extends Application {
      * @param searchField  text search field
      * 
      */
-    private void animeSearch(TextField searchField) {
+    private void animeSearch(ArrayList<AnimeData> animeList, TextField searchField, ChoiceBox sortingChoiceBox) {
 
         // Setup variables and apply linear search
         String searchText = searchField.getText().toLowerCase();
         ArrayList<AnimeData> searchResults = new ArrayList<>();
-        AnimeSorting.linearSearch(this.currentAnimeList, searchField, searchText, searchResults);
+        AnimeSorting.linearSearch(animeList, searchField, searchText, searchResults);
         ArrayList<AnimeData> newAnimeList = new ArrayList<>(searchResults);
 
         // Modify table
-        mainTable.setItems(FXCollections.observableArrayList(newAnimeList));
         this.currentAnimeList = newAnimeList;
+        animeSorting(sortingChoiceBox);
+        refreshCurrentAnimeList();
+        mainTable.setItems(FXCollections.observableArrayList(newAnimeList));
+        
     }
 
     /**
@@ -735,7 +738,7 @@ public class AnimeListApp extends Application {
         // Setup variables and apply merge sort
         int selectedIndex = sortingChoiceBox.getSelectionModel().getSelectedIndex();
         AnimeSorting.mergeSort(this.currentAnimeList, selectedIndex);
-
+        
         // Modify table
         mainTable.setItems(FXCollections.observableArrayList(this.currentAnimeList));
     }
