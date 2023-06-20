@@ -450,16 +450,15 @@ public class AnimeListApp extends Application {
 
         // Adds a checkbox to filter out NSFW anime
         CheckBox nsfwFilterCheckBox = new CheckBox("NSFW Filter");
-        nsfwFilterCheckBox.setOnAction(event -> nsfwFilter(nsfwFilterCheckBox, animeList, sortingChoiceBox));
-
         CheckBox comedyFilter = new CheckBox("Comedy Only");
-        comedyFilter.setOnAction(event -> genreFilter(animeList, comedyFilter, "Comedy", sortingChoiceBox));
-
         CheckBox actionFilter = new CheckBox("Action Only");
-        actionFilter.setOnAction(event -> genreFilter(animeList, actionFilter, "Action", sortingChoiceBox));
-
         CheckBox romanceFilter = new CheckBox("Romance Only");
-        romanceFilter.setOnAction(event -> genreFilter(animeList, romanceFilter, "Romance", sortingChoiceBox));
+
+        comedyFilter.setOnAction(event -> genreFilter(animeList, comedyFilter, actionFilter, romanceFilter, "Comedy", "Action", "Romance", sortingChoiceBox));
+        actionFilter.setOnAction(event -> genreFilter(animeList, actionFilter, romanceFilter, comedyFilter, "Action", "Romance", "Comedy", sortingChoiceBox));
+        romanceFilter.setOnAction(event -> genreFilter(animeList, romanceFilter, comedyFilter, actionFilter, "Romance", "Comedy", "Action", sortingChoiceBox));
+        nsfwFilterCheckBox.setOnAction(event -> nsfwFilter(nsfwFilterCheckBox, animeList, sortingChoiceBox, comedyFilter, actionFilter, romanceFilter));
+
 
         // Added a textfield to search for anime
         TextField searchField = new TextField();
@@ -751,39 +750,58 @@ public class AnimeListApp extends Application {
      * @param genre  genre to filter by
      * 
      */
-    private void genreFilter(ArrayList<AnimeData> animeList, CheckBox filterCheckBox, String genre, ChoiceBox sortingChoiceBox){
+    private void genreFilter(ArrayList<AnimeData> animeList, CheckBox filterCheckBox1, CheckBox filterCheckBox2, CheckBox filterCheckBox3, String genre1, String genre2, String genre3, ChoiceBox sortingChoiceBox){
 
         // Create a blank filtered list
         ArrayList<AnimeData> filteredAnimeList = new ArrayList<>();
 
         // is filter checkbox checked
-        if (filterCheckBox.isSelected()){
+        if (filterCheckBox1.isSelected()){
 
             // loop through main data and add to filtered list
             for (AnimeData anime : this.currentAnimeList){
 
                 // does anime contain genre? if so add to filtered list
-                if (anime.getGenres().contains(genre)) {
+                if (anime.getGenres().contains(genre1)) {
 
                     filteredAnimeList.add(anime);
                 }
             }
             
             // set main table to filtered list
-            mainTable.setItems(FXCollections.observableArrayList(filteredAnimeList));
             this.currentAnimeList = filteredAnimeList;
+            animeSorting(sortingChoiceBox);
+            mainTable.setItems(FXCollections.observableArrayList(this.currentAnimeList));
+    
         }
         else {
             // loop through main data and add to filtered list
             for (AnimeData anime : animeList){
 
                 // does anime contain genre? if so add to filtered list
-                if (!anime.getGenres().contains(genre) && !this.currentAnimeList.contains(anime)) {
+                if (!anime.getGenres().contains(genre1) && !this.currentAnimeList.contains(anime)) {
 
-                    this.currentAnimeList.add(anime);
+                    if (filterCheckBox2.isSelected() && filterCheckBox3.isSelected()) {
+                        if (anime.getGenres().contains(genre2) && anime.getGenres().contains(genre3)) {
+                            this.currentAnimeList.add(anime);
+                        }
+                    }
+                    else if (filterCheckBox2.isSelected() && !filterCheckBox3.isSelected()) {
+                        if (anime.getGenres().contains(genre2) && anime.getGenres().contains(genre3)) {
+                            this.currentAnimeList.add(anime);
+                        }
+                    }
+                    else if (filterCheckBox3.isSelected() && !filterCheckBox2.isSelected()) {
+                        if (anime.getGenres().contains(genre3) && anime.getGenres().contains(genre2)) {
+                            this.currentAnimeList.add(anime);
+                        }
+                    }
+                    else {
+                        this.currentAnimeList.add(anime);
+                    }
+                
                 }
             }
-
             // Sort data, add it to main table and update current anime list
             animeSorting(sortingChoiceBox);
             refreshCurrentAnimeList();
@@ -800,7 +818,7 @@ public class AnimeListApp extends Application {
      * @param sortingChoiceBox  choice box 
      * 
      */
-    private void nsfwFilter(CheckBox nsfwFilterCheckBox, ArrayList<AnimeData> animeList, ChoiceBox sortingChoiceBox) {
+    private void nsfwFilter(CheckBox nsfwFilterCheckBox, ArrayList<AnimeData> animeList, ChoiceBox sortingChoiceBox, CheckBox comedyCheck, CheckBox actionCheck, CheckBox romanceCheck) {
 
         // Create a blank filtered list
         ArrayList<AnimeData> filteredAnimeList = new ArrayList<>();
@@ -827,8 +845,9 @@ public class AnimeListApp extends Application {
 
                 // if anime is nsfw and is not in current anime list
                 if ((anime.getGenres().contains("Hentai") || anime.getGenres().contains("Ecchi") || anime.getGenres().contains("Harem")) && !currentAnimeList.contains(anime)) {
-
-                    currentAnimeList.add(anime);
+                    if (!comedyCheck.isSelected() && !actionCheck.isSelected() && !romanceCheck.isSelected()) {
+                        this.currentAnimeList.add(anime);
+                    }
                 }
             }
 
@@ -837,7 +856,6 @@ public class AnimeListApp extends Application {
             refreshCurrentAnimeList();
             mainTable.setItems(FXCollections.observableArrayList(this.currentAnimeList));
             
-        
         }
     }
 
