@@ -252,8 +252,16 @@ public class BarChartGenerator {
 
             return 0;
         }
+        double median = 0;
 
-        double median = scores.get((int)scores.size()/2);
+        if (scores.size() % 2 == 0) {
+
+            median = ((double)scores.get(scores.size()/2) + (double) scores.get(scores.size()/2 - 1))/2;
+        }
+        else {
+
+            median = (double) scores.get(scores.size()/2);
+        }
         return Math.round(median * 100.0) / 100.0;
     }
 }
