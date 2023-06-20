@@ -23,7 +23,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import charts.BarChartGenerator;
 import charts.PieChartGenerator;
 
@@ -39,6 +42,7 @@ public class AnimeListApp extends Application {
     private TableView<AnimeData> userTable;
     private List<AnimeData> userAnimeList;
     private ArrayList<AnimeData> currentAnimeList;
+    ArrayList<AnimeData> tempAnimeList;
 
     /**
      * Main method
@@ -318,6 +322,7 @@ public class AnimeListApp extends Application {
         // Create lists
         userAnimeList = new ArrayList<>();
         ArrayList<AnimeData> currentUserAnimeList = new ArrayList<>();
+        this.tempAnimeList = new ArrayList<>(animeList);
         this.currentAnimeList = new ArrayList<>(animeList);
 
         // Create column values to main table
@@ -433,6 +438,12 @@ public class AnimeListApp extends Application {
         // sets default sorting option to by name and reorganizes the list
         sortingChoiceBox.setValue("Name");
         animeSorting(this.currentAnimeList, sortingChoiceBox);
+        
+        animeSorting(animeList, sortingChoiceBox);
+        tempAnimeList = this.currentAnimeList;
+        this.currentAnimeList = new ArrayList<>(animeList);
+
+        refreshCurrentAnimeList();
 
         // set action to change sorting option. See AnimeSorting.java and animeSorting method. Uses MergeSort
         sortingChoiceBox.setOnAction(e -> animeSorting(this.currentAnimeList, sortingChoiceBox));
@@ -452,7 +463,7 @@ public class AnimeListApp extends Application {
 
         // Added a textfield to search for anime
         TextField searchField = new TextField();
-        searchField.setPromptText("Search for Anime");
+        searchField.setPromptText("Enter a keyword");
 
         // set action to search for anime. See animeSearch method. Uses Linear Search
         searchField.setOnAction(e -> animeSearch(this.currentAnimeList, searchField));
@@ -543,6 +554,7 @@ public class AnimeListApp extends Application {
         Scene scene = new Scene(borderPane, 850, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
+
     }
 
     /**
@@ -774,8 +786,10 @@ public class AnimeListApp extends Application {
 
             // Sort data, add it to main table and update current anime list
             animeSorting(currentAnimeList, sortingChoiceBox);
-            mainTable.setItems(FXCollections.observableArrayList(currentAnimeList));
             this.currentAnimeList = currentAnimeList;
+            refreshCurrentAnimeList();
+            mainTable.setItems(FXCollections.observableArrayList(this.currentAnimeList));
+
         }
     }
 
@@ -820,9 +834,20 @@ public class AnimeListApp extends Application {
 
             // Sort data and add to main table, update current anime list
             animeSorting(currentAnimeList, sortingChoiceBox);
-            mainTable.setItems(FXCollections.observableArrayList(currentAnimeList));
             this.currentAnimeList = currentAnimeList;
+            refreshCurrentAnimeList();
+            mainTable.setItems(FXCollections.observableArrayList(this.currentAnimeList));
+            
         
+        }
+    }
+
+    private void refreshCurrentAnimeList() {
+        for (int i = 0; i < this.tempAnimeList.size()-1; i++) {
+
+            if (this.tempAnimeList.get(i).getTitle().equals(this.tempAnimeList.get(i+1).getTitle())) {
+                this.currentAnimeList.remove(this.tempAnimeList.get(i));
+            }
         }
     }
 }
