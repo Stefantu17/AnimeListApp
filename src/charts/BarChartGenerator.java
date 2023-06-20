@@ -240,7 +240,21 @@ public class BarChartGenerator {
 
             return 0;
         }
+
+        scores.sort(null);
         double median = 0;
+
+        for (int i = 0; i <  scores.size(); i++) {
+
+            for (int j =  scores.size() - 1; j > i; j--) {
+                if (scores.get(i) > scores.get(j)) {
+
+                    Double tmp = scores.get(i);
+                    scores.set(i, scores.get(j)) ;
+                    scores.set(j,tmp);
+                }
+            }
+        }
 
         if (scores.size() % 2 == 0) {
 
