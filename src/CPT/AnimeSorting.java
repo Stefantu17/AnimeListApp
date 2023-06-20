@@ -17,6 +17,7 @@ public class AnimeSorting {
      * 
      * @param list  Anime data list displayed on main page
      * @param comparatorType  Comparator value
+     * 
      */
     public static void mergeSort(ArrayList<AnimeData> list, int comparatorType) {
 
@@ -240,6 +241,7 @@ public class AnimeSorting {
      * 
      * @param searchField  the search field
      * @return  whether search is number or string
+     * 
      */
     private static boolean isDigit(TextField searchField){
         try {
