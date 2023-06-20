@@ -42,7 +42,7 @@ public class AnimeListApp extends Application {
     private TableView<AnimeData> userTable;
     private List<AnimeData> userAnimeList;
     private ArrayList<AnimeData> currentAnimeList;
-    ArrayList<AnimeData> tempAnimeList;
+    private ArrayList<AnimeData> tempAnimeList;
 
     /**
      * Main method
@@ -437,36 +437,36 @@ public class AnimeListApp extends Application {
 
         // sets default sorting option to by name and reorganizes the list
         sortingChoiceBox.setValue("Name");
-        animeSorting(this.currentAnimeList, sortingChoiceBox);
+        animeSorting(sortingChoiceBox);
         
-        animeSorting(animeList, sortingChoiceBox);
-        tempAnimeList = this.currentAnimeList;
+        animeSorting(sortingChoiceBox);
+        this.tempAnimeList = this.currentAnimeList;
         this.currentAnimeList = new ArrayList<>(animeList);
 
         refreshCurrentAnimeList();
 
         // set action to change sorting option. See AnimeSorting.java and animeSorting method. Uses MergeSort
-        sortingChoiceBox.setOnAction(e -> animeSorting(this.currentAnimeList, sortingChoiceBox));
+        sortingChoiceBox.setOnAction(e -> animeSorting(sortingChoiceBox));
 
         // Adds a checkbox to filter out NSFW anime
         CheckBox nsfwFilterCheckBox = new CheckBox("NSFW Filter");
-        nsfwFilterCheckBox.setOnAction(event -> nsfwFilter(nsfwFilterCheckBox, this.currentAnimeList, animeList, sortingChoiceBox));
+        nsfwFilterCheckBox.setOnAction(event -> nsfwFilter(nsfwFilterCheckBox, animeList, sortingChoiceBox));
 
         CheckBox comedyFilter = new CheckBox("Comedy Only");
-        comedyFilter.setOnAction(event -> genreFilter(this.currentAnimeList, animeList, comedyFilter, "Comedy", sortingChoiceBox));
+        comedyFilter.setOnAction(event -> genreFilter(animeList, comedyFilter, "Comedy", sortingChoiceBox));
 
         CheckBox actionFilter = new CheckBox("Action Only");
-        actionFilter.setOnAction(event -> genreFilter(this.currentAnimeList, animeList, actionFilter, "Action", sortingChoiceBox));
+        actionFilter.setOnAction(event -> genreFilter(animeList, actionFilter, "Action", sortingChoiceBox));
 
         CheckBox romanceFilter = new CheckBox("Romance Only");
-        romanceFilter.setOnAction(event -> genreFilter(this.currentAnimeList, animeList, romanceFilter, "Romance", sortingChoiceBox));
+        romanceFilter.setOnAction(event -> genreFilter(animeList, romanceFilter, "Romance", sortingChoiceBox));
 
         // Added a textfield to search for anime
         TextField searchField = new TextField();
         searchField.setPromptText("Enter a keyword");
 
         // set action to search for anime. See animeSearch method. Uses Linear Search
-        searchField.setOnAction(e -> animeSearch(this.currentAnimeList, searchField));
+        searchField.setOnAction(e -> animeSearch(searchField));
 
         // Creates a tabpane to add lists and charts to.
         TabPane tabPane = new TabPane();
@@ -679,7 +679,7 @@ public class AnimeListApp extends Application {
      * @param maxScore  max score entry for user
      * @param minScore  min score entry for user
      * @param medianScore  median score entry for user
-     * @author S. Tuczynski & G. Lui
+     * 
      */
     private void removeAnimeFromUserList(ArrayList<AnimeData> currentUserAnimeList, BarChartGenerator barChart, PieChartGenerator pieChart, Text averageScore, Text standardDeviationScore, Text animeCount, Text maxScore, Text minScore, Text medianScore) {
 
@@ -708,16 +708,15 @@ public class AnimeListApp extends Application {
     /**
      * Helper method that applies linear search and updates the anime list based on results
      * 
-     * @param animeList  main anime list
      * @param searchField  text search field
      * 
      */
-    private void animeSearch(ArrayList<AnimeData> currentAnimeList, TextField searchField) {
+    private void animeSearch(TextField searchField) {
 
         // Setup variables and apply linear search
         String searchText = searchField.getText().toLowerCase();
         ArrayList<AnimeData> searchResults = new ArrayList<>();
-        AnimeSorting.linearSearch(currentAnimeList, searchField, searchText, searchResults);
+        AnimeSorting.linearSearch(this.currentAnimeList, searchField, searchText, searchResults);
         ArrayList<AnimeData> newAnimeList = new ArrayList<>(searchResults);
 
         // Modify table
@@ -728,19 +727,17 @@ public class AnimeListApp extends Application {
     /**
      * Helper method that applies merge sort and updates the anime list based the sorted list
      * 
-     * @param animeList  main anime list
      * @param sortingChoiceBox  sorting choice box
      * 
      */
-    private void animeSorting(ArrayList<AnimeData> currentAnimeList, ChoiceBox sortingChoiceBox) {
+    private void animeSorting(ChoiceBox sortingChoiceBox) {
 
         // Setup variables and apply merge sort
         int selectedIndex = sortingChoiceBox.getSelectionModel().getSelectedIndex();
-        AnimeSorting.mergeSort(currentAnimeList, selectedIndex);
+        AnimeSorting.mergeSort(this.currentAnimeList, selectedIndex);
 
         // Modify table
-        mainTable.setItems(FXCollections.observableArrayList(currentAnimeList));
-        this.currentAnimeList = currentAnimeList;
+        mainTable.setItems(FXCollections.observableArrayList(this.currentAnimeList));
     }
 
     /**
@@ -751,7 +748,7 @@ public class AnimeListApp extends Application {
      * @param genre  genre to filter by
      * 
      */
-    private void genreFilter(ArrayList<AnimeData> currentAnimeList, ArrayList<AnimeData> animeList, CheckBox filterCheckBox, String genre, ChoiceBox sortingChoiceBox){
+    private void genreFilter(ArrayList<AnimeData> animeList, CheckBox filterCheckBox, String genre, ChoiceBox sortingChoiceBox){
 
         // Create a blank filtered list
         ArrayList<AnimeData> filteredAnimeList = new ArrayList<>();
@@ -760,7 +757,7 @@ public class AnimeListApp extends Application {
         if (filterCheckBox.isSelected()){
 
             // loop through main data and add to filtered list
-            for (AnimeData anime : currentAnimeList){
+            for (AnimeData anime : this.currentAnimeList){
 
                 // does anime contain genre? if so add to filtered list
                 if (anime.getGenres().contains(genre)) {
@@ -778,15 +775,14 @@ public class AnimeListApp extends Application {
             for (AnimeData anime : animeList){
 
                 // does anime contain genre? if so add to filtered list
-                if (!anime.getGenres().contains(genre) && !currentAnimeList.contains(anime)) {
+                if (!anime.getGenres().contains(genre) && !this.currentAnimeList.contains(anime)) {
 
-                    currentAnimeList.add(anime);
+                    this.currentAnimeList.add(anime);
                 }
             }
 
             // Sort data, add it to main table and update current anime list
-            animeSorting(currentAnimeList, sortingChoiceBox);
-            this.currentAnimeList = currentAnimeList;
+            animeSorting(sortingChoiceBox);
             refreshCurrentAnimeList();
             mainTable.setItems(FXCollections.observableArrayList(this.currentAnimeList));
 
@@ -798,9 +794,10 @@ public class AnimeListApp extends Application {
      * 
      * @param nsfwFilterCheckBox  nsfw check box
      * @param animeList  main anime list
+     * @param sortingChoiceBox  choice box 
      * 
      */
-    private void nsfwFilter(CheckBox nsfwFilterCheckBox, ArrayList<AnimeData> currentAnimeList, ArrayList<AnimeData> animeList, ChoiceBox sortingChoiceBox) {
+    private void nsfwFilter(CheckBox nsfwFilterCheckBox, ArrayList<AnimeData> animeList, ChoiceBox sortingChoiceBox) {
 
         // Create a blank filtered list
         ArrayList<AnimeData> filteredAnimeList = new ArrayList<>();
@@ -833,8 +830,7 @@ public class AnimeListApp extends Application {
             }
 
             // Sort data and add to main table, update current anime list
-            animeSorting(currentAnimeList, sortingChoiceBox);
-            this.currentAnimeList = currentAnimeList;
+            animeSorting(sortingChoiceBox);
             refreshCurrentAnimeList();
             mainTable.setItems(FXCollections.observableArrayList(this.currentAnimeList));
             
@@ -842,6 +838,10 @@ public class AnimeListApp extends Application {
         }
     }
 
+    /**
+     * A helper method that removes duplicate entries from the current anime list
+     * 
+     */
     private void refreshCurrentAnimeList() {
         for (int i = 0; i < this.tempAnimeList.size()-1; i++) {
 
