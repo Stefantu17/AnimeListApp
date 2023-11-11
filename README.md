@@ -20,10 +20,10 @@ Made using JavaFX, as per the requirement of this project, sorting and searching
 
 ## Gallery
 <p float="left">
-<img src="src/images/list.png" alt="list" width="400"/>
-<img src="src/images/info.png" alt="info" width="400"/>
-<img src="src/images/pie.png" alt="pie" width="400"/>
-<img src="src/images/bar.png" alt="bar" width="400"/>
+<img src="src/images/list.png" alt="list" width="700"/>
+<img src="src/images/info.png" alt="info" width="700"/>
+<img src="src/images/pie.png" alt="pie" width="700"/>
+<img src="src/images/bar.png" alt="bar" width="700"/>
 </p>
 
 #### Project created for my ICS4U (Grade 12 University Computer Science) Culminating Performance Task.
