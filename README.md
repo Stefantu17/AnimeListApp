@@ -1,5 +1,21 @@
-# AnimeListApp
+# AnimeListApp 
+Anime Data Visualizer with JavaFX
 
-The dataset being modelled in this JavaFX application is a Anime records list taken from the website [MyAnimeList.net](https://myanimelist.net/). (Reference to the dataset can be found at [this link](https://www.kaggle.com/datasets/marlesson/myanimelist-dataset-animes-profiles-reviews)). From this link, the file animes.csv is used in this project to model a personal anime list, similar to that of MyAnimeList. The data provided allows for a database of anime to be displayed with information about each anime entry shown on the list as well as extended information shown if a user clicks the anime. The main list of anime has a built in keyword search button, multiple sort types and a NSFW filter. A user can select which Animes they have watched and the Anime selected will be put into their own personal list. The Anime they selected will then contribute to a bar graph which shows the average user rating statistics of all they Anime they have watched as well as number statistics. Users will also see a pie chart that displays the proportions of genres they have watched.
+### Overview
+Anime Data Visualizer is a JavaFX project designed to provide insights into anime data sourced from a CSV file based on MyAnimeList. The application allows users to explore anime titles, visualize genre distribution through a pie chart, and analyze statistical data using a bar chart.
 
-This project was initally [Gregory Lui's](https://github.com/Gregory-Lui) and my grade 12 computer science final summative
+### Anime Selection:
+Browse a list of anime titles loaded from MyAnimeList.
+Select an anime to view detailed information.
+
+### Genre Distribution
+Visualize the distribution of genres in the selected anime list using a pie chart.
+
+### Statistical Data
+View statistical metrics, such as ratings, episode counts, etc., for the entire anime list via a bar chart
+
+### Requirements
+Java 8 or higher
+JavaFX
+
+#### Project created for my ICS4U (Grade 12 University Computer Science) Culminating Performance Task.
